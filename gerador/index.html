@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Demos</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a;
+    --tx:#e7eaf0; --tx2:#98a1b3; --ac:#3b82f6; --ok:#22c55e;
+    --r:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg);color:var(--tx);height:100vh;overflow:hidden;
+  }
+  .wrap{display:grid;grid-template-columns:400px 1fr;height:100vh}
+  @media(max-width:900px){
+    body{overflow:auto;height:auto}
+    .wrap{grid-template-columns:1fr;height:auto}
+    .prev{height:70vh!important;position:static!important}
+  }
+
+  /* ---- painel esquerdo ---- */
+  .side{background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:18px}
+  .side h1{font-size:17px;margin-bottom:3px}
+  .side h1 span{color:var(--ac)}
+  .sub{color:var(--tx2);font-size:12.5px;margin-bottom:18px;line-height:1.45}
+
+  fieldset{border:none;margin-bottom:20px}
+  legend{
+    font-size:11px;text-transform:uppercase;letter-spacing:.09em;
+    color:var(--tx2);font-weight:700;margin-bottom:9px;
+    padding-bottom:6px;border-bottom:1px solid var(--line);width:100%;
+  }
+  label{display:block;font-size:12.5px;color:var(--tx2);margin:11px 0 4px}
+  input,select,textarea{
+    width:100%;background:var(--panel2);border:1px solid var(--line);
+    color:var(--tx);padding:9px 11px;border-radius:var(--r);
+    font:inherit;font-size:13.5px;
+  }
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
+  textarea{resize:vertical;min-height:62px}
+  input[type=color]{height:38px;padding:3px;cursor:pointer}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .hint{font-size:11.5px;color:var(--tx2);margin-top:4px;line-height:1.4}
+
+  .item{
+    background:var(--panel2);border:1px solid var(--line);
+    border-radius:var(--r);padding:11px;margin-bottom:9px;position:relative;
+  }
+  .item label:first-child{margin-top:0}
+  .del{
+    position:absolute;top:8px;right:8px;background:none;border:none;
+    color:var(--tx2);cursor:pointer;font-size:17px;line-height:1;padding:2px 6px;
+  }
+  .del:hover{color:#ef4444}
+
+  button{font:inherit;cursor:pointer;border-radius:var(--r)}
+  .add{
+    width:100%;background:transparent;border:1px dashed var(--line);
+    color:var(--tx2);padding:9px;font-size:13px;
+  }
+  .add:hover{border-color:var(--ac);color:var(--ac)}
+
+  .actions{
+    position:sticky;bottom:-18px;background:var(--panel);
+    padding:14px 0 4px;margin-top:22px;border-top:1px solid var(--line);
+  }
+  .btn{
+    width:100%;background:var(--ac);border:none;color:#fff;
+    padding:12px;font-size:14px;font-weight:600;margin-bottom:8px;
+  }
+  .btn:hover{filter:brightness(1.12)}
+  .btn.sec{background:var(--panel2);border:1px solid var(--line);color:var(--tx)}
+  .btn.ok{background:var(--ok)}
+
+  /* ---- preview ---- */
+  .prev{position:relative;background:#0a0c10;height:100vh}
+  .bar{
+    height:42px;background:var(--panel);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:9px;padding:0 14px;font-size:12.5px;color:var(--tx2);
+  }
+  .dots{display:flex;gap:5px}
+  .dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+  .seg{margin-left:auto;display:flex;gap:4px}
+  .seg button{
+    background:var(--panel2);border:1px solid var(--line);color:var(--tx2);
+    padding:4px 11px;font-size:12px;
+  }
+  .seg button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+  iframe{
+    width:100%;height:calc(100vh - 42px);border:none;background:#fff;
+    display:block;margin:0 auto;transition:width .2s;
+  }
+  iframe.mob{width:390px;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="side">
+  <h1>Gerador de <span>Demos</span></h1>
+  <p class="sub">Preencha, baixe o arquivo e publique em
+    <a href="https://app.netlify.com/drop" target="_blank" style="color:var(--ac)">netlify.com/drop</a>.
+    Meta: 10 minutos por página.</p>
+
+  <fieldset>
+    <legend>O negócio</legend>
+    <label>Nome</label>
+    <input id="nome" placeholder="Studio Bella Estética">
+    <label>Ramo (preenche sugestões automáticas)</label>
+    <select id="categoria"></select>
+    <label>Frase de efeito</label>
+    <input id="slogan" placeholder="Sua beleza cuidada por quem entende">
+    <label>Sobre o negócio</label>
+    <textarea id="sobre" placeholder="Há 8 anos em Taguatinga cuidando..."></textarea>
+  </fieldset>
+
+  <fieldset>
+    <legend>Contato</legend>
+    <label>WhatsApp (com DDD)</label>
+    <input id="whatsapp" placeholder="61 99999-0000">
+    <p class="hint">Só números importam — o botão flutuante já abre a conversa com mensagem pronta.</p>
+    <label>Instagram</label>
+    <input id="instagram" placeholder="@studiobella">
+    <label>Endereço</label>
+    <input id="endereco" placeholder="CNB 7, Lote 12 — Taguatinga Norte, DF">
+    <label>Horário</label>
+    <input id="horario" placeholder="Seg a Sex 9h às 19h · Sáb 9h às 14h">
+  </fieldset>
+
+  <fieldset>
+    <legend>Visual</legend>
+    <div class="row">
+      <div><label>Cor principal</label><input type="color" id="cor" value="#0ea5e9"></div>
+      <div><label>Topo</label><select id="tema">
+        <option value="escuro">Escuro</option>
+        <option value="claro">Claro</option>
+      </select></div>
+    </div>
+    <label>Foto de fundo do topo (URL)</label>
+    <input id="heroImg" placeholder="https://...">
+    <p class="hint">Pegue do Instagram dele: abra a foto, botão direito, copiar endereço da imagem. Sem foto, usa um fundo em degradê.</p>
+    <div class="row">
+      <div><label>Nota Google</label><input id="nota" placeholder="4.9"></div>
+      <div><label>Nº avaliações</label><input id="numAval" placeholder="127"></div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Serviços</legend>
+    <div id="servicos"></div>
+    <button class="add" data-add="servicos">+ serviço</button>
+  </fieldset>
+
+  <fieldset>
+    <legend>Galeria</legend>
+    <div id="fotos"></div>
+    <button class="add" data-add="fotos">+ foto</button>
+  </fieldset>
+
+  <fieldset>
+    <legend>Depoimentos</legend>
+    <p class="hint" style="margin:0 0 9px">Copie as avaliações reais do Google dele. Prova social de verdade fecha mais.</p>
+    <div id="depoimentos"></div>
+    <button class="add" data-add="depoimentos">+ depoimento</button>
+  </fieldset>
+
+  <div class="actions">
+    <button class="btn ok" id="baixar">Baixar página (.html)</button>
+    <button class="btn sec" id="copiar">Copiar código</button>
+    <button class="btn sec" id="exemplo">Carregar exemplo</button>
+    <button class="btn sec" id="limpar">Limpar tudo</button>
+  </div>
+</div>
+
+<div class="prev">
+  <div class="bar">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <span id="urlbar">preview</span>
+    <div class="seg">
+      <button id="vMob" class="on">Celular</button>
+      <button id="vDesk">Desktop</button>
+    </div>
+  </div>
+  <iframe id="frame" class="mob"></iframe>
+</div>
+
+</div>
+
+<script>
+/* ============ presets por ramo ============ */
+const RAMOS = {
+  estetica:{n:'Estética / Beleza',cor:'#c026d3',slogan:'Sua beleza cuidada por quem entende do assunto',
+    serv:[['Limpeza de pele','Pele renovada e livre de impurezas','R$ 180'],['Harmonização facial','Realce natural dos seus traços','A partir de R$ 900'],['Depilação a laser','Resultado definitivo e sem dor','R$ 120/sessão'],['Massagem modeladora','Redução de medidas e bem-estar','R$ 150']]},
+  odonto:{n:'Odontologia',cor:'#0891b2',slogan:'O sorriso que você sempre quis, com quem cuida de verdade',
+    serv:[['Implante dentário','Recupere seu sorriso completo','Avaliação gratuita'],['Clareamento','Até 6 tons mais branco','R$ 600'],['Lentes de contato dental','Sorriso alinhado e natural','Orçamento na hora'],['Ortodontia','Aparelho fixo e alinhador invisível','A partir de R$ 180/mês']]},
+  barbearia:{n:'Barbearia',cor:'#b45309',slogan:'Corte bem feito, do jeito que homem gosta',
+    serv:[['Corte masculino','Na tesoura ou máquina, do seu jeito','R$ 45'],['Barba completa','Toalha quente, navalha e finalização','R$ 40'],['Combo corte + barba','O pacote completo','R$ 75'],['Pezinho','Acabamento rápido','R$ 20']]},
+  petshop:{n:'Pet Shop / Veterinária',cor:'#16a34a',slogan:'Cuidado de verdade para quem é da família',
+    serv:[['Banho e tosa','Seu pet limpinho e cheiroso','A partir de R$ 60'],['Consulta veterinária','Atendimento clínico completo','R$ 120'],['Vacinação','Calendário completo em dia','Consulte'],['Hotel para pets','Seu pet cuidado enquanto você viaja','R$ 80/diária']]},
+  academia:{n:'Academia / Studio',cor:'#dc2626',slogan:'O treino certo para o corpo que você quer',
+    serv:[['Musculação','Ficha montada e acompanhamento','R$ 120/mês'],['Treino funcional','Aulas em grupo todos os dias','R$ 150/mês'],['Personal trainer','Acompanhamento individual','Consulte'],['Avaliação física','Bioimpedância e plano de metas','Gratuita']]},
+  advocacia:{n:'Advocacia / Contabilidade',cor:'#1e40af',slogan:'Seus direitos defendidos com seriedade',
+    serv:[['Direito previdenciário','Aposentadoria, BPC e revisões','1ª consulta gratuita'],['Direito trabalhista','Rescisões, verbas e processos','Consulte'],['Direito de família','Divórcio, pensão e inventário','Consulte'],['Consultoria','Orientação antes de decidir','R$ 250']]},
+  oficina:{n:'Oficina / Automotivo',cor:'#ea580c',slogan:'Seu carro nas mãos de quem entende',
+    serv:[['Revisão completa','Checagem de 40 itens','R$ 250'],['Troca de óleo e filtros','Serviço em 40 minutos','A partir de R$ 180'],['Funilaria e pintura','Orçamento sem compromisso','Consulte'],['Suspensão e freios','Segurança em primeiro lugar','Orçamento grátis']]},
+  generico:{n:'Outro ramo',cor:'#0ea5e9',slogan:'Qualidade e atendimento que você merece',
+    serv:[['Serviço 1','Descreva o que está incluso','Consulte'],['Serviço 2','Descreva o que está incluso','Consulte'],['Serviço 3','Descreva o que está incluso','Consulte']]}
+};
+
+/* ============ estado ============ */
+let S = {
+  nome:'',categoria:'estetica',slogan:'',sobre:'',whatsapp:'',instagram:'',
+  endereco:'',horario:'',cor:'#c026d3',tema:'escuro',heroImg:'',nota:'',numAval:'',
+  servicos:[], fotos:[''], depoimentos:[]
+};
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+const tel = s => { let d = String(s||'').replace(/\D/g,''); if(!d) return '';
+  if(d.length<=11) d='55'+d; return d; };
+const rgba = (hex,a) => {
+  const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(hex||''));
+  if(!m) return 'rgba(14,165,233,'+a+')';
+  return 'rgba('+parseInt(m[1],16)+','+parseInt(m[2],16)+','+parseInt(m[3],16)+','+a+')';
+};
+
+/* ============ formulário ============ */
+const sel = $('categoria');
+Object.keys(RAMOS).forEach(k=>{
+  const o=document.createElement('option'); o.value=k; o.textContent=RAMOS[k].n; sel.appendChild(o);
+});
+
+['nome','categoria','slogan','sobre','whatsapp','instagram','endereco',
+ 'horario','cor','tema','heroImg','nota','numAval'].forEach(k=>{
+  $(k).addEventListener('input', e=>{
+    S[k]=e.target.value;
+    if(k==='categoria') aplicarRamo(e.target.value);
+    render();
+  });
+});
+
+function aplicarRamo(k){
+  const r = RAMOS[k]; if(!r) return;
+  S.cor = r.cor; $('cor').value = r.cor;
+  if(!S.slogan){ S.slogan = r.slogan; $('slogan').value = r.slogan; }
+  if(!S.servicos.length){
+    S.servicos = r.serv.map(x=>({titulo:x[0],desc:x[1],preco:x[2]}));
+    listas();
+  }
+}
+
+const CAMPOS = {
+  servicos:[['titulo','Nome do serviço'],['desc','Descrição curta'],['preco','Preço (opcional)']],
+  depoimentos:[['nome','Nome de quem avaliou'],['texto','O que ele escreveu']]
+};
+
+function listas(){
+  ['servicos','depoimentos'].forEach(tipo=>{
+    const box = $(tipo); box.innerHTML='';
+    S[tipo].forEach((it,i)=>{
+      const d=document.createElement('div'); d.className='item';
+      d.innerHTML='<button class="del" title="remover">&times;</button>';
+      CAMPOS[tipo].forEach(([campo,rot])=>{
+        const l=document.createElement('label'); l.textContent=rot;
+        const inp = campo==='texto'||campo==='desc'
+          ? document.createElement('textarea') : document.createElement('input');
+        inp.value = it[campo]||''; inp.placeholder = rot;
+        inp.addEventListener('input',e=>{ S[tipo][i][campo]=e.target.value; render(); });
+        d.appendChild(l); d.appendChild(inp);
+      });
+      d.querySelector('.del').onclick=()=>{ S[tipo].splice(i,1); listas(); render(); };
+      box.appendChild(d);
+    });
+  });
+
+  const fb = $('fotos'); fb.innerHTML='';
+  S.fotos.forEach((u,i)=>{
+    const d=document.createElement('div'); d.className='item';
+    d.innerHTML='<button class="del" title="remover">&times;</button><label>URL da foto</label>';
+    const inp=document.createElement('input'); inp.value=u; inp.placeholder='https://...';
+    inp.addEventListener('input',e=>{ S.fotos[i]=e.target.value; render(); });
+    d.appendChild(inp);
+    d.querySelector('.del').onclick=()=>{ S.fotos.splice(i,1); listas(); render(); };
+    fb.appendChild(d);
+  });
+}
+
+document.querySelectorAll('[data-add]').forEach(b=>{
+  b.onclick=()=>{
+    const t=b.dataset.add;
+    if(t==='fotos') S.fotos.push('');
+    else if(t==='servicos') S.servicos.push({titulo:'',desc:'',preco:''});
+    else S.depoimentos.push({nome:'',texto:''});
+    listas(); render();
+  };
+});
+
+/* ============ construção da página ============ */
+function build(){
+  const nome = S.nome || 'Nome do Negócio';
+  const w = tel(S.whatsapp);
+  const msg = encodeURIComponent('Olá! Vi a página de vocês e gostaria de mais informações.');
+  const link = w ? 'https://wa.me/'+w+'?text='+msg : '#';
+  const insta = String(S.instagram||'').replace('@','').trim();
+  const escuro = S.tema === 'escuro';
+  const servs = S.servicos.filter(x=>x.titulo);
+  const fotos = S.fotos.filter(x=>x && x.trim());
+  const deps = S.depoimentos.filter(x=>x.texto);
+  const sobre = S.sobre || ('A ' + nome + ' atende com dedicação e capricho, com foco em fazer bem feito e no prazo combinado.');
+
+  const heroBg = S.heroImg
+    ? 'linear-gradient(rgba(8,10,16,.72),rgba(8,10,16,.86)),url("'+esc(S.heroImg)+'") center/cover'
+    : 'linear-gradient(140deg,'+S.cor+' 0%,#0b1020 100%)';
+
+  let h = '';
+  h += '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n';
+  h += '<meta charset="UTF-8">\n';
+  h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n';
+  h += '<title>'+esc(nome)+(S.endereco?' — Taguatinga, DF':'')+'</title>\n';
+  h += '<meta name="description" content="'+esc(S.slogan||sobre.slice(0,150))+'">\n';
+  h += '<meta name="theme-color" content="'+S.cor+'">\n';
+  h += '<meta property="og:title" content="'+esc(nome)+'">\n';
+  h += '<meta property="og:description" content="'+esc(S.slogan||sobre.slice(0,150))+'">\n';
+  h += '<meta property="og:type" content="website">\n';
+  if(S.heroImg) h += '<meta property="og:image" content="'+esc(S.heroImg)+'">\n';
+  h += '<link rel="preconnect" href="https://fonts.googleapis.com">\n';
+  h += '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
+  h += '<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">\n';
+
+  h += '<style>\n';
+  h += ':root{--ac:'+S.cor+';--tx:#12151c;--tx2:#5b6475;--bg:#fff;--soft:#f5f7fa;--line:#e6e9f0;--radius:16px}\n';
+  h += '*{margin:0;padding:0;box-sizing:border-box}\n';
+  h += 'html{scroll-behavior:smooth}\n';
+  h += 'body{font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,sans-serif;color:var(--tx);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}\n';
+  h += 'img{max-width:100%;display:block}\n';
+  h += 'a{text-decoration:none;color:inherit}\n';
+  h += '.c{max-width:1080px;margin:0 auto;padding:0 20px}\n';
+  h += 'section{padding:72px 0}\n';
+  h += '.tit{font-size:clamp(25px,4.4vw,36px);font-weight:800;letter-spacing:-.02em;margin-bottom:10px;text-align:center}\n';
+  h += '.sub{color:var(--tx2);text-align:center;max-width:580px;margin:0 auto 42px;font-size:16px}\n';
+
+  /* header */
+  h += 'header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}\n';
+  h += '.nav{display:flex;align-items:center;justify-content:space-between;height:66px}\n';
+  h += '.logo{font-weight:800;font-size:18px;letter-spacing:-.02em}\n';
+  h += '.logo b{color:var(--ac)}\n';
+  h += '.btn{display:inline-flex;align-items:center;gap:8px;background:var(--ac);color:#fff;padding:11px 20px;border-radius:999px;font-weight:700;font-size:14.5px;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 14px rgba(0,0,0,.14)}\n';
+  h += '.btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.2)}\n';
+  h += '.btn.g{background:#fff;color:var(--tx)}\n';
+  h += '.btn.o{background:transparent;border:1.5px solid rgba(255,255,255,.55);color:#fff;box-shadow:none}\n';
+
+  /* hero */
+  h += '.hero{background:'+heroBg+';color:'+(escuro?'#fff':'var(--tx)')+';padding:96px 0 100px;text-align:center;position:relative}\n';
+  h += '.hero h1{font-size:clamp(31px,6.4vw,58px);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:16px}\n';
+  h += '.hero p{font-size:clamp(16px,2.4vw,20px);opacity:.92;max-width:620px;margin:0 auto 32px}\n';
+  h += '.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}\n';
+  h += '.stars{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:7px 15px;border-radius:999px;font-size:13.5px;margin-bottom:22px;font-weight:600}\n';
+
+  /* cards */
+  h += '.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:20px}\n';
+  h += '.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;transition:transform .18s,box-shadow .18s}\n';
+  h += '.card:hover{transform:translateY(-4px);box-shadow:0 12px 34px rgba(16,24,40,.09)}\n';
+  h += '.card h3{font-size:18.5px;font-weight:700;margin-bottom:7px}\n';
+  h += '.card p{color:var(--tx2);font-size:14.5px;margin-bottom:14px}\n';
+  h += '.preco{font-weight:800;color:var(--ac);font-size:16px}\n';
+  h += '.ico{width:46px;height:46px;border-radius:13px;background:'+rgba(S.cor,.12)+';display:grid;place-items:center;margin-bottom:16px}\n';
+  h += '.ico svg{width:23px;height:23px;stroke:var(--ac);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}\n';
+
+  /* sobre */
+  h += '.sobre{background:var(--soft)}\n';
+  h += '.split{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}\n';
+  h += '.split h2{font-size:clamp(24px,3.6vw,33px);font-weight:800;letter-spacing:-.02em;margin-bottom:16px}\n';
+  h += '.split p{color:var(--tx2);font-size:16px;margin-bottom:14px}\n';
+  h += '.split img{border-radius:var(--radius);height:340px;width:100%;object-fit:cover}\n';
+
+  /* galeria */
+  h += '.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}\n';
+  h += '.gal img{border-radius:12px;height:230px;width:100%;object-fit:cover;transition:transform .25s}\n';
+  h += '.gal img:hover{transform:scale(1.03)}\n';
+
+  /* depoimentos */
+  h += '.dep{background:var(--soft)}\n';
+  h += '.dep .card{background:#fff}\n';
+  h += '.dep .card p{font-size:15px;color:var(--tx);font-style:italic;margin-bottom:16px}\n';
+  h += '.aut{display:flex;align-items:center;gap:11px}\n';
+  h += '.av{width:40px;height:40px;border-radius:50%;background:var(--ac);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px}\n';
+  h += '.aut b{font-size:14.5px;display:block}\n';
+  h += '.aut span{font-size:12.5px;color:var(--tx2)}\n';
+
+  /* local */
+  h += '.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:20px;margin-bottom:32px}\n';
+  h += '.bx{background:var(--soft);border-radius:var(--radius);padding:24px;text-align:center}\n';
+  h += '.bx h4{font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--tx2);margin-bottom:8px}\n';
+  h += '.bx p{font-size:15.5px;font-weight:600}\n';
+
+  /* final + footer */
+  h += '.fim{background:var(--ac);color:#fff;text-align:center}\n';
+  h += '.fim h2{font-size:clamp(25px,4.4vw,38px);font-weight:800;margin-bottom:12px;letter-spacing:-.02em}\n';
+  h += '.fim p{opacity:.93;margin-bottom:28px;font-size:16.5px}\n';
+  h += 'footer{background:#0f1319;color:#8b94a6;padding:44px 0;text-align:center;font-size:14px}\n';
+  h += 'footer .logo{color:#fff;margin-bottom:10px}\n';
+  h += 'footer a{color:#8b94a6}\n';
+  h += 'footer a:hover{color:#fff}\n';
+
+  /* float */
+  h += '.float{position:fixed;right:18px;bottom:18px;z-index:90;width:58px;height:58px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 6px 22px rgba(37,211,102,.45);animation:pulse 2.6s infinite}\n';
+  h += '@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}\n';
+  h += '.float svg{width:31px;height:31px;fill:#fff}\n';
+
+  h += '@media(max-width:768px){section{padding:54px 0}.split{grid-template-columns:1fr;gap:28px}.split img{height:250px}.nav .btn{padding:9px 15px;font-size:13.5px}}\n';
+  h += '</style>\n</head>\n<body>\n';
+
+  /* ---- header ---- */
+  h += '<header><div class="c nav">';
+  h += '<div class="logo">'+esc(nome.split(' ')[0])+' <b>'+esc(nome.split(' ').slice(1).join(' '))+'</b></div>';
+  h += '<a class="btn" href="'+link+'" target="_blank">Chamar no WhatsApp</a>';
+  h += '</div></header>\n';
+
+  /* ---- hero ---- */
+  h += '<div class="hero"><div class="c">';
+  if(S.nota) h += '<div class="stars">&#11088; '+esc(S.nota)+(S.numAval?' &middot; '+esc(S.numAval)+' avaliações no Google':'')+'</div>';
+  h += '<h1>'+esc(nome)+'</h1>';
+  h += '<p>'+esc(S.slogan||RAMOS[S.categoria].slogan)+'</p>';
+  h += '<div class="cta">';
+  h += '<a class="btn g" href="'+link+'" target="_blank">Falar no WhatsApp</a>';
+  if(servs.length) h += '<a class="btn o" href="#servicos">Ver serviços</a>';
+  h += '</div></div></div>\n';
+
+  /* ---- serviços ---- */
+  if(servs.length){
+    h += '<section id="servicos"><div class="c">';
+    h += '<h2 class="tit">Nossos serviços</h2>';
+    h += '<p class="sub">Tudo que a gente faz, com preço claro e sem enrolação.</p>';
+    h += '<div class="grid">';
+    servs.forEach(s=>{
+      h += '<div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>';
+      h += '<h3>'+esc(s.titulo)+'</h3>';
+      if(s.desc) h += '<p>'+esc(s.desc)+'</p>';
+      if(s.preco) h += '<div class="preco">'+esc(s.preco)+'</div>';
+      h += '</div>';
+    });
+    h += '</div></div></section>\n';
+  }
+
+  /* ---- sobre ---- */
+  h += '<section class="sobre"><div class="c"><div class="split"><div>';
+  h += '<h2>Sobre a '+esc(nome)+'</h2>';
+  h += '<p>'+esc(sobre)+'</p>';
+  if(S.endereco) h += '<p><strong>Onde estamos:</strong> '+esc(S.endereco)+'</p>';
+  h += '<a class="btn" href="'+link+'" target="_blank" style="margin-top:8px">Fazer um orçamento</a>';
+  h += '</div>';
+  h += fotos[0]
+    ? '<img src="'+esc(fotos[0])+'" alt="'+esc(nome)+'">'
+    : '<div style="height:340px;border-radius:16px;background:linear-gradient(140deg,'+S.cor+',#0b1020);opacity:.85"></div>';
+  h += '</div></div></section>\n';
+
+  /* ---- galeria ---- */
+  if(fotos.length>1){
+    h += '<section><div class="c"><h2 class="tit">Nosso trabalho</h2>';
+    h += '<p class="sub">Alguns resultados de quem já passou por aqui.</p><div class="gal">';
+    fotos.slice(1).forEach(f=>{ h += '<img src="'+esc(f)+'" alt="'+esc(nome)+'" loading="lazy">'; });
+    h += '</div></div></section>\n';
+  }
+
+  /* ---- depoimentos ---- */
+  if(deps.length){
+    h += '<section class="dep"><div class="c"><h2 class="tit">O que dizem sobre a gente</h2>';
+    h += '<p class="sub">Avaliações reais de clientes daqui da região.</p><div class="grid">';
+    deps.forEach(d=>{
+      const n = (d.nome||'Cliente').trim();
+      h += '<div class="card"><div style="color:#f59e0b;font-size:16px;margin-bottom:10px">&#11088;&#11088;&#11088;&#11088;&#11088;</div>';
+      h += '<p>&ldquo;'+esc(d.texto)+'&rdquo;</p>';
+      h += '<div class="aut"><div class="av">'+esc(n.charAt(0).toUpperCase())+'</div>';
+      h += '<div><b>'+esc(n)+'</b><span>Cliente</span></div></div></div>';
+    });
+    h += '</div></div></section>\n';
+  }
+
+  /* ---- localização ---- */
+  if(S.endereco||S.horario){
+    h += '<section><div class="c"><h2 class="tit">Onde nos encontrar</h2>';
+    h += '<p class="sub">Venha tomar um café com a gente.</p><div class="info">';
+    if(S.endereco) h += '<div class="bx"><h4>Endereço</h4><p>'+esc(S.endereco)+'</p></div>';
+    if(S.horario) h += '<div class="bx"><h4>Horário</h4><p>'+esc(S.horario)+'</p></div>';
+    if(w) h += '<div class="bx"><h4>WhatsApp</h4><p>'+esc(S.whatsapp)+'</p></div>';
+    h += '</div>';
+    if(S.endereco){
+      h += '<div style="text-align:center"><a class="btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(nome+' '+S.endereco)+'">Ver no Google Maps</a></div>';
+    }
+    h += '</div></section>\n';
+  }
+
+  /* ---- chamada final ---- */
+  h += '<section class="fim"><div class="c">';
+  h += '<h2>Vamos conversar?</h2>';
+  h += '<p>Chame no WhatsApp e tire suas dúvidas. A gente responde rápido.</p>';
+  h += '<a class="btn g" href="'+link+'" target="_blank">Chamar agora no WhatsApp</a>';
+  h += '</div></section>\n';
+
+  /* ---- footer ---- */
+  h += '<footer><div class="c"><div class="logo">'+esc(nome)+'</div>';
+  if(S.endereco) h += '<p>'+esc(S.endereco)+'</p>';
+  if(insta) h += '<p style="margin-top:8px"><a href="https://instagram.com/'+esc(insta)+'" target="_blank">@'+esc(insta)+'</a></p>';
+  h += '<p style="margin-top:16px;font-size:12.5px;opacity:.6">&copy; '+new Date().getFullYear()+' '+esc(nome)+'. Todos os direitos reservados.</p>';
+  h += '</div></footer>\n';
+
+  /* ---- botão flutuante ---- */
+  if(w){
+    h += '<a class="float" href="'+link+'" target="_blank" aria-label="WhatsApp">';
+    h += '<svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.5.7.6-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.2-.3-.3-.5-.4z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg></a>\n';
+  }
+
+  /* ---- schema SEO ---- */
+  const schema = {
+    "@context":"https://schema.org","@type":"LocalBusiness","name":nome,
+    "description":S.slogan||sobre, "telephone":w?'+'+w:undefined,
+    "address":{"@type":"PostalAddress","streetAddress":S.endereco||'',
+      "addressLocality":"Taguatinga","addressRegion":"DF","addressCountry":"BR"},
+    "openingHours":S.horario||undefined, "image":S.heroImg||fotos[0]||undefined
+  };
+  if(S.nota) schema.aggregateRating = {"@type":"AggregateRating",
+    "ratingValue":S.nota, "reviewCount":S.numAval||'1'};
+  h += '<script type="application/ld+json">'+JSON.stringify(schema)+'<\/script>\n';
+  h += '</body>\n</html>';
+  return h;
+}
+
+/* ============ preview ============ */
+let t;
+function render(){
+  clearTimeout(t);
+  t = setTimeout(()=>{
+    $('frame').srcdoc = build();
+    const n = S.nome ? S.nome.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+      .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') : 'preview';
+    $('urlbar').textContent = n + '.netlify.app';
+  }, 180);
+}
+
+$('vMob').onclick=()=>{ $('frame').classList.add('mob'); $('vMob').classList.add('on'); $('vDesk').classList.remove('on'); };
+$('vDesk').onclick=()=>{ $('frame').classList.remove('mob'); $('vDesk').classList.add('on'); $('vMob').classList.remove('on'); };
+
+/* ============ ações ============ */
+$('baixar').onclick=()=>{
+  const n = S.nome ? S.nome.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') : 'pagina';
+  const b = new Blob([build()],{type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b); a.download = 'index.html'; a.click();
+  URL.revokeObjectURL(a.href);
+  const btn=$('baixar'); btn.textContent='Baixado! Agora arraste em netlify.com/drop';
+  setTimeout(()=>btn.textContent='Baixar página (.html)',3200);
+};
+
+$('copiar').onclick=async()=>{
+  try{ await navigator.clipboard.writeText(build());
+    const b=$('copiar'); b.textContent='Copiado!';
+    setTimeout(()=>b.textContent='Copiar código',1800);
+  }catch(e){ alert('Não consegui copiar. Use o botão Baixar.'); }
+};
+
+$('exemplo').onclick=()=>{
+  S = {
+    nome:'Studio Bella Estética', categoria:'estetica',
+    slogan:'Sua beleza cuidada por quem entende do assunto',
+    sobre:'Há 8 anos em Taguatinga cuidando da autoestima das nossas clientes. Equipe formada, produtos de primeira linha e um atendimento que trata cada pessoa pelo nome.',
+    whatsapp:'61 99999-0000', instagram:'@studiobella',
+    endereco:'CNB 7, Lote 12 — Taguatinga Norte, DF',
+    horario:'Seg a Sex 9h às 19h · Sáb 9h às 14h',
+    cor:'#c026d3', tema:'escuro', heroImg:'', nota:'4.9', numAval:'127',
+    servicos: RAMOS.estetica.serv.map(x=>({titulo:x[0],desc:x[1],preco:x[2]})),
+    fotos:[''],
+    depoimentos:[
+      {nome:'Juliana M.',texto:'Melhor lugar de Taguatinga, sem exagero. Saio de lá sempre me sentindo outra pessoa.'},
+      {nome:'Patrícia S.',texto:'Atendimento impecável e resultado que aparece. Já indiquei pra todas as minhas amigas.'},
+      {nome:'Renata C.',texto:'Faço limpeza de pele há 2 anos com elas. Nunca mais procurei outro lugar.'}
+    ]
+  };
+  sync();
+};
+
+$('limpar').onclick=()=>{
+  if(!confirm('Limpar todos os campos?')) return;
+  S = {nome:'',categoria:'estetica',slogan:'',sobre:'',whatsapp:'',instagram:'',
+    endereco:'',horario:'',cor:'#c026d3',tema:'escuro',heroImg:'',nota:'',numAval:'',
+    servicos:[],fotos:[''],depoimentos:[]};
+  sync();
+};
+
+function sync(){
+  ['nome','categoria','slogan','sobre','whatsapp','instagram','endereco',
+   'horario','cor','tema','heroImg','nota','numAval'].forEach(k=>$(k).value=S[k]||'');
+  listas(); render();
+}
+
+aplicarRamo('estetica'); sync();
+</script>
+</body>
+</html>
