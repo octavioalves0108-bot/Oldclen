@@ -180,18 +180,56 @@ manhã.
 
 ---
 
+## Diretórios comerciais — use como fonte secundária
+
+Existem guias comerciais online com negócios reais do DF, organizados por
+bairro e por ramo. Servem para **levantar nomes em volume** quando as buscas
+do Maps começarem a se repetir:
+
+- **[Bendito Guia](https://www.benditoguia.com.br)** — o mais completo. Ficha
+  por empresa com telefone, endereço e avaliações, navegável por
+  Taguatinga Norte e Taguatinga Sul
+- **[Diário Cidade](https://www.diariocidade.com/df/brasilia/guia/)** —
+  listagem por CNPJ, boa para conferir se o negócio ainda está ativo
+- **[Achei o Profissional](https://acheioprofissional.com.br/esteticista/taguatinga-df)** —
+  específico de serviços, com WhatsApp. Bom para estética, que é seu Tier A
+- **[Barbearias Perto de Mim](https://barbeariaspertodemim.com)** — só
+  barbearia e salão, separado por Taguatinga Norte e Sul
+
+### Duas limitações que você precisa levar a sério
+
+**Nenhum deles diz quem tem site.** Esse é justamente o filtro que define seu
+alvo, e ele só existe na ficha do Google Maps. Então o diretório te dá o
+nome, e a verificação continua sendo no Maps.
+
+**Os dados envelhecem.** Numa única busca eu já vi uma barbearia de Taguatinga
+Norte listada com o telefone `(61) 8672-2499` — celular de 8 dígitos, formato
+que saiu de uso no DF há mais de uma década. Aquele registro está parado há
+anos, e o número não atende mais.
+
+**Nunca mande mensagem para um número tirado direto de diretório.** Confirme
+no Maps antes. Mensagem para número errado é, no melhor caso, tempo perdido;
+no pior, você está mandando proposta comercial para o celular pessoal de um
+estranho.
+
+### O fluxo certo
+1. Maps primeiro — é a única fonte com o filtro de site
+2. Diretório quando as buscas do Maps se repetirem, só para levantar nomes
+3. **Todo nome do diretório volta para o Maps** para confirmar telefone,
+   avaliações e ausência de site
+
+---
+
 ## Um aviso sobre atalhos
 
 Vão te oferecer listas prontas de empresas do DF, extratores de contato do
-Google Maps e robôs de disparo. Três motivos para não usar nesta semana:
+Google Maps e robôs de disparo. Dois motivos para não usar nesta semana:
 
-- **Os dados vêm velhos.** Telefone trocado e negócio fechado são comuns, e
-  você descobre isso mandando mensagem pro vazio
-- **Nenhum deles sabe quem tem site.** É exatamente o filtro que importa, e é
-  o que essas listas não trazem
 - **Disparo em massa derruba seu número.** Ver
   [`06-whatsapp-operacao.md`](06-whatsapp-operacao.md), seção 2 — você perde
   o número, o histórico e a semana
+- **Lista comprada vem sem o filtro que importa** e com os dados velhos,
+  pelos mesmos motivos acima
 
 Os 45 minutos olhando ficha por ficha não são desperdício. É neles que você
 descobre o nome do dono, lê as avaliações que viram depoimento e percebe quem
