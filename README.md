@@ -60,8 +60,19 @@ portfólio.** Em dois dias você sai do zero e passa a ter 15 páginas para most
 | 3 | [`docs/03-abordagem.md`](docs/03-abordagem.md) | O que falar, presencial e por WhatsApp |
 | 4 | [`docs/04-objecoes-e-fechamento.md`](docs/04-objecoes-e-fechamento.md) | As 9 objeções reais e o fechamento |
 | 5 | [`docs/05-motor-de-indicacao.md`](docs/05-motor-de-indicacao.md) | Como sair de 6 para 30 |
+| 6 | [`docs/06-whatsapp-operacao.md`](docs/06-whatsapp-operacao.md) | **Operação só por mensagem** — volume, ban, follow-up |
 | — | [`gerador/index.html`](gerador/index.html) | A ferramenta que monta a página em 10 min |
 | — | [`crm/pipeline.csv`](crm/pipeline.csv) | Onde você controla quem falou o quê |
+
+### Se você for trabalhar só por WhatsApp
+
+Leia o documento 6 antes de mandar qualquer mensagem. Três coisas mudam:
+
+- **A meta da semana cai para 3 a 5**, não 6. Mensagem é mais lenta que rua
+- **Você pode perder o número por ban já na terça** se disparar errado.
+  A seção 2 do documento 6 é a mais importante de todas
+- **WhatsApp não fecha, WhatsApp abre.** O objetivo de cada conversa é
+  conseguir uma chamada de 10 minutos, não vender no chat
 
 ---
 
