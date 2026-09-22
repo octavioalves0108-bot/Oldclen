@@ -1,0 +1,982 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alvaní Guia Kalunga</title>
+<meta name="description" content="Alvaní Torres, guia nativo Kalunga da Chapada dos Veadeiros. Cachoeiras, trilhas e a história viva do Quilombo Kalunga.">
+<meta name="theme-color" content="#0A1311">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0A1311;
+  --bg-2:#0E1B17;
+  --surface:#13231E;
+  --line:rgba(239,232,218,.12);
+  --line-2:rgba(239,232,218,.22);
+  --ink:#EFE8DA;
+  --muted:#A6B1A8;
+  --dim:#6E7C74;
+  --teal:#46DCCB;
+  --teal-deep:#17857D;
+  --gold:#E3A64A;
+  --shade:rgba(5,10,9,.72);
+  --f-display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",sans-serif;
+  --f-serif:"Instrument Serif","Iowan Old Style","Times New Roman",serif;
+  --f-body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-io:cubic-bezier(.76,0,.24,1);
+  --gutter:clamp(16px,5vw,56px);
+  --max:1180px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--f-body);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body.is-locked{overflow:hidden}
+img{max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+::selection{background:var(--teal);color:var(--bg)}
+.wrap{max-width:var(--max);margin-inline:auto;padding-inline:var(--gutter)}
+.mono{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- grain + vignette ---------- */
+.grain{position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.045;background-size:180px;animation:grain 1s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}60%{transform:translate(-2%,6%)}80%{transform:translate(5%,2%)}100%{transform:translate(0,0)}}
+
+/* ---------- split text ---------- */
+.split .w{display:inline-block;white-space:nowrap}
+.split .ch{display:inline-block;transform-origin:50% 100%;will-change:transform,opacity,filter}
+.js .split:not(.is-in) .ch{opacity:0;transform:translateY(.55em) rotateX(-75deg);filter:blur(10px)}
+.split .ch{transition:opacity .9s var(--ease-out),transform 1.1s var(--ease-out),filter .9s var(--ease-out);transition-delay:calc(var(--d,0ms) + var(--i)*var(--st,26ms))}
+
+/* ---------- reveal ---------- */
+.js [data-reveal]:not(.is-in){opacity:0;transform:translateY(28px);filter:blur(6px)}
+[data-reveal]{transition:opacity 1s var(--ease-out),transform 1.2s var(--ease-out),filter 1s var(--ease-out);transition-delay:var(--d,0ms)}
+
+/* ---------- preloader ---------- */
+.loader{position:fixed;inset:0;z-index:100;display:grid;place-items:center;pointer-events:auto}
+.loader__panel{position:absolute;left:0;right:0;height:50.5%;background:#050A09;transition:transform 1.3s var(--ease-io)}
+.loader__panel--top{top:0}
+.loader__panel--bot{bottom:0}
+.loader.is-out .loader__panel--top{transform:translateY(-101%)}
+.loader.is-out .loader__panel--bot{transform:translateY(101%)}
+.loader.is-gone{display:none}
+.loader__inner{position:relative;z-index:2;display:grid;justify-items:center;gap:18px;padding-inline:var(--gutter);text-align:center;transition:opacity .6s ease,transform 1.2s var(--ease-io),filter .8s ease}
+.loader.is-out .loader__inner{opacity:0;transform:scale(1.35);filter:blur(12px)}
+.loader__meta{display:flex;gap:18px;color:var(--dim)}
+.loader__name{position:relative;font:900 clamp(78px,24vw,220px)/.82 var(--f-display);letter-spacing:.01em;text-transform:uppercase;margin:0}
+.loader__outline{color:transparent;-webkit-text-stroke:1px rgba(239,232,218,.35)}
+.loader__fill{position:absolute;inset:0;color:transparent;background:linear-gradient(180deg,#9BF5EA 0%,var(--teal) 45%,var(--teal-deep) 100%);-webkit-background-clip:text;background-clip:text;clip-path:inset(calc(100% - var(--p,0%)) 0 0 0);transition:clip-path .25s linear}
+.loader__line{width:min(320px,70vw);height:1px;background:var(--line);position:relative;overflow:hidden}
+.loader__line i{position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--teal),var(--gold));transform-origin:0 50%;transform:scaleX(var(--pp,0))}
+.loader__row{display:flex;justify-content:space-between;width:min(320px,70vw);color:var(--muted)}
+.loader__count{font-variant-numeric:tabular-nums;color:var(--ink)}
+.loader__tag{font:italic 400 clamp(20px,5vw,28px)/1.2 var(--f-serif);color:var(--muted);margin:0}
+.loader__skip{position:absolute;z-index:3;right:var(--gutter);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:none;border:1px solid var(--line-2);border-radius:999px;padding:8px 14px;color:var(--muted);cursor:pointer;transition:color .3s,border-color .3s}
+.loader__skip:hover{color:var(--ink);border-color:var(--ink)}
+.loader.is-out .loader__skip{opacity:0}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background .5s,backdrop-filter .5s,transform .8s var(--ease-out)}
+.js body:not(.is-ready) .nav{transform:translateY(-110%)}
+.nav.is-solid{background:rgba(10,19,17,.72);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);border-bottom:1px solid var(--line)}
+.nav__in{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:baseline;gap:10px;text-decoration:none}
+.brand b{font:900 26px/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.brand span{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:0 20px;border-radius:999px;font:600 14px/1 var(--f-body);letter-spacing:.02em;text-decoration:none;cursor:pointer;border:1px solid transparent;position:relative;overflow:hidden;isolation:isolate;transition:transform .5s var(--ease-out),border-color .3s,color .3s}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;transform:translateY(101%);transition:transform .6s var(--ease-out)}
+.btn:hover::before{transform:none}
+.btn:active{transform:scale(.97)}
+.btn--solid{background:var(--teal);color:#04201D}
+.btn--solid::before{background:var(--ink)}
+.btn--ghost{border-color:var(--line-2);color:var(--ink);background:rgba(239,232,218,.03)}
+.btn--ghost::before{background:rgba(239,232,218,.1)}
+.btn--sm{min-height:38px;padding:0 16px;font-size:13px}
+.btn svg{width:16px;height:16px;flex:none;transition:transform .5s var(--ease-out)}
+.btn:hover svg{transform:translateX(3px)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;display:grid;align-items:end;overflow:hidden;isolation:isolate;background:#07100E}
+.scene{position:absolute;inset:0;perspective:900px;perspective-origin:50% 40%;z-index:-1}
+.scene__rig{position:absolute;inset:-6%;transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .2s linear}
+.layer{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.layer svg,.layer canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+.layer--sky{transform:translateZ(-420px) scale(1.5)}
+.layer--far{transform:translateZ(-260px) scale(1.3)}
+.layer--mid{transform:translateZ(-80px) scale(1.09)}
+.layer--near{transform:translateZ(60px) scale(.94)}
+.js body:not(.is-ready) .scene__dolly{transform:scale(1.35) translateY(4%)}
+.scene__dolly{position:absolute;inset:0;transform-style:preserve-3d;transition:transform 3.2s var(--ease-out)}
+.scene::after{content:"";position:absolute;inset:0;background:#050A09;opacity:0;pointer-events:none;transition:opacity 2.4s var(--ease-out)}
+.js body:not(.is-ready) .scene::after{opacity:.9}
+.scene__scroll{position:absolute;inset:0;transform-style:preserve-3d;transform:translate3d(0,var(--sy,0px),var(--sz,0px))}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 80% at 50% 40%,transparent 40%,rgba(3,7,6,.75) 100%),linear-gradient(180deg,rgba(7,16,14,.2) 0%,transparent 30%,rgba(10,19,17,.6) 70%,var(--bg) 100%)}
+.hero__rays{position:absolute;inset:0;z-index:-1;pointer-events:none;background:repeating-conic-gradient(from 200deg at 50% -10%,rgba(227,166,74,.07) 0deg 4deg,transparent 4deg 11deg);mask-image:linear-gradient(180deg,#000 0%,transparent 70%);-webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 70%);animation:rays 14s ease-in-out infinite alternate}
+@keyframes rays{from{transform:rotate(-3deg) scale(1.1);opacity:.6}to{transform:rotate(3deg) scale(1.2);opacity:1}}
+.hero__content{padding-block:120px 72px;display:grid;gap:22px;width:100%}
+.hero__eyebrow{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;color:var(--muted)}
+.hero__eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(70,220,203,.6);animation:ping 2.4s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(70,220,203,.55)}80%,100%{box-shadow:0 0 0 12px rgba(70,220,203,0)}}
+.hero__title{margin:0;font:900 clamp(64px,15.5vw,184px)/.84 var(--f-display);text-transform:uppercase;letter-spacing:-.005em;text-wrap:balance;perspective:600px;text-shadow:0 20px 60px rgba(0,0,0,.45)}
+.hero__title .line{display:block}
+.hero__title em{font:italic 400 .8em/1 var(--f-serif);text-transform:none;letter-spacing:-.01em;color:var(--teal);padding-right:.05em}
+.hero__lead{max-width:34ch;margin:0;font-size:clamp(17px,2.2vw,20px);line-height:1.55;color:var(--ink);opacity:.86}
+.hero__lead strong{font-weight:600;color:var(--ink)}
+.hero__cta{display:flex;flex-wrap:wrap;gap:12px}
+.hero__foot{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-top:18px;color:var(--dim)}
+.scroll-cue{display:flex;align-items:center;gap:12px}
+.scroll-cue i{width:1px;height:44px;background:var(--line-2);position:relative;overflow:hidden}
+.scroll-cue i::after{content:"";position:absolute;left:0;top:-40%;width:100%;height:40%;background:var(--teal);animation:cue 2s var(--ease-io) infinite}
+@keyframes cue{to{top:100%}}
+
+/* ---------- marquee ---------- */
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding-block:18px;background:var(--bg)}
+.marquee__track{display:flex;width:max-content;animation:marq 38s linear infinite}
+.marquee__track span{font:800 clamp(28px,6vw,54px)/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em;padding-inline:22px;white-space:nowrap;color:transparent;-webkit-text-stroke:1px rgba(239,232,218,.35);transition:color .4s}
+.marquee__track span:nth-child(4n+1){color:var(--ink);-webkit-text-stroke:0}
+.marquee__track span.sep{color:var(--teal);-webkit-text-stroke:0;padding-inline:0}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ---------- section heads ---------- */
+.section{position:relative;padding-block:clamp(80px,12vw,150px)}
+.kicker{display:flex;align-items:center;gap:12px;color:var(--teal);margin:0 0 18px}
+.kicker::before{content:"";width:28px;height:1px;background:currentColor}
+.h2{margin:0;font:900 clamp(44px,9vw,104px)/.9 var(--f-display);text-transform:uppercase;letter-spacing:.003em;text-wrap:balance;perspective:600px}
+.h2 em{font:italic 400 .82em/1 var(--f-serif);text-transform:none;color:var(--gold)}
+.sub{max-width:52ch;color:var(--muted);margin:22px 0 0;font-size:17px}
+.head-row{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:24px}
+</style>
+<style>
+/* ---------- experiences carousel ---------- */
+.xp{overflow:hidden;background:radial-gradient(90% 60% at 50% 55%,rgba(23,133,125,.16),transparent 70%),var(--bg)}
+.cf{--cw:min(72vw,340px);position:relative;height:calc(var(--cw)*1.25 + 40px);margin-top:clamp(40px,7vw,70px);perspective:1400px;perspective-origin:50% 45%;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
+.cf.is-drag{cursor:grabbing}
+.cf__stage{position:absolute;inset:0;transform-style:preserve-3d}
+.cf__floor{position:absolute;left:50%;bottom:-10px;width:calc(var(--cw)*2.2);height:80px;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 50%,rgba(70,220,203,.28),transparent 70%);filter:blur(10px);pointer-events:none;animation:breathe 5s ease-in-out infinite}
+@keyframes breathe{50%{opacity:.55;transform:translateX(-50%) scaleX(.9)}}
+.card{position:absolute;left:50%;top:0;width:var(--cw);aspect-ratio:4/5;margin-left:calc(var(--cw)/-2);padding:0;border:0;border-radius:22px;overflow:hidden;background:#0B1513;text-align:left;cursor:pointer;transform-style:preserve-3d;will-change:transform,opacity;box-shadow:0 50px 90px -40px rgba(0,0,0,.9),0 0 0 1px rgba(239,232,218,.08) inset;-webkit-tap-highlight-color:transparent}
+.card__art{position:absolute;inset:0}
+.card__art svg,.card__art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.08) translate3d(calc(var(--mx,0)*-10px),calc(var(--my,0)*-10px),0);transition:transform .6s var(--ease-out)}
+.card__shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,10,9,.35) 0%,transparent 30%,transparent 50%,rgba(5,10,9,.88) 100%)}
+.card__shine{position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 45% at calc(50% + var(--mx,0)*40%) calc(30% + var(--my,0)*30%),rgba(255,255,255,.22),transparent 70%);mix-blend-mode:soft-light;opacity:0;transition:opacity .5s}
+.card.is-active .card__shine{opacity:1}
+.card__top{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(5,10,9,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(239,232,218,.16);color:var(--ink)}
+.card__num{color:rgba(239,232,218,.7)}
+.card__body{position:absolute;left:18px;right:18px;bottom:18px;transform:translateZ(40px)}
+.card__veil{position:absolute;inset:0;background:#030706;pointer-events:none}
+.card__loc{display:block;color:var(--teal);margin:0 0 8px}
+.card__name{display:block;margin:0;font:900 clamp(34px,9.5vw,46px)/.9 var(--f-display);text-transform:uppercase;letter-spacing:.005em;color:var(--ink);text-wrap:balance}
+.card.is-active{box-shadow:0 60px 100px -40px rgba(0,0,0,.95),0 0 0 1px rgba(70,220,203,.45) inset,0 0 60px -10px rgba(70,220,203,.25)}
+.cf__ui{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:34px}
+.round{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;background:rgba(239,232,218,.04);border:1px solid var(--line-2);cursor:pointer;transition:background .3s,border-color .3s,transform .4s var(--ease-out)}
+.round:hover{background:rgba(70,220,203,.12);border-color:var(--teal)}
+.round:active{transform:scale(.92)}
+.round svg{width:18px;height:18px}
+.cf__meter{display:grid;gap:8px;justify-items:center;min-width:120px}
+.cf__count{font-variant-numeric:tabular-nums;color:var(--muted)}
+.cf__count b{color:var(--ink);font-weight:500}
+.cf__bar{width:120px;height:2px;background:var(--line);overflow:hidden;border-radius:2px}
+.cf__bar i{display:block;height:100%;background:var(--teal);transform-origin:0 50%;transform:scaleX(var(--t,0))}
+.detail{display:grid;gap:22px;margin-top:clamp(40px,6vw,64px);padding-top:32px;border-top:1px solid var(--line)}
+.detail .swap{transition:opacity .45s var(--ease-out),transform .6s var(--ease-out),filter .45s}
+.detail.is-swap .swap{opacity:0;transform:translateY(14px);filter:blur(6px)}
+.detail__name{margin:0;font:900 clamp(40px,8vw,72px)/.9 var(--f-display);text-transform:uppercase}
+.detail__desc{margin:0;max-width:56ch;color:var(--ink);opacity:.85;font-size:17px}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.facts li{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(239,232,218,.03);font-size:14px;color:var(--muted)}
+.facts li b{color:var(--ink);font-weight:600}
+
+/* ---------- guide ---------- */
+.guide{background:var(--bg-2);overflow:hidden}
+.guide__grid{display:grid;gap:clamp(40px,7vw,90px);align-items:center}
+.emblem{position:relative;width:min(100%,440px);aspect-ratio:1;margin-inline:auto;display:grid;place-items:center;perspective:900px}
+.emblem__disc{position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#2FB3A6 0%,#0F5953 45%,#062623 100%);box-shadow:0 40px 90px -30px rgba(0,0,0,.9),inset 0 0 60px rgba(0,0,0,.5);overflow:hidden;transform:rotateX(var(--erx,0deg)) rotateY(var(--ery,0deg));transition:transform .4s var(--ease-out)}
+.emblem__disc::before{content:"";position:absolute;inset:-30%;background:repeating-radial-gradient(circle at 50% 120%,rgba(255,255,255,.07) 0 2px,transparent 2px 22px);animation:ripple 6s linear infinite}
+@keyframes ripple{to{transform:translateY(-22px)}}
+.emblem__letter{position:relative;font:900 clamp(160px,42vw,260px)/1 var(--f-display);color:var(--ink);text-shadow:0 18px 50px rgba(0,0,0,.5);transform:translateZ(60px) rotateX(var(--erx,0deg)) rotateY(var(--ery,0deg));transition:transform .4s var(--ease-out)}
+.emblem__ring{position:absolute;inset:0;animation:spin 28s linear infinite}
+.emblem__ring text{font:500 13px var(--f-mono);letter-spacing:.32em;text-transform:uppercase;fill:var(--muted)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.guide__text p{margin:0 0 18px;max-width:56ch;color:var(--muted);font-size:17px}
+.guide__text p.lede{font:400 clamp(24px,3.4vw,32px)/1.3 var(--f-serif);color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:34px;padding-top:26px;border-top:1px solid var(--line)}
+.stat b{display:block;font:900 clamp(42px,10vw,76px)/.9 var(--f-display);font-variant-numeric:tabular-nums;color:var(--ink)}
+.stat b small{font-size:.5em;color:var(--teal);margin-left:2px}
+.stat > span{display:block;margin-top:8px;color:var(--dim);line-height:1.5}
+
+/* ---------- manifesto ---------- */
+.manifesto{padding-block:clamp(90px,14vw,170px)}
+.manifesto p{margin:0;font:400 clamp(32px,6.6vw,76px)/1.08 var(--f-serif);letter-spacing:-.01em;text-wrap:balance}
+.manifesto .mw{opacity:.16;transition:opacity .5s ease,color .5s ease}
+.manifesto .mw.on{opacity:1}
+.manifesto .mw.hl.on{color:var(--teal);font-style:italic}
+
+/* ---------- final cta ---------- */
+.cta{position:relative;overflow:hidden;isolation:isolate;text-align:center;padding-block:clamp(100px,16vw,180px)}
+.cta__rings{position:absolute;left:50%;top:50%;width:0;height:0;z-index:-1}
+.cta__rings i{position:absolute;left:0;top:0;width:900px;height:900px;margin:-450px 0 0 -450px;border-radius:50%;border:1px solid rgba(70,220,203,.35);transform:scale(.05);opacity:0;animation:drop 7.5s cubic-bezier(.2,.6,.3,1) infinite}
+.cta__rings i:nth-child(2){animation-delay:1.5s}
+.cta__rings i:nth-child(3){animation-delay:3s}
+.cta__rings i:nth-child(4){animation-delay:4.5s}
+.cta__rings i:nth-child(5){animation-delay:6s}
+@keyframes drop{0%{transform:scale(.05);opacity:0}10%{opacity:1}100%{transform:scale(1);opacity:0}}
+.cta::before{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(50% 45% at 50% 50%,rgba(23,133,125,.35),transparent 70%)}
+.cta .h2{font-size:clamp(52px,12vw,140px)}
+.cta__handle{display:inline-flex;align-items:center;gap:10px;margin:28px 0 30px;padding:10px 10px 10px 18px;border-radius:999px;border:1px solid var(--line-2);background:rgba(5,10,9,.4)}
+.cta__handle code{font:500 15px var(--f-mono);color:var(--ink);user-select:all}
+.copy{border:0;border-radius:999px;padding:8px 12px;background:rgba(239,232,218,.08);cursor:pointer;transition:background .3s}
+.copy:hover{background:rgba(70,220,203,.2)}
+.cta__note{max-width:46ch;margin:26px auto 0;color:var(--dim);font-size:14px}
+
+/* ---------- footer ---------- */
+.foot{border-top:1px solid var(--line);padding-block:34px calc(34px + env(safe-area-inset-bottom,0px));color:var(--dim)}
+.foot__in{display:flex;flex-wrap:wrap;gap:14px 28px;justify-content:space-between;align-items:center}
+.foot small{font-size:12px;line-height:1.6;max-width:60ch}
+
+/* ---------- wide screens ---------- */
+@media (min-width:900px){
+  .hero__content{padding-block:140px 90px}
+  .detail{grid-template-columns:1.1fr 1fr;align-items:start;column-gap:60px}
+  .detail__side{display:grid;gap:22px;justify-items:start}
+  .guide__grid{grid-template-columns:.9fr 1.1fr}
+  .cf{--cw:min(34vw,380px)}
+}
+@media (max-width:520px){
+  .nav .brand span,.hero__eyebrow .sep{display:none}
+  .hero__foot .mono:last-child{display:none}
+  .stats{gap:8px}
+  .stat > span{font-size:10px;letter-spacing:.1em}
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0ms!important}
+  .grain{display:none}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+<div class="grain" id="grain" aria-hidden="true"></div>
+
+<div class="loader" id="loader" role="status" aria-label="Carregando">
+  <div class="loader__panel loader__panel--top"></div>
+  <div class="loader__panel loader__panel--bot"></div>
+  <div class="loader__inner">
+    <div class="loader__meta mono"><span>Cavalcante · GO</span><span>13°47′S 47°27′W</span></div>
+    <p class="loader__name" aria-label="Alvaní"><span class="loader__outline" aria-hidden="true">Alvaní</span><span class="loader__fill" id="loadFill" aria-hidden="true">Alvaní</span></p>
+    <p class="loader__tag">guia nativo Kalunga</p>
+    <div class="loader__line" id="loadLine"><i></i></div>
+    <div class="loader__row mono"><span id="loadLabel">Carregando o território</span><span class="loader__count" id="loadCount">000</span></div>
+  </div>
+  <button class="loader__skip mono" id="skip" type="button">Pular intro</button>
+</div>
+
+<header class="nav" id="nav">
+  <div class="wrap nav__in">
+    <a class="brand" href="#topo"><b>Alvaní</b><span class="mono">Guia Kalunga</span></a>
+    <a class="btn btn--solid btn--sm" href="https://www.instagram.com/alvani_guia.nativo/" target="_blank" rel="noopener">Reservar</a>
+  </div>
+</header>
+
+<main id="topo">
+  <section class="hero" id="hero">
+    <div class="scene" aria-hidden="true">
+      <div class="scene__rig" id="rig">
+        <div class="scene__dolly">
+          <div class="scene__scroll" id="sceneScroll">
+            <div class="layer layer--sky" id="lSky"></div>
+            <div class="layer layer--far" id="lFar"></div>
+            <div class="layer layer--mid" id="lMid"><canvas id="falls"></canvas></div>
+            <div class="layer layer--near" id="lNear"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero__rays" aria-hidden="true"></div>
+    <div class="wrap hero__content">
+      <p class="hero__eyebrow mono" data-reveal style="--d:200ms"><span class="dot"></span>Alvaní Torres <span class="sep">—</span> Chapada dos Veadeiros</p>
+      <h1 class="hero__title" aria-label="Águas que guardam histórias">
+        <span class="line split" data-split style="--d:350ms">Águas que</span>
+        <span class="line split" data-split style="--d:600ms">guardam <em>histórias</em></span>
+      </h1>
+      <p class="hero__lead" data-reveal style="--d:1100ms">Cachoeiras, trilhas e a história viva do Quilombo Kalunga, guiadas por quem nasceu no <strong>Vão de Almas</strong>.</p>
+      <div class="hero__cta" data-reveal style="--d:1300ms">
+        <a class="btn btn--solid" href="#experiencias">Ver experiências <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn--ghost" href="https://www.instagram.com/alvani_guia.nativo/" target="_blank" rel="noopener">@alvani_guia.nativo</a>
+      </div>
+      <div class="hero__foot" data-reveal style="--d:1500ms">
+        <div class="scroll-cue mono"><i></i>Role para explorar</div>
+        <span class="mono">Território Kalunga · Goiás</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track" id="marquee"></div>
+  </div>
+
+  <section class="section xp" id="experiencias" aria-roledescription="carrossel" aria-label="Experiências">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <p class="kicker mono" data-reveal>Experiências</p>
+          <h2 class="h2 split" data-split>Seis caminhos pelo <em>território</em></h2>
+        </div>
+        <p class="sub" data-reveal style="--d:200ms">Roteiros que o Alvaní conduz em Cavalcante e nas comunidades Kalunga. Deslize para escolher o seu.</p>
+      </div>
+      <div class="cf" id="cf">
+        <div class="cf__floor"></div>
+        <div class="cf__stage" id="stage"></div>
+      </div>
+      <div class="cf__ui">
+        <button class="round" id="prev" type="button" aria-label="Experiência anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+        <div class="cf__meter">
+          <span class="cf__count mono" id="count"><b>01</b> / 06</span>
+          <div class="cf__bar"><i id="bar"></i></div>
+        </div>
+        <button class="round" id="next" type="button" aria-label="Próxima experiência"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="detail" id="detail" aria-live="polite">
+        <div class="swap">
+          <p class="kicker mono" id="dTag">Cartão-postal</p>
+          <h3 class="detail__name" id="dName">Cachoeira Santa Bárbara</h3>
+        </div>
+        <div class="detail__side swap">
+          <p class="detail__desc" id="dDesc"></p>
+          <ul class="facts" id="dFacts"></ul>
+          <a class="btn btn--solid" id="dCta" href="https://www.instagram.com/alvani_guia.nativo/" target="_blank" rel="noopener">Quero este roteiro <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section guide" id="guia">
+    <div class="wrap guide__grid">
+      <div class="emblem" id="emblem" data-reveal aria-hidden="true">
+        <svg class="emblem__ring" viewBox="0 0 440 440"><defs><path id="circ" d="M220,220 m-200,0 a200,200 0 1,1 400,0 a200,200 0 1,1 -400,0"/></defs><text><textPath href="#circ">Guia nativo Kalunga · Quilombo Vão de Almas · Chapada dos Veadeiros ·</textPath></text></svg>
+        <div class="emblem__disc"></div>
+        <span class="emblem__letter">A</span>
+      </div>
+      <div class="guide__text">
+        <p class="kicker mono" data-reveal>O guia</p>
+        <h2 class="h2 split" data-split>Quem nasceu <em>aqui</em> conhece o caminho</h2>
+        <p class="lede" data-reveal style="margin-top:28px">Alvaní Torres é Kalunga do Quilombo Vão de Almas, em Cavalcante.</p>
+        <p data-reveal style="--d:120ms">Desde 2015 ele conduz visitantes, professores, estudantes e antropólogos pelas comunidades Kalunga de Cavalcante, Teresina de Goiás e Monte Alegre de Goiás. Na trilha, explica a vegetação, conta as histórias do povo Kalunga e mostra o lugar do jeito de quem vive nele.</p>
+        <div class="stats">
+          <div class="stat" data-reveal><b data-count="2015" data-from="1990">2015</b><span class="mono">guiando desde</span></div>
+          <div class="stat" data-reveal style="--d:120ms"><b data-count="3">3</b><span class="mono">municípios Kalunga</span></div>
+          <div class="stat" data-reveal style="--d:240ms"><b><span data-count="12">12</span><small>m</small></b><span class="mono">de fundo no poço do Guardião</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="manifesto">
+    <div class="wrap">
+      <p id="manifesto">Aqui, a trilha não é só caminho. É a memória de um povo que construiu a própria liberdade no coração do cerrado.</p>
+    </div>
+  </section>
+
+  <section class="cta" id="reservar">
+    <div class="cta__rings" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="wrap">
+      <p class="kicker mono" data-reveal style="justify-content:center">Reservas</p>
+      <h2 class="h2 split" data-split>Reserve seu <em>caminho</em></h2>
+      <div class="cta__handle" data-reveal><code id="handle">@alvani_guia.nativo</code><button class="copy mono" id="copy" type="button">Copiar</button></div>
+      <div data-reveal style="--d:120ms"><a class="btn btn--solid" href="https://www.instagram.com/alvani_guia.nativo/" target="_blank" rel="noopener">Chamar no Instagram <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      <p class="cta__note" data-reveal style="--d:200ms">As cachoeiras do Engenho II, no território Kalunga, só podem ser visitadas com guia credenciado. Combine data, roteiro e valores direto com o Alvaní.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <a class="brand" href="#topo"><b>Alvaní</b><span class="mono">Guia Kalunga</span></a>
+    <span class="mono">13°47′S · 47°27′W · Cavalcante, GO</span>
+    <small>Ilustrações criadas para esta página. Roteiros, datas e valores sujeitos a confirmação com o guia.</small>
+  </div>
+</footer>
+<script>
+const IG = 'https://www.instagram.com/alvani_guia.nativo/';
+
+// foto: cole a URL de uma foto real para substituir a ilustração do cartão
+const XP = [
+  { id:'sb', name:'Cachoeira Santa Bárbara', tag:'Cartão-postal', loc:'Engenho II · Cavalcante', foto:'',
+    desc:'O poço azul-turquesa mais famoso da Chapada dos Veadeiros, dentro do território quilombola Kalunga. É a imagem que faz muita gente decidir vir até aqui.',
+    facts:[['Local','Comunidade Engenho II'],['Acesso','Só com guia credenciado'],['Combina com','Capivara e Candaru no mesmo dia']],
+    art:{kind:'fall', seed:3, sky:['#0A2125','#2E7B73'], glow:'#C9FFF4', rock:['#06120F','#0E2621','#1A443C'], water:'#86F4E5', pool:['#5CF0DE','#0E8C80']} },
+  { id:'cc', name:'Capivara & Candaru', tag:'Circuito do dia', loc:'Engenho II · Cavalcante', foto:'',
+    desc:'As outras duas quedas do Engenho II. Dá para visitar as três cachoeiras da comunidade em um único dia, com tempo para banho e fotos em cada uma.',
+    facts:[['Local','Comunidade Engenho II'],['Roteiro','Santa Bárbara, Capivara e Candaru em 1 dia'],['Território','Quilombo Kalunga']],
+    art:{kind:'fall', seed:11, wide:true, sky:['#0C2014','#4E8A56'], glow:'#F3F6C6', rock:['#07130B','#122A1A','#1F4429'], water:'#E4FBEF', pool:['#7FE3B8','#1D7E5E']} },
+  { id:'gd', name:'Cachoeira do Guardião', tag:'Pouco explorada', loc:'Vão do Moleque · Cavalcante', foto:'',
+    desc:'Um refúgio remoto na comunidade Kalunga do Vão do Moleque, aberto à visitação em 2018. O poço azul chega a 12 metros de profundidade, e poucos guias conhecem o caminho até lá.',
+    facts:[['Local','Comunidade Vão do Moleque'],['Poço','Até 12 m de profundidade'],['Aberta à visitação','Desde 2018']],
+    art:{kind:'fall', seed:21, tall:true, sky:['#050F26','#1E4D8C'], glow:'#C2DBFF', rock:['#030914','#0A1932','#132B52'], water:'#B9DCFF', pool:['#3F86FF','#0B2F8A']} },
+  { id:'bq', name:'Complexo Boqueirão', tag:'Borda infinita', loc:'Kalunga · 75 km de Cavalcante', foto:'',
+    desc:'Quatro piscinas naturais de borda infinita, ligadas por uma trilha curta, com água mais morna que a de outros pontos da Chapada. Fica perto da divisa com o Tocantins.',
+    facts:[['Piscinas','4 naturais, de borda infinita'],['Trilha','300 m, de fácil acesso'],['Melhor época','Maio a outubro']],
+    art:{kind:'pools', seed:34, sky:['#241006','#D4863C'], glow:'#FFE2A6', rock:['#130904','#2A150A','#4A2610'], water:'#FFEBC8', pool:['#6FE8DF','#1C9C95']} },
+  { id:'va', name:'Vão de Almas', tag:'Raiz Kalunga', loc:'Quilombo Vão de Almas · Cavalcante', foto:'',
+    desc:'O quilombo onde o Alvaní nasceu, um dos quatro núcleos do território Kalunga. Uma imersão nas histórias, nas tradições e no modo de vida de quem construiu uma comunidade própria no coração do cerrado.',
+    facts:[['Território','Quilombo Kalunga'],['Experiência','História e cultura'],['Guia','Nativo da comunidade']],
+    art:{kind:'culture', seed:47, sky:['#130912','#8C4838'], glow:'#FFC58A', rock:['#090407','#1A0D10','#2F1815']} },
+  { id:'hc', name:'Turismo histórico e cultural', tag:'Grupos e escolas', loc:'Cavalcante · Teresina · Monte Alegre', foto:'',
+    desc:'Roteiros pelas comunidades Kalunga dos três municípios, pensados para visitantes, professores, estudantes e antropólogos. É o trabalho que o Alvaní faz desde 2015.',
+    facts:[['Desde','2015'],['Municípios','Cavalcante, Teresina de Goiás e Monte Alegre de Goiás'],['Público','Visitantes, escolas e pesquisadores']],
+    art:{kind:'culture', seed:58, night:true, sky:['#060713','#2D2654'], glow:'#E3A64A', rock:['#040409','#0B0B1A','#171632']} }
+];
+
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = (s, c = document) => c.querySelector(s);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function rng(seed){ return () => { seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const f = n => Math.round(n * 10) / 10;
+
+/* ---------- SVG scene primitives ---------- */
+function mesas(r, W, H, y0, amp, steps){
+  let x = 0, y = y0, d = `M0 ${f(H)} L0 ${f(y)}`;
+  while (x < W){
+    const seg = W / steps * (0.5 + r());
+    if (r() < 0.55){ x += seg; d += ` L${f(x)} ${f(y)}`; }
+    else { const ny = y0 + (r() - 0.5) * amp; x += seg * 0.18; d += ` L${f(x)} ${f(ny)}`; y = ny; }
+  }
+  return d + ` L${f(W)} ${f(y)} L${f(W)} ${f(H)} Z`;
+}
+function strata(r, W, y0, y1, n, color){
+  let s = '';
+  for (let i = 0; i < n; i++){
+    const y = lerp(y0, y1, (i + r() * 0.6) / n);
+    let d = `M0 ${f(y)}`;
+    for (let x = 0; x <= W; x += W / 8) d += ` L${f(x)} ${f(y + (r() - 0.5) * 8)}`;
+    s += `<path d="${d}" stroke="${color}" stroke-opacity="${f(0.06 + r() * 0.08)}" stroke-width="${f(0.8 + r() * 1.4)}" fill="none"/>`;
+  }
+  return s;
+}
+function stars(r, W, H, n, maxY, twinkle){
+  let s = '';
+  for (let i = 0; i < n; i++){
+    const cx = r() * W, cy = r() * maxY, rad = f(0.4 + r() * 1.3), o = f(0.25 + r() * 0.75);
+    s += `<circle cx="${f(cx)}" cy="${f(cy)}" r="${rad}" fill="#fff" opacity="${o}">` +
+      (i < twinkle ? `<animate attributeName="opacity" values="${o};.05;${o}" dur="${f(2 + r() * 4)}s" begin="-${f(r() * 4)}s" repeatCount="indefinite"/>` : '') + `</circle>`;
+  }
+  return s;
+}
+function grass(r, W, H, y, n, color, hMax){
+  let d = '';
+  for (let i = 0; i < n; i++){
+    const x = r() * W, h = hMax * (0.35 + r() * 0.65), lean = (r() - 0.5) * h * 0.5, w = 1.5 + r() * 2.5;
+    d += `M${f(x - w)} ${f(y)} Q${f(x + lean * 0.4)} ${f(y - h * 0.6)} ${f(x + lean)} ${f(y - h)} Q${f(x + lean * 0.3 + w)} ${f(y - h * 0.5)} ${f(x + w)} ${f(y)} Z `;
+  }
+  return `<path d="${d}" fill="${color}"/>`;
+}
+function buriti(x, gy, h, lean, s, color){
+  const tx = x + lean, ty = gy - h;
+  let p = `<path d="M${f(x)} ${f(gy)} Q${f(x + lean * 0.2)} ${f(gy - h * 0.5)} ${f(tx)} ${f(ty)}" stroke="${color}" stroke-width="${f(4 * s)}" fill="none" stroke-linecap="round"/>`;
+  for (let j = 0; j < 13; j++){
+    const a = Math.PI * (1.05 + j / 12 * 0.9), L = h * (0.28 + (j % 3) * 0.03);
+    const ex = tx + Math.cos(a) * L, ey = ty + Math.sin(a) * L * 0.75 + L * 0.35;
+    const cx = tx + Math.cos(a) * L * 0.55, cy = ty + Math.sin(a) * L * 0.9;
+    p += `<path d="M${f(tx)} ${f(ty)} Q${f(cx)} ${f(cy)} ${f(ex)} ${f(ey)}" stroke="${color}" stroke-width="${f(2.2 * s)}" fill="none" stroke-linecap="round"/>`;
+  }
+  return p;
+}
+function fallPattern(id, dur){
+  return `<pattern id="${id}" width="16" height="64" patternUnits="userSpaceOnUse">` +
+    `<path d="M2 0v40M6 12v52M10 0v22M10 32v32M14 6v30" stroke="#fff" stroke-opacity=".6" stroke-width="1.5" stroke-linecap="round"/>` +
+    `<animateTransform attributeName="patternTransform" type="translate" from="0 0" to="0 64" dur="${dur}s" repeatCount="indefinite"/></pattern>`;
+}
+
+/* ---------- card artwork ---------- */
+function cardArt(x){
+  const a = x.art, W = 400, H = 500, r = rng(a.seed), id = x.id;
+  let defs = `<linearGradient id="sk-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a.sky[0]}"/><stop offset="1" stop-color="${a.sky[1]}"/></linearGradient>` +
+    `<radialGradient id="gl-${id}"><stop offset="0" stop-color="${a.glow}" stop-opacity=".95"/><stop offset=".25" stop-color="${a.glow}" stop-opacity=".35"/><stop offset="1" stop-color="${a.glow}" stop-opacity="0"/></radialGradient>` +
+    `<filter id="bl-${id}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>`;
+  let body = `<rect width="${W}" height="${H}" fill="url(#sk-${id})"/>`;
+
+  if (a.kind === 'fall'){
+    const lipY = H * (a.tall ? 0.22 : 0.3), poolY = H * 0.74, cx = 200 + (r() - 0.5) * 30, fw = a.wide ? 120 : 44;
+    defs += fallPattern(`fp-${id}`, a.tall ? 0.7 : 0.95) +
+      `<radialGradient id="pl-${id}" cx=".5" cy=".3"><stop offset="0" stop-color="${a.pool[0]}"/><stop offset="1" stop-color="${a.pool[1]}"/></radialGradient>`;
+    body += `<circle cx="${f(cx)}" cy="${f(lipY - 60)}" r="170" fill="url(#gl-${id})"/>`;
+    body += stars(r, W, H, 26, lipY, 8);
+    body += `<path d="${mesas(r, W, H, lipY - 70, 40, 5)}" fill="${a.rock[2]}" opacity=".7"/>`;
+    let top = `M0 ${f(H)} L0 ${f(lipY - 30 - r() * 30)}`;
+    for (let i = 1; i < 5; i++) top += ` L${f((cx - fw / 2) * i / 5)} ${f(lipY - 40 * (1 - i / 5) - r() * 18)}`;
+    top += ` L${f(cx - fw / 2)} ${f(lipY)} L${f(cx + fw / 2)} ${f(lipY)}`;
+    for (let i = 1; i < 5; i++) top += ` L${f(cx + fw / 2 + (W - cx - fw / 2) * i / 5)} ${f(lipY - 40 * i / 5 - r() * 18)}`;
+    top += ` L${W} ${f(lipY - 30 - r() * 30)} L${W} ${H} Z`;
+    body += `<path d="${top}" fill="${a.rock[1]}"/>` + strata(r, W, lipY, poolY, 9, a.glow);
+    body += `<rect x="${f(cx - fw / 2)}" y="${f(lipY)}" width="${fw}" height="${f(poolY - lipY + 14)}" fill="${a.water}" opacity=".55"/>` +
+      `<rect x="${f(cx - fw / 2)}" y="${f(lipY)}" width="${fw}" height="${f(poolY - lipY + 14)}" fill="url(#fp-${id})"/>` +
+      `<rect x="${f(cx - fw / 2 - 4)}" y="${f(lipY - 2)}" width="${fw + 8}" height="6" rx="3" fill="#fff" opacity=".7"/>`;
+    let L = `M0 ${H} L0 ${f(lipY + 10)}`, R = `M${W} ${H} L${W} ${f(lipY + 10)}`;
+    for (let k = 0; k <= 6; k++){
+      const y = lerp(lipY + 10, poolY + 10, k / 6), spread = k * 9 + r() * 26;
+      L += ` L${f(cx - fw / 2 - 34 - spread)} ${f(y)}`;
+      R += ` L${f(cx + fw / 2 + 34 + spread + r() * 10)} ${f(y)}`;
+    }
+    L += ` L${f(cx - 150)} ${H} Z`; R += ` L${f(cx + 150)} ${H} Z`;
+    body += `<path d="${L}" fill="${a.rock[0]}" stroke="${a.glow}" stroke-opacity=".18"/><path d="${R}" fill="${a.rock[0]}" stroke="${a.glow}" stroke-opacity=".12"/>`;
+    body += `<ellipse cx="${f(cx)}" cy="${f(poolY + 26)}" rx="120" ry="24" fill="url(#pl-${id})"/>`;
+    for (let k = 0; k < 3; k++) body += `<ellipse cx="${f(cx)}" cy="${f(poolY + 24)}" rx="20" ry="4" fill="none" stroke="#fff" stroke-opacity=".5"><animate attributeName="rx" values="20;110" dur="3s" begin="-${k}s" repeatCount="indefinite"/><animate attributeName="ry" values="4;20" dur="3s" begin="-${k}s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".6;0" dur="3s" begin="-${k}s" repeatCount="indefinite"/></ellipse>`;
+    body += `<g filter="url(#bl-${id})">` + [0, 1, 2].map(k => `<ellipse cx="${f(cx + (k - 1) * 30)}" cy="${f(poolY + 6)}" rx="${40 + k * 10}" ry="18" fill="#fff" opacity=".35"><animate attributeName="opacity" values=".15;.45;.15" dur="${3 + k}s" repeatCount="indefinite"/></ellipse>`).join('') + `</g>`;
+    body += `<path d="M0 ${H} L0 ${f(H - 40)} Q60 ${f(H - 70)} 120 ${f(H - 44)} T260 ${f(H - 50)} T400 ${f(H - 60)} L400 ${H} Z" fill="#020605"/>` + grass(r, W, H, H - 30, 26, '#020605', 60);
+  }
+
+  if (a.kind === 'pools'){
+    const sunY = H * 0.36;
+    defs += fallPattern(`fp-${id}`, 1.1) +
+      `<linearGradient id="pl-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a.pool[0]}"/><stop offset="1" stop-color="${a.pool[1]}"/></linearGradient>`;
+    body += `<circle cx="250" cy="${f(sunY)}" r="210" fill="url(#gl-${id})"/><circle cx="250" cy="${f(sunY)}" r="26" fill="${a.glow}"/>`;
+    body += `<path d="${mesas(r, W, H, H * 0.42, 50, 5)}" fill="${a.rock[2]}" opacity=".85"/>`;
+    for (let k = 0; k < 4; k++){
+      const y = H * (0.5 + k * 0.105), x0 = W * (0.3 - k * 0.09) + (r() - 0.5) * 20, x1 = W * (0.7 + k * 0.09) + (r() - 0.5) * 20, hh = H * 0.1;
+      body += `<path d="M${f(x0 - 6)} ${f(y)} L${f(x1 + 6)} ${f(y)} L${f(x1 + 18)} ${f(y + hh)} L${f(x0 - 18)} ${f(y + hh)} Z" fill="${k % 2 ? a.rock[1] : a.rock[0]}"/>` +
+        `<rect x="${f(x0)}" y="${f(y - 12)}" width="${f(x1 - x0)}" height="14" rx="7" fill="url(#pl-${id})"/>` +
+        `<rect x="${f(x0 + 6)}" y="${f(y)}" width="${f(x1 - x0 - 12)}" height="2" fill="${a.glow}" opacity=".9"><animate attributeName="opacity" values=".5;1;.5" dur="${2.5 + k}s" repeatCount="indefinite"/></rect>` +
+        `<ellipse cx="${f(250 - k * 12)}" cy="${f(y - 6)}" rx="${14 + k * 6}" ry="2.5" fill="#fff" opacity=".8"/>` +
+        (k < 3 ? `<rect x="${f(lerp(x0, x1, 0.25 + r() * 0.5) - 12)}" y="${f(y + 1)}" width="24" height="${f(hh - 2)}" fill="${a.water}" opacity=".45"/><rect x="${f(lerp(x0, x1, 0.4) - 12)}" y="${f(y + 1)}" width="24" height="${f(hh - 2)}" fill="url(#fp-${id})" opacity=".8"/>` : '');
+    }
+    body += grass(r, W, H, H, 30, '#0A0402', 70);
+  }
+
+  if (a.kind === 'culture'){
+    const gy = H * 0.74;
+    body += a.night ? `<circle cx="300" cy="110" r="150" fill="url(#gl-${id})" opacity=".5"/><circle cx="300" cy="110" r="22" fill="#F7E7C6"/><circle cx="291" cy="104" r="20" fill="${a.sky[0]}" opacity=".35"/>`
+      : `<circle cx="140" cy="${f(H * 0.5)}" r="240" fill="url(#gl-${id})"/>`;
+    body += stars(r, W, H, a.night ? 90 : 30, H * 0.55, 18);
+    body += `<path d="${mesas(r, W, H, H * 0.56, 36, 5)}" fill="${a.rock[2]}" opacity=".9"/>`;
+    body += `<path d="M0 ${H} L0 ${f(gy)} Q120 ${f(gy - 18)} 220 ${f(gy - 6)} T400 ${f(gy - 14)} L400 ${H} Z" fill="${a.rock[1]}"/>`;
+    body += `<path d="M70 ${f(gy + 2)} L70 ${f(gy - 34)} L58 ${f(gy - 34)} L100 ${f(gy - 66)} L150 ${f(gy - 34)} L138 ${f(gy - 34)} L138 ${f(gy + 2)} Z" fill="${a.rock[0]}"/><rect x="96" y="${f(gy - 24)}" width="14" height="26" fill="${a.glow}" opacity=".55"><animate attributeName="opacity" values=".4;.7;.45;.6;.4" dur="2.2s" repeatCount="indefinite"/></rect>`;
+    const fx = 250, fy = gy + 18;
+    defs += `<radialGradient id="fi-${id}"><stop offset="0" stop-color="#FFE9B0"/><stop offset=".3" stop-color="${a.glow}" stop-opacity=".7"/><stop offset="1" stop-color="${a.glow}" stop-opacity="0"/></radialGradient>`;
+    body += `<circle cx="${fx}" cy="${fy}" r="60" fill="url(#fi-${id})"><animate attributeName="r" values="56;66;52;62;56" dur="1.6s" repeatCount="indefinite"/></circle>`;
+    for (let k = 0; k < 7; k++) body += `<circle cx="${f(fx + (r() - 0.5) * 20)}" cy="${fy}" r="1.4" fill="#FFD48A"><animate attributeName="cy" values="${fy};${f(fy - 90 - r() * 60)}" dur="${f(1.8 + r() * 1.6)}s" begin="-${f(r() * 2)}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="${f(1.8 + r() * 1.6)}s" begin="-${f(r() * 2)}s" repeatCount="indefinite"/></circle>`;
+    [[330, 190, 14], [370, 150, -8], [30, 170, 10], [190, 120, -6]].forEach(([bx, bh, bl], i) => body += buriti(bx, gy + 4 + i * 3, bh, bl, 1, a.rock[0]));
+    body += `<path d="M0 ${H} L0 ${f(H - 36)} Q100 ${f(H - 58)} 200 ${f(H - 40)} T400 ${f(H - 48)} L400 ${H} Z" fill="#030203"/>` + grass(r, W, H, H - 26, 30, '#030203', 56);
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>${defs}</defs>${body}</svg>`;
+}
+
+/* ---------- hero scene layers (sized to the hero's aspect) ---------- */
+function heroGeom(){
+  const hero = $('#lMid'), w = hero.clientWidth || innerWidth, h = hero.clientHeight || innerHeight;
+  const W = 1000, H = Math.round(1000 * h / w), portrait = h > w;
+  const cx = W / 2, fw = portrait ? 120 : 64, lipY = H * (portrait ? 0.3 : 0.26), poolY = H * (portrait ? 0.62 : 0.66);
+  return { W, H, cx, fw, lipY, poolY, portrait };
+}
+function heroLayers(g){
+  const { W, H, cx, fw, lipY, poolY, portrait } = g, r = rng(7);
+  const svg = (inner, defs = '') => `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><defs>${defs}</defs>${inner}</svg>`;
+  const sky = svg(
+    `<rect width="${W}" height="${H}" fill="url(#hsk)"/><circle cx="${cx}" cy="${f(lipY - H * 0.05)}" r="${f(W * (portrait ? 0.9 : 0.45))}" fill="url(#hgl)"/>` + stars(r, W, H, portrait ? 70 : 120, lipY, 26),
+    `<linearGradient id="hsk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#040B0A"/><stop offset=".45" stop-color="#0F3531"/><stop offset=".62" stop-color="#9A6A3A"/><stop offset="1" stop-color="#0A1311"/></linearGradient>` +
+    `<radialGradient id="hgl"><stop offset="0" stop-color="#FFD9A0" stop-opacity=".55"/><stop offset=".35" stop-color="#E3A64A" stop-opacity=".18"/><stop offset="1" stop-color="#E3A64A" stop-opacity="0"/></radialGradient>`);
+  const far = svg(
+    `<path d="${mesas(r, W, H, lipY - H * 0.08, H * 0.05, 6)}" fill="#1A3E39" opacity=".55"/>` +
+    `<path d="${mesas(r, W, H, lipY - H * 0.02, H * 0.06, 5)}" fill="#0E2622" stroke="#E3A64A" stroke-opacity=".35" stroke-width="1.5"/>`);
+  let top = `M0 ${H} L0 ${f(lipY - H * 0.06)}`;
+  for (let i = 1; i < 6; i++) top += ` L${f((cx - fw / 2) * i / 6)} ${f(lipY - H * 0.06 * (1 - i / 6) - r() * 14)}`;
+  top += ` L${f(cx - fw / 2)} ${f(lipY)} L${f(cx + fw / 2)} ${f(lipY)}`;
+  for (let i = 1; i < 6; i++) top += ` L${f(cx + fw / 2 + (W - cx - fw / 2) * i / 6)} ${f(lipY - H * 0.06 * i / 6 - r() * 14)}`;
+  top += ` L${W} ${f(lipY - H * 0.06)} L${W} ${H} Z`;
+  const back = svg(`<path d="${top}" fill="#0C211D"/>` + strata(r, W, lipY + 10, poolY, 14, '#E3A64A'));
+  let L = `M0 ${H} L0 ${f(lipY - 20)}`, R = `M${W} ${H} L${W} ${f(lipY - 20)}`;
+  const gap = portrait ? 90 : 140, open = portrait ? 16 : 34;
+  for (let k = 0; k <= 8; k++){
+    const y = lerp(lipY + 20, poolY + 30, k / 8), s = k * open + r() * 30;
+    L += ` L${f(cx - fw / 2 - gap - s)} ${f(y)}`;
+    R += ` L${f(cx + fw / 2 + gap + s + r() * 16)} ${f(y)}`;
+  }
+  L += ` L${f(cx - W * 0.42)} ${H} Z`; R += ` L${f(cx + W * 0.42)} ${H} Z`;
+  const front = svg(`<path d="${L}" fill="#06110F" stroke="#46DCCB" stroke-opacity=".14" stroke-width="1.5"/><path d="${R}" fill="#06110F" stroke="#E3A64A" stroke-opacity=".16" stroke-width="1.5"/>`);
+  const near = svg(
+    grass(r, W, H, H, portrait ? 40 : 70, '#020605', H * 0.14) +
+    buriti(W * 0.06, H * 1.02, H * 0.34, 18, 2.2, '#020605') + buriti(W * 0.95, H * 1.02, H * 0.4, -24, 2.4, '#020605') +
+    (portrait ? '' : buriti(W * 0.86, H * 1.02, H * 0.24, 10, 1.8, '#020605')));
+  return { sky, far, back, front, near };
+}
+</script>
+<script>
+(() => {
+const body = document.body;
+
+/* ---------- split text ---------- */
+function split(el){
+  let i = 0;
+  if (!el.closest('[aria-label]')) el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+  const walk = node => [...node.childNodes].forEach(ch => {
+    if (ch.nodeType === 3){
+      const frag = document.createDocumentFragment();
+      ch.textContent.split(/(\s+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(' ')); return; }
+        const w = document.createElement('span'); w.className = 'w'; w.setAttribute('aria-hidden', 'true');
+        [...part].forEach(c => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; s.style.setProperty('--i', i++); w.appendChild(s); });
+        frag.appendChild(w);
+      });
+      node.replaceChild(frag, ch);
+    } else if (ch.nodeType === 1) walk(ch);
+  });
+  walk(el);
+}
+document.querySelectorAll('[data-split]').forEach(split);
+
+/* ---------- grain ---------- */
+try {
+  const g = document.createElement('canvas'); g.width = g.height = 160;
+  const gc = g.getContext('2d'), img = gc.createImageData(160, 160);
+  for (let i = 0; i < img.data.length; i += 4){ const v = Math.random() * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+  gc.putImageData(img, 0, 0);
+  $('#grain').style.backgroundImage = `url(${g.toDataURL()})`;
+} catch (e) {}
+
+/* ---------- marquee ---------- */
+const mq = ['Santa Bárbara','Capivara','Candaru','Guardião','Boqueirão','Vão de Almas','Vão do Moleque','Engenho II'].map(w => `<span>${w}</span><span class="sep">✦</span>`).join('');
+$('#marquee').innerHTML = mq + mq;
+
+/* ---------- hero scene ---------- */
+const lSky = $('#lSky'), lFar = $('#lFar'), lMid = $('#lMid'), lNear = $('#lNear'), cv = $('#falls'), ctx = cv.getContext('2d');
+let G, CW = 0, CH = 0, lastAspect = 0, lastW = 0;
+function mountScene(){
+  G = heroGeom();
+  const L = heroLayers(G);
+  lSky.innerHTML = L.sky; lFar.innerHTML = L.far; lNear.innerHTML = L.near;
+  lMid.querySelectorAll('svg').forEach(s => s.remove());
+  lMid.insertAdjacentHTML('afterbegin', L.back);
+  lMid.insertAdjacentHTML('beforeend', L.front);
+  if (RM) document.querySelectorAll('.scene svg').forEach(s => s.pauseAnimations && s.pauseAnimations());
+  sizeCanvas(); seed();
+  lastAspect = G.H / G.W; lastW = innerWidth;
+}
+function sizeCanvas(){
+  const dpr = Math.min(devicePixelRatio || 1, innerWidth < 700 ? 1.5 : 2);
+  CW = cv.clientWidth; CH = cv.clientHeight;
+  cv.width = Math.round(CW * dpr); cv.height = Math.round(CH * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+let streaks = [], mist = [], motes = [], ripples = [], fallBox;
+function box(){
+  const sx = CW / G.W, sy = CH / G.H;
+  return { x0:(G.cx - G.fw / 2) * sx, x1:(G.cx + G.fw / 2) * sx, top:G.lipY * sy, bot:(G.poolY + 12) * sy, cx:G.cx * sx };
+}
+function spawnStreak(s, fresh){
+  const b = fallBox;
+  s.u = Math.random(); s.y = fresh ? lerp(b.top, b.bot, Math.random()) : b.top - Math.random() * 20;
+  s.v = 40 + Math.random() * 80; s.len = 12 + Math.random() * 30; s.a = 0.18 + Math.random() * 0.6; s.w = 0.6 + Math.random() * 1.6;
+  return s;
+}
+function seed(){
+  fallBox = box();
+  const n = CW < 700 ? 150 : 260;
+  streaks = Array.from({ length:n }, () => spawnStreak({}, true));
+  mist = []; ripples = [];
+  motes = Array.from({ length:CW < 700 ? 34 : 60 }, () => ({ x:Math.random() * CW, y:Math.random() * CH, vx:(Math.random() - 0.5) * 6, vy:-4 - Math.random() * 10, r:0.6 + Math.random() * 1.8, p:Math.random() * 6.28 }));
+}
+function draw(dt, t){
+  const b = fallBox, fw = b.x1 - b.x0;
+  ctx.clearRect(0, 0, CW, CH);
+  const col = ctx.createLinearGradient(0, b.top, 0, b.bot);
+  col.addColorStop(0, 'rgba(210,255,248,.55)'); col.addColorStop(0.5, 'rgba(120,230,218,.28)'); col.addColorStop(1, 'rgba(255,255,255,.5)');
+  ctx.fillStyle = col;
+  ctx.beginPath(); ctx.moveTo(b.x0, b.top); ctx.lineTo(b.x1, b.top); ctx.lineTo(b.x1 + fw * 0.18, b.bot); ctx.lineTo(b.x0 - fw * 0.18, b.bot); ctx.closePath(); ctx.fill();
+
+  const py = b.bot + CH * 0.02, prx = fw * 3.2, pry = CH * 0.035;
+  const pg = ctx.createRadialGradient(b.cx, py, 0, b.cx, py, prx);
+  pg.addColorStop(0, 'rgba(120,250,236,.75)'); pg.addColorStop(0.5, 'rgba(30,160,150,.45)'); pg.addColorStop(1, 'rgba(10,60,56,0)');
+  ctx.fillStyle = pg; ctx.beginPath(); ctx.ellipse(b.cx, py, prx, pry, 0, 0, 6.283); ctx.fill();
+
+  ctx.lineCap = 'round';
+  for (const s of streaks){
+    s.v += 520 * dt; s.y += s.v * dt;
+    if (s.y - s.len > b.bot){ spawnStreak(s, false); if (Math.random() < 0.18 && mist.length < 40) mist.push({ x:lerp(b.x0, b.x1, Math.random()), y:b.bot, r:6, vx:(Math.random() - 0.5) * 40, vy:-10 - Math.random() * 25, life:1 }); }
+    const k = clamp((s.y - b.top) / (b.bot - b.top), 0, 1);
+    const x = lerp(b.x0, b.x1, s.u) + (s.u - 0.5) * fw * 0.36 * k + Math.sin(t * 0.002 + s.u * 9) * 0.6;
+    const len = s.len + s.v * 0.03;
+    ctx.globalAlpha = s.a * (0.5 + k * 0.5);
+    ctx.strokeStyle = '#E9FFFB'; ctx.lineWidth = s.w;
+    ctx.beginPath(); ctx.moveTo(x, Math.max(b.top, s.y - len)); ctx.lineTo(x, Math.min(b.bot, s.y)); ctx.stroke();
+  }
+  ctx.globalAlpha = 0.9; ctx.fillStyle = '#fff'; ctx.fillRect(b.x0 - 2, b.top - 1.5, fw + 4, 3);
+
+  if (Math.random() < dt * 1.4) ripples.push({ r:4, a:0.55 });
+  ctx.strokeStyle = '#DFFFFA';
+  ripples = ripples.filter(r => (r.r += 40 * dt, r.a -= 0.18 * dt, r.a > 0));
+  for (const r of ripples){ ctx.globalAlpha = r.a; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(b.cx, py, Math.min(r.r * 2.4, prx), Math.min(r.r * 0.34, pry), 0, 0, 6.283); ctx.stroke(); }
+
+  ctx.globalCompositeOperation = 'lighter';
+  mist = mist.filter(m => (m.x += m.vx * dt, m.y += m.vy * dt, m.r += 22 * dt, m.life -= 0.32 * dt, m.life > 0));
+  for (const m of mist){
+    const g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.r);
+    g.addColorStop(0, `rgba(220,255,250,${0.16 * m.life})`); g.addColorStop(1, 'rgba(220,255,250,0)');
+    ctx.globalAlpha = 1; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, 6.283); ctx.fill();
+  }
+  for (const m of motes){
+    m.x += m.vx * dt; m.y += m.vy * dt; m.p += dt * 1.6;
+    if (m.y < -10){ m.y = CH + 10; m.x = Math.random() * CW; }
+    if (m.x < -10) m.x = CW + 10; if (m.x > CW + 10) m.x = -10;
+    ctx.globalAlpha = 0.25 + 0.55 * (0.5 + 0.5 * Math.sin(m.p));
+    ctx.fillStyle = '#F2C27A'; ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, 6.283); ctx.fill();
+  }
+  ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+}
+mountScene();
+
+let heroVisible = true, lastT = performance.now();
+new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; }).observe($('#hero'));
+if (RM){ for (let i = 0; i < 90; i++) draw(1 / 30, i * 33); }
+
+/* ---------- parallax + scroll-driven camera ---------- */
+const rig = $('#rig'), sceneScroll = $('#sceneScroll'), heroContent = $('.hero__content'), nav = $('#nav');
+rig.style.transition = 'none';
+const fine = matchMedia('(pointer: fine)').matches;
+let tRx = 0, tRy = 0, cRx = 0, cRy = 0;
+if (fine && !RM) addEventListener('pointermove', e => { tRy = (e.clientX / innerWidth - 0.5) * 7; tRx = -(e.clientY / innerHeight - 0.5) * 4; }, { passive:true });
+
+function frame(t){
+  const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t;
+  if (!RM){
+    if (!fine){ tRy = Math.sin(t * 0.00035) * 3.2; tRx = Math.sin(t * 0.00027) * 1.6; }
+    cRx = lerp(cRx, tRx, 0.06); cRy = lerp(cRy, tRy, 0.06);
+    if (heroVisible){
+      rig.style.setProperty('--rx', cRx.toFixed(3) + 'deg'); rig.style.setProperty('--ry', cRy.toFixed(3) + 'deg');
+      if (!document.hidden && body.classList.contains('is-ready')) draw(dt, t);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+const manifesto = $('#manifesto'), mText = manifesto.textContent.trim();
+manifesto.innerHTML = `<span class="sr-only">${esc(mText)}</span>` + mText.split(/\s+/).map(w => `<span class="mw${/mem[oó]ria|liberdade/i.test(w) ? ' hl' : ''}" aria-hidden="true">${esc(w)}</span>`).join(' ');
+const mWords = [...manifesto.querySelectorAll('.mw')];
+const emblem = $('#emblem');
+
+let ticking = false;
+function onScroll(){
+  ticking = false;
+  const y = scrollY, vh = innerHeight;
+  nav.classList.toggle('is-solid', y > 40);
+  if (!RM && y < vh * 1.2){
+    sceneScroll.style.setProperty('--sy', (y * 0.3).toFixed(1) + 'px');
+    sceneScroll.style.setProperty('--sz', (y * 0.22).toFixed(1) + 'px');
+    heroContent.style.transform = `translate3d(0,${(y * 0.18).toFixed(1)}px,0)`;
+    heroContent.style.opacity = clamp(1 - y / (vh * 0.75), 0, 1).toFixed(3);
+  }
+  const mr = manifesto.getBoundingClientRect();
+  const mp = RM ? 1 : clamp((vh * 0.85 - mr.top) / (mr.height + vh * 0.3), 0, 1), on = Math.round(mp * mWords.length * 1.08);
+  mWords.forEach((w, i) => w.classList.toggle('on', i < on));
+  const er = emblem.getBoundingClientRect(), ep = clamp((vh - er.top) / (vh + er.height), 0, 1);
+  if (!RM){ emblem.style.setProperty('--ery', ((ep - 0.5) * 36).toFixed(2) + 'deg'); emblem.style.setProperty('--erx', ((0.5 - ep) * 14).toFixed(2) + 'deg'); }
+}
+addEventListener('scroll', () => { if (!ticking){ ticking = true; requestAnimationFrame(onScroll); } }, { passive:true });
+onScroll();
+
+let rsT;
+addEventListener('resize', () => {
+  clearTimeout(rsT);
+  rsT = setTimeout(() => {
+    const g = heroGeom();
+    if (innerWidth !== lastW || Math.abs(g.H / g.W - lastAspect) / lastAspect > 0.12) mountScene();
+    else { sizeCanvas(); fallBox = box(); }
+    render();
+  }, 180);
+});
+
+/* ---------- carousel ---------- */
+const stage = $('#stage'), cf = $('#cf'), n = XP.length;
+const cards = XP.map((x, i) => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'card';
+  b.setAttribute('aria-label', `${x.name}, ${x.loc}`);
+  b.innerHTML = `<span class="card__art">${x.foto ? `<img src="${esc(x.foto)}" alt="" loading="lazy">` : cardArt(x)}</span>` +
+    `<span class="card__shade"></span><span class="card__veil"></span><span class="card__shine"></span>` +
+    `<span class="card__top"><span class="chip mono">${esc(x.tag)}</span></span>` +
+    `<span class="card__body"><span class="card__loc mono">${esc(x.loc)}</span><span class="card__name">${esc(x.name)}</span></span>`;
+  b.addEventListener('click', () => { if (suppress) return; lastUse = performance.now(); target = Math.round(pos) + wrap(i - Math.round(pos)); kick(); });
+  stage.appendChild(b);
+  return b;
+});
+if (RM) cards.forEach(c => { const s = c.querySelector('svg'); s && s.pauseAnimations && s.pauseAnimations(); });
+const veils = cards.map(c => c.querySelector('.card__veil'));
+const wrap = d => ((d % n) + n + n / 2) % n - n / 2;
+let pos = 0, target = 0, raf = 0, drag = null, suppress = false, lastUse = 0, shown = -1, spacing = 200;
+
+function render(){
+  const cw = cards[0].offsetWidth || 300;
+  spacing = cw * (innerWidth < 700 ? 0.6 : 0.74);
+  cards.forEach((c, i) => {
+    const d = wrap(i - pos), ad = Math.abs(d);
+    const op = clamp(2.6 - ad, 0, 1);
+    c.style.transform = `translate3d(${(d * spacing).toFixed(1)}px,0,${(-ad * cw * 0.55).toFixed(1)}px) rotateY(${clamp(-d * 38, -62, 62).toFixed(2)}deg) scale(${(1 - Math.min(ad, 2.5) * 0.04).toFixed(3)})`;
+    c.style.opacity = op.toFixed(3);
+    c.style.visibility = op < 0.01 ? 'hidden' : 'visible';
+    c.style.zIndex = 100 - Math.round(ad * 10);
+    veils[i].style.opacity = Math.min(ad * 0.5, 0.78).toFixed(3);
+  });
+  const active = ((Math.round(pos) % n) + n) % n;
+  if (active !== shown) setActive(active);
+}
+function tick(){
+  if (!drag){ pos = RM ? target : lerp(pos, target, 0.1); if (Math.abs(target - pos) < 0.0008) pos = target; }
+  render();
+  raf = (drag || pos !== target) ? requestAnimationFrame(tick) : 0;
+}
+function kick(){ if (!raf) raf = requestAnimationFrame(tick); }
+
+const dEl = $('#detail'), dTag = $('#dTag'), dName = $('#dName'), dDesc = $('#dDesc'), dFacts = $('#dFacts'), dCta = $('#dCta'), count = $('#count'), bar = $('#bar');
+let swapT;
+function fill(x){
+  dTag.textContent = x.tag; dName.textContent = x.name; dDesc.textContent = x.desc;
+  dFacts.innerHTML = x.facts.map(([k, v]) => `<li>${esc(k)}: <b>${esc(v)}</b></li>`).join('');
+  dCta.href = IG;
+}
+function setActive(i){
+  const first = shown < 0; shown = i;
+  cards.forEach((c, k) => { c.classList.toggle('is-active', k === i); c.tabIndex = k === i ? 0 : -1; c.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+  count.innerHTML = `<b>${String(i + 1).padStart(2, '0')}</b> / ${String(n).padStart(2, '0')}`;
+  bar.style.transform = `scaleX(${(i + 1) / n})`;
+  bar.style.transition = 'transform .6s cubic-bezier(.16,1,.3,1)';
+  if (first || RM){ fill(XP[i]); return; }
+  clearTimeout(swapT); dEl.classList.add('is-swap');
+  swapT = setTimeout(() => { fill(XP[shown]); dEl.classList.remove('is-swap'); }, 300);
+}
+$('#prev').addEventListener('click', () => { lastUse = performance.now(); target = Math.round(target) - 1; kick(); });
+$('#next').addEventListener('click', () => { lastUse = performance.now(); target = Math.round(target) + 1; kick(); });
+cf.tabIndex = 0;
+cf.setAttribute('aria-label', 'Experiências: use as setas para navegar');
+cf.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft'){ e.preventDefault(); lastUse = performance.now(); target = Math.round(target) + (e.key === 'ArrowRight' ? 1 : -1); kick(); }
+});
+cf.addEventListener('pointerdown', e => {
+  if (e.button !== 0) return;
+  drag = { x:e.clientX, y:e.clientY, p:pos, moved:false, v:0, lx:e.clientX, lt:performance.now() };
+});
+cf.addEventListener('pointermove', e => {
+  if (!drag){
+    if (e.pointerType === 'mouse' && !RM){
+      const c = cards[shown], r = c.getBoundingClientRect();
+      c.style.setProperty('--mx', clamp((e.clientX - r.left) / r.width - 0.5, -0.5, 0.5).toFixed(3));
+      c.style.setProperty('--my', clamp((e.clientY - r.top) / r.height - 0.5, -0.5, 0.5).toFixed(3));
+    }
+    return;
+  }
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  if (!drag.moved){
+    if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)){ drag.moved = true; cf.setPointerCapture(e.pointerId); cf.classList.add('is-drag'); }
+    else if (Math.abs(dy) > 10){ drag = null; return; }
+    else return;
+  }
+  const now = performance.now();
+  drag.v = lerp(drag.v, (e.clientX - drag.lx) / Math.max(1, now - drag.lt), 0.5); drag.lx = e.clientX; drag.lt = now;
+  pos = drag.p - dx / spacing; target = pos; kick();
+});
+function endDrag(){
+  if (drag && drag.moved){
+    const fling = clamp(-drag.v * 260 / spacing, -2, 2);
+    target = Math.round(pos + fling);
+    cf.classList.remove('is-drag');
+    suppress = true; setTimeout(() => suppress = false, 60);
+    lastUse = performance.now();
+  }
+  drag = null; kick();
+}
+cf.addEventListener('pointerup', endDrag);
+cf.addEventListener('pointercancel', endDrag);
+cf.addEventListener('pointerleave', () => { const c = cards[shown]; if (c){ c.style.setProperty('--mx', 0); c.style.setProperty('--my', 0); } });
+
+let cfVisible = false;
+new IntersectionObserver(es => {
+  const v = es[0].isIntersecting;
+  if (v && !cfVisible) lastUse = performance.now() - 3000;
+  cfVisible = v;
+}, { threshold:0.4 }).observe(cf);
+if (!RM) setInterval(() => {
+  if (cfVisible && !drag && !document.hidden && performance.now() - lastUse > 7000){ target = Math.round(target) + 1; kick(); }
+}, 4600);
+render();
+
+/* ---------- reveals + counters ---------- */
+function countUp(el){
+  if (!el || RM) return;
+  const to = +el.dataset.count, from = +(el.dataset.from || 0), t0 = performance.now(), dur = 1700;
+  const step = t => { const k = clamp((t - t0) / dur, 0, 1), e = k === 1 ? 1 : 1 - Math.pow(2, -10 * k); el.textContent = Math.round(from + (to - from) * e); if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add('is-in'); io.unobserve(e.target);
+  if (e.target.matches('.stat')) countUp(e.target.querySelector('[data-count]'));
+}), { rootMargin:'0px 0px -8% 0px', threshold:0.12 });
+const hero = $('#hero');
+document.querySelectorAll('[data-reveal],[data-split]').forEach(el => { if (!hero.contains(el)) io.observe(el); });
+
+/* ---------- copy handle ---------- */
+const copyBtn = $('#copy'), handle = $('#handle');
+copyBtn.addEventListener('click', () => {
+  const done = () => { copyBtn.textContent = 'Copiado'; setTimeout(() => copyBtn.textContent = 'Copiar', 2000); };
+  const pick = () => { const r = document.createRange(); r.selectNodeContents(handle); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+  try { navigator.clipboard.writeText(handle.textContent).then(done, pick); } catch (e) { pick(); }
+});
+
+/* ---------- loader ---------- */
+const loader = $('#loader'), fillEl = $('#loadFill'), line = $('#loadLine'), cnt = $('#loadCount'), label = $('#loadLabel');
+const labels = [[0, 'Carregando o território'], [30, 'Ouvindo as águas'], [62, 'Abrindo a trilha'], [96, 'Bem-vindo ao Kalunga']];
+body.classList.add('is-locked');
+let prog = 0, cap = 72, finished = false;
+const t0 = performance.now(), MIN = RM ? 200 : 2700;
+Promise.all([
+  document.fonts ? document.fonts.ready.catch(() => {}) : null,
+  new Promise(r => document.readyState === 'complete' ? r() : addEventListener('load', r, { once:true }))
+]).then(() => cap = 100);
+setTimeout(() => cap = 100, 5000);
+function heroIn(){ hero.querySelectorAll('[data-reveal],[data-split]').forEach(el => el.classList.add('is-in')); }
+function finish(){
+  if (finished) return; finished = true;
+  prog = 100; paint();
+  setTimeout(() => {
+    loader.classList.add('is-out');
+    body.classList.remove('is-locked'); body.classList.add('is-ready');
+    heroIn();
+    setTimeout(() => { loader.classList.add('is-gone'); loader.removeAttribute('role'); }, 1500);
+  }, RM ? 0 : 260);
+}
+function paint(){
+  fillEl.style.setProperty('--p', prog.toFixed(1) + '%');
+  line.style.setProperty('--pp', (prog / 100).toFixed(3));
+  cnt.textContent = String(Math.floor(prog)).padStart(3, '0');
+  label.textContent = labels.filter(l => prog >= l[0]).pop()[1];
+}
+let lastL = performance.now();
+function load(now){
+  if (finished) return;
+  const dt = Math.min(0.1, Math.max(0, (now - lastL) / 1000)); lastL = now;
+  const goal = Math.min(cap, (performance.now() - t0) / MIN * 100);
+  prog = goal - prog < 0.4 ? goal : prog + (goal - prog) * (1 - Math.exp(-dt * 8));
+  paint();
+  if (prog >= 100) finish(); else requestAnimationFrame(load);
+}
+requestAnimationFrame(load);
+$('#skip').addEventListener('click', finish);
+setTimeout(finish, 8000);
+})();
+</script>
+</body>
+</html>
