@@ -166,7 +166,9 @@ button{font:inherit;color:inherit}
 @keyframes breathe{50%{opacity:.55;transform:translateX(-50%) scaleX(.9)}}
 .card{position:absolute;left:50%;top:0;width:var(--cw);aspect-ratio:4/5;margin-left:calc(var(--cw)/-2);padding:0;border:0;border-radius:22px;overflow:hidden;background:#0B1513;text-align:left;cursor:pointer;will-change:transform,opacity;-webkit-backface-visibility:hidden;backface-visibility:hidden;isolation:isolate;box-shadow:0 50px 90px -40px rgba(0,0,0,.9),0 0 0 1px rgba(239,232,218,.08) inset;-webkit-tap-highlight-color:transparent}
 .card__art{position:absolute;inset:0}
-.card__art svg,.card__art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.08);transition:transform .6s var(--ease-out)}
+.card__art svg,.card__art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.08);transition:transform .6s var(--ease-out),opacity .8s ease}
+.card__art img{object-position:50% 50%;opacity:0}
+.card__art img.is-loaded{opacity:1}
 .card__shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,10,9,.35) 0%,transparent 30%,transparent 50%,rgba(5,10,9,.88) 100%)}
 .card__shine{position:absolute;inset:-25%;pointer-events:none;background:radial-gradient(40% 30% at 50% 40%,rgba(255,255,255,.1),transparent 70%);opacity:0;transition:opacity .5s,transform .6s var(--ease-out)}
 .card.is-active .card__shine{opacity:1}
@@ -404,7 +406,7 @@ button{font:inherit;color:inherit}
   <div class="wrap foot__in">
     <a class="brand" href="#topo"><b>Alvaní</b><span class="mono">Guia Kalunga</span></a>
     <span class="mono">13°47′S · 47°27′W · Cavalcante, GO</span>
-    <small>Ilustrações criadas para esta página. Roteiros, datas e valores sujeitos a confirmação com o guia.</small>
+    <small>Ilustrações criadas para esta página, exceto as fotos da Cachoeira do Guardião e do Complexo Boqueirão. Roteiros, datas e valores sujeitos a confirmação com o guia.</small>
   </div>
 </footer>
 <script>
@@ -420,11 +422,11 @@ const XP = [
     desc:'As outras duas quedas do Engenho II. Dá para visitar as três cachoeiras da comunidade em um único dia, com tempo para banho e fotos em cada uma.',
     facts:[['Local','Comunidade Engenho II'],['Roteiro','Santa Bárbara, Capivara e Candaru em 1 dia'],['Território','Quilombo Kalunga']],
     art:{kind:'fall', seed:11, wide:true, sky:['#0C2014','#4E8A56'], glow:'#F3F6C6', rock:['#07130B','#122A1A','#1F4429'], water:'#E4FBEF', pool:['#7FE3B8','#1D7E5E']} },
-  { id:'gd', name:'Cachoeira do Guardião', tag:'Pouco explorada', loc:'Vão do Moleque · Cavalcante', foto:'',
+  { id:'gd', name:'Cachoeira do Guardião', tag:'Pouco explorada', loc:'Vão do Moleque · Cavalcante', foto:'fotos/guardiao.jpg',
     desc:'Um refúgio remoto na comunidade Kalunga do Vão do Moleque, aberto à visitação em 2018. O poço azul chega a 12 metros de profundidade, e poucos guias conhecem o caminho até lá.',
     facts:[['Local','Comunidade Vão do Moleque'],['Poço','Até 12 m de profundidade'],['Aberta à visitação','Desde 2018']],
     art:{kind:'fall', seed:21, tall:true, sky:['#050F26','#1E4D8C'], glow:'#C2DBFF', rock:['#030914','#0A1932','#132B52'], water:'#B9DCFF', pool:['#3F86FF','#0B2F8A']} },
-  { id:'bq', name:'Complexo Boqueirão', tag:'Borda infinita', loc:'Kalunga · 75 km de Cavalcante', foto:'',
+  { id:'bq', name:'Complexo Boqueirão', tag:'Borda infinita', loc:'Kalunga · 75 km de Cavalcante', foto:'fotos/boqueirao.jpg', pos:'50% 64%',
     desc:'Quatro piscinas naturais de borda infinita, ligadas por uma trilha curta, com água mais morna que a de outros pontos da Chapada. Fica perto da divisa com o Tocantins.',
     facts:[['Piscinas','4 naturais, de borda infinita'],['Trilha','300 m, de fácil acesso'],['Melhor época','Maio a outubro']],
     art:{kind:'pools', seed:34, sky:['#241006','#D4863C'], glow:'#FFE2A6', rock:['#130904','#2A150A','#4A2610'], water:'#FFEBC8', pool:['#6FE8DF','#1C9C95']} },
@@ -834,7 +836,7 @@ const cards = XP.map((x, i) => {
   const b = document.createElement('button');
   b.type = 'button'; b.className = 'card';
   b.setAttribute('aria-label', `${x.name}, ${x.loc}`);
-  b.innerHTML = `<span class="card__art">${x.foto ? `<img src="${esc(x.foto)}" alt="" loading="lazy">` : cardArt(x)}</span>` +
+  b.innerHTML = `<span class="card__art">${cardArt(x)}${x.foto ? `<img src="${esc(x.foto)}" alt="" decoding="async"${x.pos ? ` style="object-position:${esc(x.pos)}"` : ''}>` : ''}</span>` +
     `<span class="card__shade"></span><span class="card__veil"></span><span class="card__shine"></span>` +
     `<span class="card__top"><span class="chip mono">${esc(x.tag)}</span></span>` +
     `<span class="card__body"><span class="card__loc mono">${esc(x.loc)}</span><span class="card__name">${esc(x.name)}</span></span>`;
@@ -845,6 +847,16 @@ const cards = XP.map((x, i) => {
 const arts = cards.map(c => c.querySelector('svg'));
 const setAnim = (svg, on) => { if (svg && svg.pauseAnimations) on ? svg.unpauseAnimations() : svg.pauseAnimations(); };
 arts.forEach(s => setAnim(s, false));
+cards.forEach((c, i) => {
+  const img = c.querySelector('.card__art img');
+  if (!img) return;
+  const reveal = () => {
+    img.classList.add('is-loaded');
+    setTimeout(() => { if (arts[i]){ arts[i].remove(); arts[i] = null; } }, 900);
+  };
+  if (img.complete && img.naturalWidth) reveal();
+  else { img.addEventListener('load', reveal, { once:true }); img.addEventListener('error', () => img.remove(), { once:true }); }
+});
 const veils = cards.map(c => c.querySelector('.card__veil'));
 const shines = cards.map(c => c.querySelector('.card__shine'));
 const wrap = d => ((d % n) + n + n / 2) % n - n / 2;
@@ -938,7 +950,7 @@ cf.addEventListener('pointercancel', endDrag);
 function tilt(e){
   const i = shown, r = cards[i].getBoundingClientRect();
   const mx = e ? clamp((e.clientX - r.left) / r.width - 0.5, -0.5, 0.5) : 0, my = e ? clamp((e.clientY - r.top) / r.height - 0.5, -0.5, 0.5) : 0;
-  const media = cards[i].querySelector('.card__art > *');
+  const media = cards[i].querySelector('.card__art > :last-child');
   if (media) media.style.transform = `scale(1.08) translate3d(${(mx * -10).toFixed(1)}px,${(my * -10).toFixed(1)}px,0)`;
   shines[i].style.transform = `translate3d(${(mx * 40).toFixed(1)}%,${(my * 30).toFixed(1)}%,0)`;
 }
