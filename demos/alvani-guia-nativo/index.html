@@ -176,6 +176,8 @@ button{font:inherit;color:inherit}
 .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(5,10,9,.66);border:1px solid rgba(239,232,218,.16);color:var(--ink)}
 .card__num{color:rgba(239,232,218,.7)}
 .card__body{position:absolute;left:18px;right:18px;bottom:18px}
+.card.has-photo .card__shade{background:linear-gradient(180deg,rgba(5,10,9,.4) 0%,transparent 26%,rgba(5,10,9,.3) 46%,rgba(5,10,9,.94) 100%)}
+.card.has-photo .card__body{text-shadow:0 2px 14px rgba(0,0,0,.6)}
 .card__veil{position:absolute;inset:0;background:#030706;pointer-events:none}
 .card__loc{display:block;color:var(--teal);margin:0 0 8px}
 .card__name{display:block;margin:0;font:900 clamp(34px,9.5vw,46px)/.9 var(--f-display);text-transform:uppercase;letter-spacing:.005em;color:var(--ink);text-wrap:balance}
@@ -406,7 +408,7 @@ button{font:inherit;color:inherit}
   <div class="wrap foot__in">
     <a class="brand" href="#topo"><b>Alvaní</b><span class="mono">Guia Kalunga</span></a>
     <span class="mono">13°47′S · 47°27′W · Cavalcante, GO</span>
-    <small>Ilustrações criadas para esta página, exceto as fotos da Cachoeira do Guardião e do Complexo Boqueirão. Roteiros, datas e valores sujeitos a confirmação com o guia.</small>
+    <small>Os cartões sem foto usam ilustrações criadas para esta página. Roteiros, datas e valores sujeitos a confirmação com o guia.</small>
   </div>
 </footer>
 <script>
@@ -418,7 +420,7 @@ const XP = [
     desc:'O poço azul-turquesa mais famoso da Chapada dos Veadeiros, dentro do território quilombola Kalunga. É a imagem que faz muita gente decidir vir até aqui.',
     facts:[['Local','Comunidade Engenho II'],['Acesso','Só com guia credenciado'],['Combina com','Capivara e Candaru no mesmo dia']],
     art:{kind:'fall', seed:3, sky:['#0A2125','#2E7B73'], glow:'#C9FFF4', rock:['#06120F','#0E2621','#1A443C'], water:'#86F4E5', pool:['#5CF0DE','#0E8C80']} },
-  { id:'cc', name:'Capivara & Candaru', tag:'Circuito do dia', loc:'Engenho II · Cavalcante', foto:'',
+  { id:'cc', name:'Capivara & Candaru', tag:'Circuito do dia', loc:'Engenho II · Cavalcante', foto:'fotos/capivara.jpg', pos:'50% 18%',
     desc:'As outras duas quedas do Engenho II. Dá para visitar as três cachoeiras da comunidade em um único dia, com tempo para banho e fotos em cada uma.',
     facts:[['Local','Comunidade Engenho II'],['Roteiro','Santa Bárbara, Capivara e Candaru em 1 dia'],['Território','Quilombo Kalunga']],
     art:{kind:'fall', seed:11, wide:true, sky:['#0C2014','#4E8A56'], glow:'#F3F6C6', rock:['#07130B','#122A1A','#1F4429'], water:'#E4FBEF', pool:['#7FE3B8','#1D7E5E']} },
@@ -430,11 +432,11 @@ const XP = [
     desc:'Quatro piscinas naturais de borda infinita, ligadas por uma trilha curta, com água mais morna que a de outros pontos da Chapada. Fica perto da divisa com o Tocantins.',
     facts:[['Piscinas','4 naturais, de borda infinita'],['Trilha','300 m, de fácil acesso'],['Melhor época','Maio a outubro']],
     art:{kind:'pools', seed:34, sky:['#241006','#D4863C'], glow:'#FFE2A6', rock:['#130904','#2A150A','#4A2610'], water:'#FFEBC8', pool:['#6FE8DF','#1C9C95']} },
-  { id:'va', name:'Vão de Almas', tag:'Raiz Kalunga', loc:'Quilombo Vão de Almas · Cavalcante', foto:'',
+  { id:'va', name:'Vão de Almas', tag:'Raiz Kalunga', loc:'Quilombo Vão de Almas · Cavalcante', foto:'fotos/vao-de-almas.jpg', pos:'50% 34%',
     desc:'O quilombo onde o Alvaní nasceu, um dos quatro núcleos do território Kalunga. Uma imersão nas histórias, nas tradições e no modo de vida de quem construiu uma comunidade própria no coração do cerrado.',
     facts:[['Território','Quilombo Kalunga'],['Experiência','História e cultura'],['Guia','Nativo da comunidade']],
     art:{kind:'culture', seed:47, sky:['#130912','#8C4838'], glow:'#FFC58A', rock:['#090407','#1A0D10','#2F1815']} },
-  { id:'hc', name:'Turismo histórico e cultural', tag:'Grupos e escolas', loc:'Cavalcante · Teresina · Monte Alegre', foto:'',
+  { id:'hc', name:'Turismo histórico e cultural', tag:'Grupos e escolas', loc:'Cavalcante · Teresina · Monte Alegre', foto:'fotos/cultural.jpg', pos:'62% 50%',
     desc:'Roteiros pelas comunidades Kalunga dos três municípios, pensados para visitantes, professores, estudantes e antropólogos. É o trabalho que o Alvaní faz desde 2015.',
     facts:[['Desde','2015'],['Municípios','Cavalcante, Teresina de Goiás e Monte Alegre de Goiás'],['Público','Visitantes, escolas e pesquisadores']],
     art:{kind:'culture', seed:58, night:true, sky:['#060713','#2D2654'], glow:'#E3A64A', rock:['#040409','#0B0B1A','#171632']} }
@@ -834,7 +836,7 @@ addEventListener('resize', () => {
 const stage = $('#stage'), cf = $('#cf'), n = XP.length;
 const cards = XP.map((x, i) => {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'card';
+  b.type = 'button'; b.className = x.foto ? 'card has-photo' : 'card';
   b.setAttribute('aria-label', `${x.name}, ${x.loc}`);
   b.innerHTML = `<span class="card__art">${cardArt(x)}${x.foto ? `<img src="${esc(x.foto)}" alt="" decoding="async"${x.pos ? ` style="object-position:${esc(x.pos)}"` : ''}>` : ''}</span>` +
     `<span class="card__shade"></span><span class="card__veil"></span><span class="card__shine"></span>` +
