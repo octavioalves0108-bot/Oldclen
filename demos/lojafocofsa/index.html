@@ -241,6 +241,18 @@
   .now__name span{display:inline-block;white-space:pre}
   .now__desc{color:var(--ivory-2);font-size:13.5px;margin-top:2px;min-height:1.6em;transition:opacity .5s}
   .ctrl{justify-self:end;display:flex;flex-direction:column;align-items:flex-end;gap:16px}
+  .ctrl__cta{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}
+  [hidden]{display:none!important}
+  .btn svg{width:16px;height:16px;flex:none}
+  .wa-float{position:fixed;right:var(--gutter);bottom:clamp(16px,3vh,28px);z-index:55;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--gold-2),var(--gold) 55%,#a8844a);color:#17130d;box-shadow:0 18px 40px -12px rgba(0,0,0,.8);
+    transition:opacity .8s var(--out),transform .8s var(--out)}
+  .wa-float svg{width:26px;height:26px}
+  .wa-float::after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid var(--gold);animation:ping 2.6s var(--out) infinite}
+  @keyframes ping{0%{transform:scale(1);opacity:.8}80%,100%{transform:scale(1.7);opacity:0}}
+  .is-locked .wa-float,.wa-float.is-away{opacity:0;transform:scale(.5);pointer-events:none}
+  .wa-float.magnetic{transition-property:opacity,transform}
+  @media (min-width:901px){.wa-float{right:calc(var(--gutter) + 24px)}}
   .ctrl__nav{display:flex;align-items:center;gap:14px}
   .ctrl__btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:border-color .4s,background .4s}
   .ctrl__btn:hover{border-color:var(--gold);background:rgba(201,169,110,.08)}
@@ -266,6 +278,7 @@
     .hero__foot{grid-template-columns:1fr;justify-items:center;gap:16px}
     .tagline{display:none}
     .ctrl{justify-self:center;align-items:center}
+    .ctrl__cta{justify-content:center}
     .stage{perspective:1100px}
     .scene{--cw:min(44vw,210px)}
     .bigword{--wy:-150%;font-size:clamp(96px,27vw,200px)}
@@ -358,7 +371,7 @@
   noscript .ns{position:fixed;inset:auto 0 0 0;z-index:200;padding:14px;text-align:center;background:var(--ink-3)}
 
   @media (prefers-reduced-motion:reduce){
-    .grain,.intro__glow,.leak,.logo .ap svg,.badge svg.txt,.rec{animation:none}
+    .grain,.intro__glow,.leak,.logo .ap svg,.badge svg.txt,.rec,.wa-float::after{animation:none}
     .split .c,.reveal{transition-duration:.01s;transition-delay:0s}
   }
 </style>
@@ -414,6 +427,7 @@
   <span class="cursor__label mono" id="cLabel"></span>
 </div>
 <div class="progress" id="progress" aria-hidden="true"></div>
+<a class="wa-float magnetic" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Conversar com a Foco no WhatsApp" data-cursor="WhatsApp" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
 <div class="vignette" aria-hidden="true"></div>
 <div class="side mono" id="side" aria-hidden="true"><b id="sideIdx">01</b><i></i><span id="sideName">Vitrine</span></div>
 
@@ -460,7 +474,10 @@
           <div class="ticks" id="ticks"></div>
           <button class="ctrl__btn magnetic" id="next" type="button" aria-label="Próximo produto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5l7 7-7 7"/></svg></button>
         </div>
-        <a class="btn btn--gold magnetic" id="dmBtn" href="https://ig.me/m/lojafocofsa" target="_blank" rel="noopener" data-cursor="Direct">Chamar no Direct <i>→</i></a>
+        <div class="ctrl__cta">
+          <a class="btn btn--gold magnetic" id="waBtn" href="#" target="_blank" rel="noopener" data-cursor="WhatsApp" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Pedir no WhatsApp</a>
+          <a class="btn btn--gold magnetic" id="dmBtn" href="https://ig.me/m/lojafocofsa" target="_blank" rel="noopener" data-cursor="Direct">Chamar no Direct <i>→</i></a>
+        </div>
       </div>
     </div>
   </section>
@@ -488,7 +505,7 @@
         <p class="mono eyebrow reveal"><span class="gold">03</span> — Em cena</p>
         <h2 class="sec__title split">Cada peça, <em>um frame.</em></h2>
       </div>
-      <p class="sec__lead reveal" style="--d:200ms;margin-top:0;max-width:22em">Role a página e a película corre. Gostou de alguma? A conversa começa no Direct.</p>
+      <p class="sec__lead reveal" style="--d:200ms;margin-top:0;max-width:22em">Role a página e a película corre. Gostou de alguma? A conversa começa no <span data-canal>Direct</span>.</p>
     </header>
     <div class="film__wrap" aria-hidden="true">
       <div class="strip strip--back" id="stripBack"></div>
@@ -505,9 +522,10 @@
     </div>
     <p class="mono eyebrow reveal"><span class="gold">04</span> — Vitrine completa</p>
     <h2 class="cta__title split">Siga o <em>foco.</em></h2>
-    <p class="cta__lead reveal" style="--d:250ms">As peças da vez estão no Instagram. Escolha a sua e chame no Direct.</p>
+    <p class="cta__lead reveal" style="--d:250ms">As peças da vez estão no Instagram. Escolha a sua e chame no <span data-canal>Direct</span>.</p>
     <div class="cta__btns reveal" style="--d:400ms">
-      <a class="btn btn--gold magnetic" href="https://www.instagram.com/lojafocofsa/" target="_blank" rel="noopener" data-cursor="Abrir">Abrir @lojafocofsa <i>→</i></a>
+      <a class="btn btn--gold magnetic" id="waCta" href="#" target="_blank" rel="noopener" data-cursor="WhatsApp" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Chamar no WhatsApp</a>
+      <a class="btn btn--gold magnetic" id="igCta" href="https://www.instagram.com/lojafocofsa/" target="_blank" rel="noopener" data-cursor="Abrir">Abrir @lojafocofsa <i>→</i></a>
       <a class="btn btn--ghost magnetic" href="https://ig.me/m/lojafocofsa" target="_blank" rel="noopener" data-cursor="Direct">Chamar no Direct</a>
     </div>
   </section>
@@ -564,6 +582,9 @@ const FOTOS_EMBUTIDAS = {
    Funciona com 3 a 12 itens.
    ===================================================================== */
 const PERFIL = "lojafocofsa";
+/* WhatsApp da loja com DDD, ex.: "75 99999-0000". Vazio esconde todos os
+   botões de WhatsApp — confirme o número com a loja antes de preencher. */
+const WHATSAPP = "";
 const PRODUTOS = [
   { linha: "Feminina",  nome: "Vestidos",          desc: "Midi off‑white, cintura bordada e barra assimétrica em babado.", arte: "vestido", foto: "vestidos.jpg", link: "", preco: "" },
   { linha: "Feminina",  nome: "Bermudas",          desc: "Jeans lavagem clara, cintura alta e barra reta.",       arte: "bermuda",    foto: "bermudas.jpg", enquadre: "50% 72%", link: "", preco: "" },
@@ -611,6 +632,15 @@ const LINHAS = [
       requestAnimationFrame(f);
     });
   const IG = `https://www.instagram.com/${PERFIL}/`;
+  /* número no formato do wa.me: 55 + DDD + número; inválido ou vazio = sem WhatsApp */
+  const WA = (() => {
+    let d = String(WHATSAPP || "").replace(/\D/g, "").replace(/^0+/, "");
+    if (d.length === 10 || d.length === 11) d = "55" + d;
+    return /^55\d{10,11}$/.test(d) ? d : "";
+  })();
+  if (WHATSAPP && !WA) console.warn("WHATSAPP inválido — use DDD + número, ex.: 75 99999-0000");
+  const waLink = msg => `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+  const waMsgProduto = p => `Olá! Vi ${p.nome} (${p.linha}) na vitrine da Foco e quero saber mais.`;
   /* foto embutida na página (embutir-fotos.py) ou, se não houver, o arquivo da pasta */
   const fotoSrc = f => (typeof FOTOS_EMBUTIDAS !== "undefined" && FOTOS_EMBUTIDAS[f]) || f;
 
@@ -730,6 +760,29 @@ const LINHAS = [
   const faces = cards.map(c => $$(".face", c));
   $("#nowTotal").textContent = pad2(N);
 
+  /* WhatsApp: aparece só com número configurado; o Direct vira botão secundário */
+  if (WA) {
+    const geral = waLink("Olá! Vim pela vitrine da Foco e quero saber mais sobre as peças.");
+    $("#waBtn").href = waLink(waMsgProduto(PRODUTOS[0]));
+    $("#waCta").href = geral;
+    $("#waFloat").href = geral;
+    ["#waBtn", "#waCta", "#waFloat"].forEach(s => ($(s).hidden = false));
+    ["#dmBtn", "#igCta"].forEach(s => $(s).classList.replace("btn--gold", "btn--ghost"));
+    $$("[data-canal]").forEach(el => (el.textContent = "WhatsApp ou no Direct"));
+    /* o flutuante some onde já há botão de WhatsApp na tela: topo, chamada final e rodapé */
+    const waFloat = $("#waFloat"), naTela = new Set();
+    const waIo = new IntersectionObserver(ents => {
+      ents.forEach(en => (en.isIntersecting ? naTela.add(en.target) : naTela.delete(en.target)));
+      const away = naTela.size > 0;
+      waFloat.classList.toggle("is-away", away);
+      waFloat.tabIndex = away ? -1 : 0;
+      waFloat.toggleAttribute("aria-hidden", away);
+    });
+    [$("#heroFoot"), $(".cta__btns"), $(".foot")].forEach(el => waIo.observe(el));
+  } else {
+    ["#waBtn", "#waCta", "#waFloat"].forEach(s => $(s).remove());
+  }
+
   const ticks = $("#ticks");
   ticks.innerHTML = PRODUTOS.map((p, i) => `<button type="button" aria-label="${esc(p.nome)}"></button>`).join("");
   const tickBtns = $$("button", ticks);
@@ -807,6 +860,7 @@ const LINHAS = [
     swapText(nowName, p.nome, dir);
     nowIdx.textContent = pad2(idx + 1);
     nowLine.textContent = p.linha;
+    if (WA) $("#waBtn").href = waLink(waMsgProduto(p));
     nowDesc.style.opacity = 0;
     setTimeout(() => { nowDesc.textContent = p.desc || ""; nowDesc.style.opacity = 1; }, 300);
   }
