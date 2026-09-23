@@ -64,6 +64,7 @@ portfólio.** Em dois dias você sai do zero e passa a ter 15 páginas para most
 | 7 | [`docs/07-varredura.md`](docs/07-varredura.md) | As 40 buscas prontas e como achar 40 alvos em 45 min |
 | — | [`gerador/index.html`](gerador/index.html) | A ferramenta que monta a página em 10 min |
 | — | [`demos/lojafocofsa/index.html`](demos/lojafocofsa/index.html) | Demo premium: abertura cinematográfica + vitrine 3D (Foco, @lojafocofsa) |
+| — | [`demos/madalena_calcados/index.html`](demos/madalena_calcados/index.html) | Demo premium: abertura com caixa de sapato 3D + passarela (Madalena Calçados, @madalena_calcados) |
 | — | [`crm/pipeline.csv`](crm/pipeline.csv) | Onde você controla quem falou o quê |
 
 ### Se você for trabalhar só por WhatsApp
