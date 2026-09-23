@@ -1179,6 +1179,8 @@ const LINHAS = [
   }
 
   function resetHero() {
+    [$("#heroFoot"), $("#lnL"), $("#lnR"), hero, ...$$(".nav > *"), ...$$(".bigword span")]
+      .forEach(el => el.getAnimations().forEach(an => an.cancel()));
     ring.live = false;
     $$(".bigword span").forEach(s => (s.style.opacity = 0));
     faces.flat().forEach(f => f.style.setProperty("--op", 0));
@@ -1198,9 +1200,11 @@ const LINHAS = [
   function heroEntrance() {
     const slow = reduce ? 0 : 1;
     hero.animate([{ transform: "scale(1.12)" }, { transform: "none" }], { duration: 2400 * slow + 1, easing: "cubic-bezier(.16,1,.3,1)" });
-    $$(".nav > *").forEach((el, i) => el.animate(
-      [{ opacity: 0, transform: "translateY(-18px)" }, { opacity: 1, transform: "none" }],
-      { duration: 1100 * slow + 1, delay: (500 + i * 120) * slow, easing: "cubic-bezier(.16,1,.3,1)", fill: "both" }).finished.then(() => (el.style.opacity = "")));
+    $$(".nav > *").forEach((el, i) => {
+      el.style.opacity = "";
+      el.animate([{ opacity: 0, transform: "translateY(-18px)" }, { opacity: 1, transform: "none" }],
+        { duration: 1100 * slow + 1, delay: (500 + i * 120) * slow, easing: "cubic-bezier(.16,1,.3,1)", fill: "backwards" });
+    });
     $$(".bigword span").forEach((s, i) => {
       s.style.opacity = "";
       s.animate([{ transform: "translateY(38%) rotateX(-96deg)", opacity: 0, filter: "blur(10px)" }, { transform: "none", opacity: 1, filter: "blur(0)" }],
@@ -1213,12 +1217,15 @@ const LINHAS = [
       update: v => pair.forEach(f => f.style.setProperty("--op", v.toFixed(3))) }));
     setTimeout(() => {
       scramble($("#eyebrow"), 1300);
-      ["#lnL", "#lnR"].forEach(s => $(s).animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 1300, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" }));
+      ["#lnL", "#lnR"].forEach(s => {
+        $(s).style.transform = "";
+        $(s).animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 1300, easing: "cubic-bezier(.16,1,.3,1)", fill: "backwards" });
+      });
     }, 700 * slow);
     setTimeout(() => $("#tagline").classList.add("in"), 1300 * slow);
     setTimeout(() => {
-      $("#heroFoot").animate([{ opacity: 0, transform: "translateY(24px)" }, { opacity: 1, transform: "none" }], { duration: 1200, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" })
-        .finished.then(() => ($("#heroFoot").style.opacity = 1));
+      $("#heroFoot").style.opacity = "";
+      $("#heroFoot").animate([{ opacity: 0, transform: "translateY(24px)" }, { opacity: 1, transform: "none" }], { duration: 1200, easing: "cubic-bezier(.16,1,.3,1)", fill: "backwards" });
       ring.live = true;
       ring.active = -1;
       hold(4200);
