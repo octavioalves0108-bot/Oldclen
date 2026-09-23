@@ -212,8 +212,10 @@
   .draw .art path,.draw .art circle{stroke-dasharray:1 1;animation:draw 1.8s var(--out) both}
   .draw .art .d{animation-delay:.35s}
   @keyframes draw{from{stroke-dashoffset:1;fill-opacity:0}to{stroke-dashoffset:0}}
-  .face__photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .face__photo + .face__shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),transparent 30%,transparent 55%,rgba(0,0,0,.75))}
+  .face__photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+  .face__shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,6,5,.5),transparent 24%,transparent 52%,rgba(8,6,5,.9) 100%)}
+  .draw .face__photo{animation:pull 1.7s var(--out) both}
+  @keyframes pull{from{filter:blur(10px) brightness(.7);transform:scale(1.14)}to{filter:none;transform:none}}
   .face__bottom{position:absolute;left:15px;right:15px;bottom:14px}
   .face__name{font:italic 400 clamp(17px,1.7vw,25px)/1.05 var(--serif);letter-spacing:-.01em}
   .face__cta{display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding-top:9px;border-top:1px solid rgba(242,236,226,.12);font-size:8.5px;color:var(--gold)}
@@ -329,6 +331,7 @@
   .cell__edge{position:absolute;top:-12px;left:10px;font:500 9px/1 var(--mono);letter-spacing:.14em;color:#e0a458;white-space:nowrap}
   .frame{position:relative;width:clamp(210px,24vw,330px);aspect-ratio:4/3;border-radius:5px;overflow:hidden}
   .frame .art{left:30%;right:30%;top:10%;height:70%;width:40%}
+  .frame .face__photo{object-position:50% 36%}
   .frame__lbl{position:absolute;left:14px;bottom:12px;right:14px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
   .frame__lbl b{font:italic 400 clamp(17px,1.6vw,22px)/1 var(--serif)}
   .frame__lbl span{font-size:8.5px;color:var(--ivory-2)}
@@ -530,11 +533,14 @@
      foto  → a foto da peça. Salve a imagem nesta mesma pasta e escreva só
              o nome do arquivo, ex.: "vestido-midi.jpg". (Evite colar o
              endereço da imagem do Instagram: esses links expiram.)
-             Vazio mostra a ilustração em traço.
+             Vazio — ou se a foto não abrir — mostra a ilustração em traço.
      link  → o link do post, ex.: "https://www.instagram.com/p/XXXXXXXX/"
              Vazio leva ao perfil da loja.
      preco → só o preço real, ex.: "R$ 129,90". Vazio mostra
              "Consulte no Direct". Nunca invente preço.
+     enquadre → opcional: que parte da foto aparece no card, como
+             "horizontal vertical". Ex.: "50% 20%" puxa para cima,
+             "35% 50%" puxa para a esquerda. Vazio centraliza no alto.
      arte  → ilustração usada quando não há foto: vestido, blusa, calca,
              camisa, polo, bermuda, vestidinho, kids
 
@@ -542,14 +548,14 @@
    ===================================================================== */
 const PERFIL = "lojafocofsa";
 const PRODUTOS = [
-  { linha: "Feminina",  nome: "Vestidos",          desc: "Leveza para o dia a dia e para as ocasiões especiais.", arte: "vestido",    foto: "", link: "", preco: "" },
-  { linha: "Feminina",  nome: "Blusas",            desc: "Caimento fluido, fácil de combinar com tudo.",          arte: "blusa",      foto: "", link: "", preco: "" },
-  { linha: "Feminina",  nome: "Calças",            desc: "Modelagens que alongam e acompanham o movimento.",      arte: "calca",      foto: "", link: "", preco: "" },
-  { linha: "Masculina", nome: "Camisas",           desc: "Do trabalho ao fim de semana, sem perder o alinhamento.", arte: "camisa",   foto: "", link: "", preco: "" },
+  { linha: "Feminina",  nome: "Vestidos",          desc: "Midi off-white, cintura bordada e barra assimétrica em babado.", arte: "vestido", foto: "vestidos.jpg", link: "", preco: "" },
+  { linha: "Feminina",  nome: "Bermudas",          desc: "Jeans lavagem clara, cintura alta e barra reta.",       arte: "bermuda",    foto: "bermudas.jpg", link: "", preco: "" },
+  { linha: "Masculina", nome: "Calças",            desc: "Jogger preta com cordão na cintura e punho na barra.",  arte: "calca",      foto: "calcas.jpg", enquadre: "45% 50%", link: "", preco: "" },
+  { linha: "Masculina", nome: "Blusas",            desc: "Manga longa em malha mescla, gola careca e bordado no peito.", arte: "blusa", foto: "blusas.jpg", enquadre: "50% 18%", link: "", preco: "" },
+  { linha: "Masculina", nome: "Camisas",           desc: "Tricô com zíper e punhos listrados sobre camiseta off-white.", arte: "camisa", foto: "camisas.jpg", link: "", preco: "" },
   { linha: "Masculina", nome: "Polos & Camisetas", desc: "Básicos com acabamento para usar todo dia.",            arte: "polo",       foto: "", link: "", preco: "" },
-  { linha: "Masculina", nome: "Bermudas",          desc: "Conforto para os dias quentes.",                        arte: "bermuda",    foto: "", link: "", preco: "" },
-  { linha: "Infantil",  nome: "Vestidinhos",       desc: "Cor e conforto para brincar à vontade.",                arte: "vestidinho", foto: "", link: "", preco: "" },
-  { linha: "Infantil",  nome: "Conjuntos Kids",    desc: "Looks completos para os pequenos.",                     arte: "kids",       foto: "", link: "", preco: "" },
+  { linha: "Infantil",  nome: "Vestidinhos",       desc: "Listrado verde-água, mangas com babado e saia em camadas.", arte: "vestidinho", foto: "vestidinhos.jpg", enquadre: "58% 35%", link: "", preco: "" },
+  { linha: "Infantil",  nome: "Conjuntos Kids",    desc: "Camiseta com estampa de margaridas e legging rosa ondulada.", arte: "kids", foto: "conjunto-kids.jpg", enquadre: "50% 22%", link: "", preco: "" },
 ];
 const LINHAS = [
   { linha: "Feminina",  arte: "vestido",    texto: "Peças para compor o seu estilo, do dia a dia às ocasiões especiais." },
@@ -688,7 +694,7 @@ const LINHAS = [
 
   ringEl.innerHTML = PRODUTOS.map((p, i) => {
     const media = p.foto
-      ? `<img class="face__photo" src="${esc(p.foto)}" alt="${esc(p.nome)}" loading="lazy" draggable="false"><i class="face__shade"></i>`
+      ? `<img class="face__photo" src="${esc(p.foto)}" alt="${esc(p.nome)}" draggable="false" data-arte="${esc(p.arte)}"${p.enquadre ? ` style="object-position:${esc(p.enquadre)}"` : ""}><i class="face__shade"></i>`
       : art(p.arte);
     return `<article class="card" data-line="${esc(p.linha)}" data-i="${i}">
       <a class="face face--front fab" href="${esc(linkOf(p))}" target="_blank" rel="noopener" tabindex="-1" draggable="false" aria-label="${esc(p.nome)} — ver no Instagram">
@@ -947,12 +953,24 @@ const LINHAS = [
 
   const frameHTML = (p, i, shift) => `
     <div class="cell"><span class="cell__edge">FOCO 400 ▸ ${pad2(((i + shift) % 36) + 1)}${i % 2 ? "A" : ""}</span>
-      <div class="frame fab" data-line="${esc(p.linha)}">${p.foto ? `<img class="face__photo" src="${esc(p.foto)}" alt="" loading="lazy">` : art(p.arte)}
+      <div class="frame fab" data-line="${esc(p.linha)}">${p.foto ? `<img class="face__photo" src="${esc(p.foto)}" alt="" loading="lazy" data-arte="${esc(p.arte)}"${p.enquadre ? ` style="object-position:${esc(p.enquadre)}"` : ""}><i class="face__shade"></i>` : art(p.arte)}
         <div class="frame__lbl"><b>${esc(p.nome)}</b><span class="mono">${esc(p.linha)}</span></div></div></div>`;
   const reel = (shift) => { let s = ""; for (let k = 0; k < 2; k++) PRODUTOS.forEach((p, i) => (s += frameHTML(p, i + k * N, shift))); return s; };
   $("#stripFront").innerHTML = reel(0);
   $("#stripBack").innerHTML = reel(12);
   const strips = [{ el: $("#stripFront"), rot: -4, dir: 1, x: 0 }, { el: $("#stripBack"), rot: 3, dir: -1, x: 0 }];
+
+  /* foto que não abre (arquivo faltando, link expirado) volta para a ilustração */
+  const fallback = img => {
+    const shade = img.nextElementSibling;
+    if (shade && shade.classList.contains("face__shade")) shade.remove();
+    img.insertAdjacentHTML("afterend", art(img.dataset.arte));
+    img.remove();
+  };
+  $$("img.face__photo[data-arte]").forEach(img => {
+    if (img.complete && img.naturalWidth === 0) fallback(img);
+    else img.addEventListener("error", () => fallback(img), { once: true });
+  });
   const filmSec = $("#em-cena");
 
   /* painéis com inclinação 3D */
