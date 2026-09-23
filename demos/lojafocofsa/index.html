@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Foco — Moda Feminina, Masculina e Infantil</title>
+<meta name="description" content="Foco — moda feminina, masculina e infantil. Veja a vitrine e chame no Direct: @lojafocofsa.">
+<meta name="theme-color" content="#0b0a09">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Foco — Moda Feminina, Masculina e Infantil">
+<meta property="og:description" content="Estilo em foco para toda a família. Vitrine completa no Instagram @lojafocofsa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link id="gf" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<style>
+  :root{
+    --ink:#0b0a09; --ink-2:#121110; --ink-3:#1b1916;
+    --ivory:#f2ece2; --ivory-2:rgba(242,236,226,.64); --ivory-3:rgba(242,236,226,.34);
+    --line:rgba(242,236,226,.12);
+    --gold:#c9a96e; --gold-2:#e8d3a6; --rec:#e5484d;
+    --serif:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
+    --sans:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --out:cubic-bezier(.16,1,.3,1);
+    --io:cubic-bezier(.77,0,.18,1);
+    --gutter:clamp(16px,4vw,56px);
+    --lb:clamp(44px,10vh,104px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--ink);scrollbar-width:thin;scrollbar-color:#2c2824 transparent}
+  body{
+    min-height:100vh;background:var(--ink);color:var(--ivory);
+    font:400 15px/1.6 var(--sans);overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  body.is-locked{overflow:hidden}
+  img,svg{display:block}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  em{font-style:italic}
+  :focus-visible{outline:1px solid var(--gold);outline-offset:4px}
+  ::selection{background:var(--gold);color:var(--ink)}
+  .mono{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+  .dim{color:var(--ivory-2)}
+  .gold{color:var(--gold)}
+
+  /* ---------- película: grão + vinheta ---------- */
+  .grain{
+    position:fixed;inset:-120px;z-index:140;pointer-events:none;opacity:.075;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    animation:grain .8s steps(5) infinite;
+  }
+  @keyframes grain{
+    0%{transform:translate(0,0)} 20%{transform:translate(-40px,24px)} 40%{transform:translate(28px,-36px)}
+    60%{transform:translate(-18px,44px)} 80%{transform:translate(44px,12px)} 100%{transform:translate(0,0)}
+  }
+  .vignette{position:fixed;inset:0;z-index:40;pointer-events:none;background:radial-gradient(130% 95% at 50% 45%,transparent 58%,rgba(0,0,0,.6) 100%)}
+
+  /* =========================================================
+     INTRO — a câmera procurando o foco
+     ========================================================= */
+  .intro{position:fixed;inset:0;z-index:100;background:#060505;overflow:hidden;display:grid;place-items:center}
+  .intro.is-gone,.hud.is-gone,.bars.is-gone{display:none}
+  .intro__glow{position:absolute;inset:0;background:radial-gradient(38% 34% at 50% 50%,rgba(201,169,110,.12),transparent 72%);animation:breathe 3.6s ease-in-out infinite}
+  @keyframes breathe{50%{opacity:.55;transform:scale(1.08)}}
+  .intro__center{position:relative;display:flex;flex-direction:column;align-items:center;gap:clamp(14px,2.4vh,26px)}
+  .intro__word{
+    display:flex;font:400 clamp(86px,19vw,290px)/.86 var(--serif);color:var(--ivory);
+    letter-spacing:var(--ls,.5em);margin-right:calc(-1 * var(--ls,.5em));
+    filter:blur(var(--bl,22px));transform:scale(var(--ws,1.1));will-change:filter,transform;
+  }
+  .intro__word span{display:inline-block}
+  .intro__sub{color:var(--ivory-2);letter-spacing:.42em;font-size:clamp(9px,1.1vw,12px);text-align:center;padding:0 16px}
+  .intro__sub span{display:inline-block;opacity:0;white-space:pre}
+
+  .vf{position:absolute;left:50%;top:50%;width:min(80vw,860px);height:min(52vh,460px);transform:translate(-50%,-50%) scale(var(--vfs,1.25));pointer-events:none;opacity:0;transition:opacity .8s}
+  .vf.is-on{opacity:1}
+  .vf__c{position:absolute;width:clamp(22px,3vw,38px);height:clamp(22px,3vw,38px);border:1.5px solid var(--ivory-2);transition:border-color .25s}
+  .vf__c.tl{top:0;left:0;border-right:0;border-bottom:0}
+  .vf__c.tr{top:0;right:0;border-left:0;border-bottom:0}
+  .vf__c.bl{bottom:0;left:0;border-right:0;border-top:0}
+  .vf__c.br{bottom:0;right:0;border-left:0;border-top:0}
+  .vf__tag{position:absolute;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--ivory-2)}
+  .vf__tag--l{top:-26px;left:0}
+  .vf__tag--r{bottom:-26px;right:0;color:var(--ivory)}
+  .vf__tag b{width:6px;height:6px;border-radius:50%;background:var(--ivory-3);transition:background .2s,box-shadow .2s}
+  .vf.is-lock .vf__c{border-color:var(--gold);animation:lock .6s var(--out)}
+  .vf.is-lock .vf__tag--l{color:var(--gold)}
+  .vf.is-lock .vf__tag b{background:var(--gold);box-shadow:0 0 10px var(--gold)}
+  @keyframes lock{0%{transform:scale(1.35);opacity:.2}60%{transform:scale(.92)}100%{transform:none;opacity:1}}
+
+  .scale{position:absolute;left:50%;bottom:calc(var(--lb) + clamp(18px,4vh,40px));width:min(560px,86vw);height:44px;transform:translateX(-50%);overflow:hidden;opacity:0;transition:opacity .8s;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent)}
+  .scale.is-on{opacity:1}
+  .scale__track{position:absolute;left:50%;top:0;height:32px;will-change:transform}
+  .scale__track i{position:absolute;bottom:0;width:1px;height:7px;background:var(--ivory-3)}
+  .scale__track i.mj{height:13px;background:var(--ivory-2)}
+  .scale__track span{position:absolute;top:0;transform:translateX(-50%);font:500 10px/1 var(--mono);color:var(--ivory-2)}
+  .scale__index{position:absolute;left:50%;top:0;width:1px;height:32px;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+  .scale__bar{position:absolute;left:0;right:0;bottom:2px;height:1px;background:var(--line)}
+  .scale__bar i{display:block;height:100%;background:linear-gradient(90deg,transparent,var(--gold));transform-origin:left;transform:scaleX(var(--p,0))}
+
+  .bars i{position:fixed;left:0;right:0;height:50vh;background:#000;z-index:110}
+  .bars__t{top:0}.bars__b{bottom:0}
+
+  .hud{position:fixed;inset:0;z-index:115;pointer-events:none}
+  .hud__row{position:absolute;left:var(--gutter);right:var(--gutter);display:flex;align-items:center;justify-content:space-between;gap:16px;opacity:0;transition:opacity .9s}
+  .hud.is-on .hud__row{opacity:1}
+  .hud__row--t{top:calc(var(--lb) / 2);transform:translateY(-50%)}
+  .hud__row--b{bottom:calc(var(--lb) / 2);transform:translateY(50%)}
+  .hud .mono{font-size:10px}
+  .rec{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--rec);margin-right:9px;vertical-align:1px;box-shadow:0 0 10px var(--rec);animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:.15}}
+  .skip{pointer-events:auto;color:var(--ivory);padding:10px 0 10px 14px;transition:color .3s}
+  .skip:hover{color:var(--gold)}
+  @media (max-width:640px){.hud__mid,.hud__handle{display:none}.hud__row--t .mono:last-child{display:none}}
+
+  .iris{position:fixed;inset:0;z-index:120;width:100%;height:100%;pointer-events:none;display:none}
+  .flash{position:fixed;inset:0;z-index:130;background:#fff8ec;opacity:0;pointer-events:none}
+
+  /* =========================================================
+     CURSOR — retícula de foco
+     ========================================================= */
+  .cursor{position:fixed;left:0;top:0;z-index:150;pointer-events:none;display:none;opacity:0;transition:opacity .5s}
+  .cursor.is-on{opacity:1}
+  .has-cursor .cursor{display:block}
+  @media (pointer:fine){.has-cursor,.has-cursor a,.has-cursor button,.has-cursor .stage{cursor:none}}
+  .cursor__dot{position:fixed;left:-2px;top:-2px;width:4px;height:4px;border-radius:50%;background:var(--gold)}
+  .cursor__ring{position:fixed;left:-18px;top:-18px;width:36px;height:36px;transition:width .45s var(--out),height .45s var(--out),left .45s var(--out),top .45s var(--out)}
+  .cursor__ring b{position:absolute;width:8px;height:8px;border:1px solid var(--ivory-2);transition:border-color .3s}
+  .cursor__ring b:nth-child(1){top:0;left:0;border-right:0;border-bottom:0}
+  .cursor__ring b:nth-child(2){top:0;right:0;border-left:0;border-bottom:0}
+  .cursor__ring b:nth-child(3){bottom:0;left:0;border-right:0;border-top:0}
+  .cursor__ring b:nth-child(4){bottom:0;right:0;border-left:0;border-top:0}
+  .cursor.is-big .cursor__ring{width:84px;height:84px;left:-42px;top:-42px}
+  .cursor.is-big .cursor__ring b{border-color:var(--gold)}
+  .cursor__label{position:fixed;left:0;top:0;transform:translate(-50%,-50%);font-size:9px;color:var(--gold);opacity:0;transition:opacity .3s;white-space:nowrap}
+  .cursor.is-big .cursor__label{opacity:1}
+
+  .progress{position:fixed;left:0;top:0;right:0;height:2px;z-index:60;background:linear-gradient(90deg,transparent,var(--gold));transform-origin:left;transform:scaleX(0)}
+  .side{position:fixed;right:calc(var(--gutter) * .5);top:50%;z-index:45;transform:translateY(-50%);writing-mode:vertical-rl;display:flex;gap:14px;align-items:center;font-size:10px;color:var(--ivory-3)}
+  .side i{width:1px;height:40px;background:var(--line)}
+  .side b{font-weight:500;color:var(--gold)}
+  @media (max-width:900px){.side{display:none}}
+
+  /* =========================================================
+     NAV
+     ========================================================= */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px var(--gutter);transition:background .6s,border-color .6s,padding .6s}
+  .nav.is-solid{background:rgba(11,10,9,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding-top:12px;padding-bottom:12px}
+  .logo{display:flex;align-items:center;gap:12px;font:600 20px/1 var(--serif);letter-spacing:.24em}
+  .ap{display:inline-block;width:26px;height:26px;color:var(--gold)}
+  .ap svg{width:100%;height:100%;overflow:visible}
+  .logo .ap svg{animation:spin 24s linear infinite}
+  .logo:hover .ap svg{animation-duration:3s}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .nav__links{display:flex;gap:clamp(18px,2.6vw,38px)}
+  .roll{display:inline-block;overflow:hidden;height:1.4em;font-size:11px;color:var(--ivory-2);transition:color .3s}
+  .roll span{display:block;position:relative;transition:transform .6s var(--out)}
+  .roll span::after{content:attr(data-t);position:absolute;left:0;top:100%;color:var(--gold)}
+  .roll:hover span{transform:translateY(-100%)}
+  .pill{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border:1px solid var(--line);border-radius:100px;font:500 12px/1 var(--sans);letter-spacing:.02em;transition:border-color .4s,background .4s}
+  .pill:hover{border-color:var(--gold);background:rgba(201,169,110,.08)}
+  .pill svg{width:15px;height:15px}
+  @media (max-width:820px){.nav__links{display:none}}
+  @media (max-width:420px){.pill span{display:none}.pill{padding:10px}}
+
+  /* =========================================================
+     HERO — vitrine 3D
+     ========================================================= */
+  .hero{position:relative;height:100vh;height:100svh;min-height:660px;display:grid;grid-template-rows:auto 1fr auto;padding:clamp(84px,11vh,112px) var(--gutter) clamp(20px,4vh,40px);overflow:hidden;isolation:isolate}
+  .hero__bg{position:absolute;inset:0;z-index:-1;overflow:hidden}
+  .leak{position:absolute;border-radius:50%;mix-blend-mode:screen;will-change:transform}
+  .leak--a{width:70vmax;height:70vmax;left:-28vmax;top:-30vmax;background:radial-gradient(circle,rgba(176,98,58,.34) 0%,rgba(176,98,58,.08) 38%,transparent 64%);animation:drift-a 16s ease-in-out infinite alternate}
+  .leak--b{width:64vmax;height:64vmax;right:-26vmax;bottom:-34vmax;background:radial-gradient(circle,rgba(201,169,110,.26) 0%,rgba(201,169,110,.06) 40%,transparent 64%);animation:drift-b 19s ease-in-out infinite alternate}
+  @keyframes drift-a{to{transform:translate(16vw,10vh) scale(1.15)}}
+  @keyframes drift-b{to{transform:translate(-14vw,-8vh) scale(1.1)}}
+  #bokeh{position:absolute;inset:0;width:100%;height:100%}
+
+  .hero__eyebrow{justify-self:center;display:flex;align-items:center;gap:16px;color:var(--ivory-2);font-size:clamp(9px,1vw,11px);letter-spacing:.34em;text-align:center;min-height:1.6em}
+  .hero__eyebrow .ln{width:clamp(24px,5vw,64px);height:1px;background:linear-gradient(90deg,transparent,var(--gold));transform-origin:right}
+  .hero__eyebrow .ln:last-child{transform-origin:left;background:linear-gradient(90deg,var(--gold),transparent)}
+
+  .stage{position:relative;perspective:1500px;perspective-origin:50% 38%;display:grid;place-items:center;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;outline:none;min-height:0}
+  .stage:active{cursor:grabbing}
+  .stage:focus-visible{outline:1px dashed rgba(201,169,110,.45);outline-offset:-12px}
+  .scene{--cw:clamp(140px,15.5vw,236px);--ch:calc(var(--cw) * 1.36);--r:420px;position:relative;width:var(--cw);height:var(--ch);transform-style:preserve-3d;will-change:transform}
+  .bigword{
+    position:absolute;left:50%;top:50%;display:flex;transform:translate(-50%,var(--wy,-70%));transform-style:preserve-3d;
+    font:500 clamp(118px,25vw,380px)/.8 var(--serif);letter-spacing:-.01em;white-space:nowrap;pointer-events:none;
+  }
+  .bigword span{display:inline-block;transform-origin:50% 100%;
+    background:linear-gradient(180deg,#f6f0e6 0%,#eadfca 48%,rgba(201,169,110,.28) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .ring{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+  .card{position:absolute;inset:0;transform-style:preserve-3d}
+  .face{position:absolute;inset:0;border-radius:6px;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;
+    filter:blur(var(--bl,0px)) brightness(var(--br,1));opacity:calc(var(--op,1) * var(--fo,1))}
+  .face--back{transform:rotateY(180deg)}
+  .fab{background:
+      linear-gradient(112deg,transparent 18%,rgba(255,244,230,.06) 30%,transparent 42%,transparent 58%,rgba(255,244,230,.05) 70%,transparent 82%),
+      radial-gradient(95% 62% at 50% 34%,var(--c2),var(--c1) 76%)}
+  [data-line="Feminina"]{--c1:#1f1210;--c2:#5e342c;--c3:#e2b2a0}
+  [data-line="Masculina"]{--c1:#0c1117;--c2:#243446;--c3:#a9c1d8}
+  [data-line="Infantil"]{--c1:#17150e;--c2:#4a4526;--c3:#e3cf93}
+  .face--front{box-shadow:inset 0 0 0 1px rgba(242,236,226,.1)}
+  .face__frame{position:absolute;inset:8px;border:1px solid rgba(242,236,226,.07);border-radius:3px;pointer-events:none}
+  .face__top{position:absolute;top:14px;left:15px;right:15px;display:flex;justify-content:space-between;font-size:8.5px;color:var(--ivory-2)}
+  .art{position:absolute;left:12%;right:12%;top:13%;height:58%;width:76%;color:var(--c3);overflow:visible}
+  .art path,.art circle{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+  .art .o{fill:currentColor;fill-opacity:.07;stroke-width:1.7}
+  .art .d{stroke-opacity:.55;stroke-width:1.1}
+  .draw .art path,.draw .art circle{stroke-dasharray:1 1;animation:draw 1.8s var(--out) both}
+  .draw .art .d{animation-delay:.35s}
+  @keyframes draw{from{stroke-dashoffset:1;fill-opacity:0}to{stroke-dashoffset:0}}
+  .face__photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .face__photo + .face__shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),transparent 30%,transparent 55%,rgba(0,0,0,.75))}
+  .face__bottom{position:absolute;left:15px;right:15px;bottom:14px}
+  .face__name{font:italic 400 clamp(17px,1.7vw,25px)/1.05 var(--serif);letter-spacing:-.01em}
+  .face__cta{display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding-top:9px;border-top:1px solid rgba(242,236,226,.12);font-size:8.5px;color:var(--gold)}
+  .face__shine{position:absolute;inset:-40% -60%;background:linear-gradient(100deg,transparent 42%,rgba(255,240,220,.16) 50%,transparent 58%);transform:translateX(calc(var(--sh,0) * 38%));pointer-events:none;mix-blend-mode:screen}
+  .face--back{background:radial-gradient(90% 65% at 50% 42%,var(--c2),var(--c1) 82%);box-shadow:inset 0 0 0 1px rgba(242,236,226,.08)}
+  .face--back .mono-f{position:absolute;inset:0;display:grid;place-items:center;font:italic 400 calc(var(--cw) * .9)/1 var(--serif);color:transparent;-webkit-text-stroke:1px rgba(232,211,166,.55)}
+  .face--back .face__top{color:var(--ivory-3)}
+  .face--back::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 11px,rgba(242,236,226,.025) 11px 12px)}
+
+  .floor{position:absolute;left:50%;top:100%;width:calc(var(--r) * 2 + var(--cw));height:calc(var(--r) * 2 + var(--cw));border-radius:50%;
+    transform:translate(-50%,-50%) translateY(30px) rotateX(90deg);pointer-events:none;
+    background:radial-gradient(closest-side,rgba(201,169,110,.22),rgba(201,169,110,.06) 58%,transparent 74%)}
+  .floor::before{content:"";position:absolute;inset:calc(var(--cw) / 2);border-radius:50%;border:1px solid rgba(242,236,226,.12)}
+  .floor::after{content:"";position:absolute;inset:calc(var(--cw) / 2 + 26px);border-radius:50%;border:1px dashed rgba(201,169,110,.18)}
+
+  .hero__foot{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:24px}
+  .tagline{font:400 clamp(22px,2.3vw,34px)/1.08 var(--serif);letter-spacing:-.01em;max-width:13em}
+  .tagline em{color:var(--gold-2)}
+  .now{text-align:center;min-width:min(340px,80vw)}
+  .now__meta{display:flex;align-items:center;justify-content:center;gap:10px;font-size:10px;color:var(--ivory)}
+  .now__meta i{width:22px;height:1px;background:var(--gold)}
+  .now__name{font:italic 400 clamp(30px,3.6vw,52px)/1.1 var(--serif);letter-spacing:-.015em;margin-top:6px;min-height:1.12em;white-space:nowrap}
+  .now__name span{display:inline-block;white-space:pre}
+  .now__desc{color:var(--ivory-2);font-size:13.5px;margin-top:2px;min-height:1.6em;transition:opacity .5s}
+  .ctrl{justify-self:end;display:flex;flex-direction:column;align-items:flex-end;gap:16px}
+  .ctrl__nav{display:flex;align-items:center;gap:14px}
+  .ctrl__btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:border-color .4s,background .4s}
+  .ctrl__btn:hover{border-color:var(--gold);background:rgba(201,169,110,.08)}
+  .ctrl__btn svg{width:16px;height:16px}
+  .ticks{display:flex;gap:6px;align-items:center}
+  .ticks button{width:14px;height:22px;display:grid;place-items:center}
+  .ticks button::before{content:"";width:1px;height:10px;background:var(--ivory-3);transition:height .5s var(--out),background .4s,width .4s}
+  .ticks button.on::before{height:20px;width:2px;background:var(--gold)}
+
+  .btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 26px;border-radius:100px;font:600 12.5px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;overflow:hidden;isolation:isolate;transition:color .5s var(--out),border-color .5s}
+  .btn::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;transform:translateY(101%);transition:transform .6s var(--out)}
+  .btn:hover::before{transform:none}
+  .btn--gold{background:linear-gradient(135deg,var(--gold-2),var(--gold) 55%,#a8844a);color:#17130d}
+  .btn--gold::before{background:var(--ivory)}
+  .btn--ghost{border:1px solid var(--ivory-3);color:var(--ivory)}
+  .btn--ghost::before{background:var(--ivory)}
+  .btn--ghost:hover{color:var(--ink);border-color:var(--ivory)}
+  .btn i{font-style:normal;transition:transform .5s var(--out)}
+  .btn:hover i{transform:translateX(4px)}
+  .magnetic{will-change:transform;transition-property:transform,color,border-color,background;transition-duration:.6s;transition-timing-function:var(--out)}
+
+  @media (max-width:900px){
+    .hero__foot{grid-template-columns:1fr;justify-items:center;gap:16px}
+    .tagline{display:none}
+    .ctrl{justify-self:center;align-items:center}
+    .stage{perspective:1100px}
+    .scene{--cw:min(44vw,210px)}
+    .bigword{--wy:-150%;font-size:clamp(96px,27vw,200px)}
+    .hero__eyebrow{letter-spacing:.2em;gap:10px}
+    .hero__eyebrow .ln{display:none}
+  }
+  @media (max-height:760px) and (min-width:901px){.scene{--cw:clamp(130px,13vw,200px)}}
+
+  /* =========================================================
+     SEÇÕES
+     ========================================================= */
+  .sec{position:relative;padding:clamp(90px,14vw,190px) var(--gutter)}
+  .sec__head{max-width:1280px;margin:0 auto clamp(40px,6vw,80px)}
+  .eyebrow{color:var(--ivory-2);margin-bottom:22px}
+  .sec__title{font:400 clamp(44px,7.4vw,118px)/.96 var(--serif);letter-spacing:-.025em}
+  .sec__title em{color:var(--gold-2)}
+  .sec__lead{max-width:34em;color:var(--ivory-2);font-size:clamp(15px,1.3vw,18px);margin-top:26px}
+
+  .split .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.04em .08em .24em .05em;margin:-.04em -.08em -.24em -.05em}
+  .split .c{display:inline-block;transform:translateY(108%) rotate(7deg);opacity:0;filter:blur(8px);transform-origin:0 100%;
+    transition:transform 1.25s var(--out),opacity 1s var(--out),filter 1s var(--out);transition-delay:calc(var(--ci) * 26ms + var(--d,0ms))}
+  .split.in .c{transform:none;opacity:1;filter:blur(0)}
+  .reveal{opacity:0;transform:translateY(34px);filter:blur(6px);transition:opacity 1.2s var(--out),transform 1.2s var(--out),filter 1.2s var(--out);transition-delay:var(--d,0ms)}
+  .reveal.in{opacity:1;transform:none;filter:none}
+
+  /* marquee */
+  .marquee{padding:clamp(40px,7vw,90px) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;position:relative}
+  .mq{display:flex;width:max-content;white-space:nowrap;will-change:transform}
+  .mq > span{display:inline-flex;align-items:center;gap:.36em;padding-right:.36em;font:italic 400 clamp(54px,10.5vw,168px)/1.02 var(--serif);letter-spacing:-.02em}
+  .mq--o > span{font-style:normal;font-weight:600;color:transparent;-webkit-text-stroke:1px rgba(242,236,226,.34)}
+  .mq .st{font-size:.26em;color:var(--gold);-webkit-text-stroke:0;font-style:normal}
+
+  /* painéis das linhas */
+  .panels{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,24px);perspective:1400px}
+  .panel{position:relative;display:block;aspect-ratio:3/4.1;border-radius:10px;overflow:hidden;transform:rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg));transition:transform .7s var(--out),box-shadow .7s var(--out);box-shadow:0 40px 80px -40px rgba(0,0,0,.9)}
+  .panel.is-tilt{transition:transform .12s linear}
+  .panel .fab{position:absolute;inset:0}
+  .panel__art{position:absolute;left:14%;right:14%;top:14%;height:52%;transform:translate(calc(var(--px,0) * -14px),calc(var(--py,0) * -14px));transition:transform .7s var(--out)}
+  .panel__art .art{left:0;right:0;top:0;width:100%;height:100%}
+  .panel__top{position:absolute;top:22px;left:24px;right:24px;display:flex;justify-content:space-between;font-size:10px;color:var(--ivory-2)}
+  .panel__body{position:absolute;left:24px;right:24px;bottom:24px}
+  .panel h3{font:italic 400 clamp(34px,3.6vw,56px)/1 var(--serif);letter-spacing:-.02em}
+  .panel p{color:var(--ivory-2);font-size:14px;margin-top:10px;max-width:22em}
+  .panel__cta{display:inline-flex;gap:10px;margin-top:20px;color:var(--gold);font-size:10px}
+  .panel__cta i{font-style:normal;transition:transform .5s var(--out)}
+  .panel:hover .panel__cta i{transform:translateX(6px)}
+  .panel__glare{position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 50% at var(--gx,50%) var(--gy,30%),rgba(255,240,215,.16),transparent 70%);opacity:0;transition:opacity .5s}
+  .panel:hover .panel__glare{opacity:1}
+  .panel::after{content:"";position:absolute;inset:10px;border:1px solid rgba(242,236,226,.08);border-radius:5px;pointer-events:none}
+  @media (max-width:860px){.panels{grid-template-columns:1fr}.panel{aspect-ratio:4/3.9}}
+
+  /* película 35mm */
+  .film{overflow:hidden;padding-left:0;padding-right:0}
+  .film .sec__head{padding:0 var(--gutter);display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;max-width:calc(1280px + var(--gutter) * 2)}
+  .film__wrap{position:relative;height:clamp(360px,44vw,560px)}
+  .strip{position:absolute;left:0;top:50%;display:flex;width:max-content;padding:40px 0;background:#15110d;will-change:transform;transform-origin:50vw 50%}
+  .strip::before,.strip::after{content:"";position:absolute;left:0;right:0;height:16px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='16'><rect x='8' y='3' width='14' height='10' rx='2.5' fill='%23f4e6c8'/></svg>");background-size:30px 16px;opacity:.85}
+  .strip::before{top:10px}.strip::after{bottom:10px}
+  .strip--front{transform:translateY(-50%) rotate(-4deg);box-shadow:0 50px 90px -30px rgba(0,0,0,.9);z-index:2}
+  .strip--back{transform:translateY(-50%) rotate(3deg);filter:blur(3px) brightness(.55);opacity:.8}
+  .cell{position:relative;padding:0 7px}
+  .cell__edge{position:absolute;top:-12px;left:10px;font:500 9px/1 var(--mono);letter-spacing:.14em;color:#e0a458;white-space:nowrap}
+  .frame{position:relative;width:clamp(210px,24vw,330px);aspect-ratio:4/3;border-radius:5px;overflow:hidden}
+  .frame .art{left:30%;right:30%;top:10%;height:70%;width:40%}
+  .frame__lbl{position:absolute;left:14px;bottom:12px;right:14px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .frame__lbl b{font:italic 400 clamp(17px,1.6vw,22px)/1 var(--serif)}
+  .frame__lbl span{font-size:8.5px;color:var(--ivory-2)}
+  .film__foot{display:flex;justify-content:center;padding:0 var(--gutter);margin-top:clamp(20px,4vw,40px)}
+
+  /* CTA */
+  .cta{position:relative;min-height:92vh;display:grid;place-content:center;justify-items:center;text-align:center;padding:clamp(110px,14vw,180px) var(--gutter);overflow:hidden;border-top:1px solid var(--line)}
+  .cta__spot{position:absolute;inset:0;pointer-events:none;background:radial-gradient(38vmax 38vmax at var(--mx,50%) var(--my,45%),rgba(201,169,110,.16),transparent 70%);transition:background .1s}
+  .cta__title{font:400 clamp(72px,15vw,236px)/.86 var(--serif);letter-spacing:-.035em}
+  .cta__title em{color:var(--gold-2)}
+  .cta__lead{color:var(--ivory-2);max-width:30em;margin-top:clamp(36px,5vw,70px);font-size:clamp(15px,1.3vw,18px)}
+  .cta__btns{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:40px}
+  .badge{position:absolute;right:clamp(16px,9vw,160px);top:clamp(70px,12vw,150px);width:clamp(110px,12vw,170px);aspect-ratio:1;display:grid;place-items:center}
+  .badge svg.txt{position:absolute;inset:0;width:100%;height:100%;animation:spin 22s linear infinite}
+  .badge text{font:500 11.5px var(--mono);letter-spacing:.28em;fill:var(--ivory-2)}
+  .badge .ap{width:34%;height:34%}
+  @media (max-width:700px){.badge{position:relative;right:auto;top:auto;margin-bottom:34px}}
+
+  .foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px 24px;padding:26px var(--gutter) 30px;border-top:1px solid var(--line);font-size:10px}
+  .foot .mono{font-size:10px}
+  .replay{color:var(--ivory);display:inline-flex;gap:8px;align-items:center;transition:color .3s}
+  .replay:hover{color:var(--gold)}
+
+  noscript .ns{position:fixed;inset:auto 0 0 0;z-index:200;padding:14px;text-align:center;background:var(--ink-3)}
+
+  @media (prefers-reduced-motion:reduce){
+    .grain,.intro__glow,.leak,.logo .ap svg,.badge svg.txt,.rec{animation:none}
+    .split .c,.reveal{transition-duration:.01s;transition-delay:0s}
+  }
+</style>
+</head>
+<body class="is-locked">
+<noscript><style>.intro,.bars,.hud{display:none!important}body{overflow:auto}.split .c,.reveal{opacity:1;transform:none;filter:none}</style></noscript>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ====================== INTRO ====================== -->
+<div class="intro" id="intro" role="status" aria-label="Carregando a vitrine da Foco">
+  <div class="intro__glow" aria-hidden="true"></div>
+  <div class="vf" id="vf" aria-hidden="true">
+    <i class="vf__c tl"></i><i class="vf__c tr"></i><i class="vf__c bl"></i><i class="vf__c br"></i>
+    <span class="vf__tag vf__tag--l mono"><b></b><span id="afLabel">AF · Focando</span></span>
+    <span class="vf__tag vf__tag--r mono"><span id="pct">000</span>%</span>
+  </div>
+  <div class="intro__center" aria-hidden="true">
+    <div class="intro__word" id="introWord"><span>F</span><span>O</span><span>C</span><span>O</span></div>
+    <p class="intro__sub mono" id="introSub">Moda Feminina · Masculina · Infantil</p>
+  </div>
+  <div class="scale" id="scale" aria-hidden="true">
+    <div class="scale__track" id="scaleTrack"></div>
+    <span class="scale__index"></span>
+    <div class="scale__bar"><i id="scaleBar"></i></div>
+  </div>
+</div>
+<div class="bars" id="bars" aria-hidden="true"><i class="bars__t" id="barT"></i><i class="bars__b" id="barB"></i></div>
+<div class="hud" id="hud">
+  <div class="hud__row hud__row--t" aria-hidden="true">
+    <span class="mono"><i class="rec"></i>REC&nbsp;&nbsp;<span id="tc" class="dim">00:00:00:00</span></span>
+    <span class="mono dim hud__mid">Foco — Cena 01</span>
+    <span class="mono dim">AF-C&nbsp;&nbsp;ƒ/1.8&nbsp;&nbsp;1/125&nbsp;&nbsp;ISO&nbsp;400</span>
+  </div>
+  <div class="hud__row hud__row--b">
+    <span class="mono dim hud__handle" aria-hidden="true">@lojafocofsa</span>
+    <button class="mono skip" id="skip" type="button">Pular intro <span aria-hidden="true">→</span></button>
+  </div>
+</div>
+<svg class="iris" id="iris" aria-hidden="true">
+  <defs>
+    <linearGradient id="bladeA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d1a16"/><stop offset=".5" stop-color="#0d0c0b"/><stop offset="1" stop-color="#050404"/></linearGradient>
+    <linearGradient id="bladeB" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#161411"/><stop offset=".5" stop-color="#0a0908"/><stop offset="1" stop-color="#040303"/></linearGradient>
+  </defs>
+  <g id="irisBlades"></g>
+  <polygon id="irisRim" fill="none" stroke="rgba(201,169,110,.55)" stroke-width="1.2"/>
+</svg>
+<div class="flash" id="flash" aria-hidden="true"></div>
+
+<div class="cursor" id="cursor" aria-hidden="true">
+  <i class="cursor__dot" id="cDot"></i>
+  <i class="cursor__ring" id="cRing"><b></b><b></b><b></b><b></b></i>
+  <span class="cursor__label mono" id="cLabel"></span>
+</div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<div class="side mono" id="side" aria-hidden="true"><b id="sideIdx">01</b><i></i><span id="sideName">Vitrine</span></div>
+
+<!-- ====================== NAV ====================== -->
+<header class="nav" id="nav">
+  <a class="logo" href="#vitrine" aria-label="Foco — início"><span class="ap" data-ap></span><span>FOCO</span></a>
+  <nav class="nav__links mono" aria-label="Seções">
+    <a class="roll" href="#vitrine"><span data-t="Vitrine">Vitrine</span></a>
+    <a class="roll" href="#linhas"><span data-t="Linhas">Linhas</span></a>
+    <a class="roll" href="#em-cena"><span data-t="Em cena">Em cena</span></a>
+    <a class="roll" href="#instagram"><span data-t="Instagram">Instagram</span></a>
+  </nav>
+  <a class="pill magnetic" href="https://www.instagram.com/lojafocofsa/" target="_blank" rel="noopener" data-cursor="Abrir" aria-label="Instagram @lojafocofsa">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".9" fill="currentColor" stroke="none"/></svg>
+    <span>@lojafocofsa</span>
+  </a>
+</header>
+
+<main>
+  <!-- ====================== VITRINE ====================== -->
+  <section class="hero" id="vitrine" data-side="01|Vitrine">
+    <div class="hero__bg" aria-hidden="true"><i class="leak leak--a"></i><i class="leak leak--b"></i><canvas id="bokeh"></canvas></div>
+
+    <p class="hero__eyebrow mono"><i class="ln" id="lnL"></i><span id="eyebrow">Moda Feminina · Masculina · Infantil</span><i class="ln" id="lnR"></i></p>
+
+    <div class="stage" id="stage" tabindex="0" role="region" aria-roledescription="carrossel" aria-label="Vitrine de produtos. Use as setas do teclado para navegar." data-cursor="Arraste">
+      <div class="scene" id="scene">
+        <h1 class="bigword" id="bigword" aria-label="Foco — Moda Feminina, Masculina e Infantil"><span aria-hidden="true">F</span><span aria-hidden="true">O</span><span aria-hidden="true">C</span><span aria-hidden="true">O</span></h1>
+        <div class="ring" id="ring"></div>
+        <div class="floor" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="hero__foot" id="heroFoot">
+      <p class="tagline split" id="tagline">Estilo em foco <em>para toda a família.</em></p>
+      <div class="now" aria-live="polite">
+        <p class="now__meta mono"><span id="nowIdx">01</span><span class="dim">/ <span id="nowTotal">08</span></span><i></i><span id="nowLine">Feminina</span></p>
+        <p class="now__name" id="nowName"></p>
+        <p class="now__desc" id="nowDesc"></p>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl__nav">
+          <button class="ctrl__btn magnetic" id="prev" type="button" aria-label="Produto anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <div class="ticks" id="ticks"></div>
+          <button class="ctrl__btn magnetic" id="next" type="button" aria-label="Próximo produto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+        <a class="btn btn--gold magnetic" id="dmBtn" href="https://ig.me/m/lojafocofsa" target="_blank" rel="noopener" data-cursor="Direct">Chamar no Direct <i>→</i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== MARQUEE ====================== -->
+  <section class="marquee" aria-label="Feminina, Masculina e Infantil">
+    <div class="mq" id="mq1" aria-hidden="true"></div>
+    <div class="mq mq--o" id="mq2" aria-hidden="true"></div>
+  </section>
+
+  <!-- ====================== LINHAS ====================== -->
+  <section class="sec" id="linhas" data-side="02|Linhas">
+    <header class="sec__head">
+      <p class="mono eyebrow reveal"><span class="gold">02</span> — Linhas</p>
+      <h2 class="sec__title split">Três linhas. <em>Um só foco.</em></h2>
+      <p class="sec__lead reveal" style="--d:200ms">Moda feminina, masculina e infantil no mesmo lugar — para vestir a família inteira sem trocar de loja.</p>
+    </header>
+    <div class="panels" id="panels"></div>
+  </section>
+
+  <!-- ====================== EM CENA ====================== -->
+  <section class="sec film" id="em-cena" data-side="03|Em cena">
+    <header class="sec__head">
+      <div>
+        <p class="mono eyebrow reveal"><span class="gold">03</span> — Em cena</p>
+        <h2 class="sec__title split">Cada peça, <em>um frame.</em></h2>
+      </div>
+      <p class="sec__lead reveal" style="--d:200ms;margin-top:0;max-width:22em">Role a página e a película corre. Gostou de alguma? A conversa começa no Direct.</p>
+    </header>
+    <div class="film__wrap" aria-hidden="true">
+      <div class="strip strip--back" id="stripBack"></div>
+      <div class="strip strip--front" id="stripFront"></div>
+    </div>
+  </section>
+
+  <!-- ====================== INSTAGRAM ====================== -->
+  <section class="cta" id="instagram" data-side="04|Instagram">
+    <div class="cta__spot" id="spot" aria-hidden="true"></div>
+    <div class="badge" aria-hidden="true">
+      <svg class="txt" viewBox="0 0 200 200"><defs><path id="circ" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs><text><textPath href="#circ">FOCO ✦ FEMININA ✦ MASCULINA ✦ INFANTIL ✦</textPath></text></svg>
+      <span class="ap" data-ap></span>
+    </div>
+    <p class="mono eyebrow reveal"><span class="gold">04</span> — Vitrine completa</p>
+    <h2 class="cta__title split">Siga o <em>foco.</em></h2>
+    <p class="cta__lead reveal" style="--d:250ms">As peças da vez estão no Instagram. Escolha a sua e chame no Direct.</p>
+    <div class="cta__btns reveal" style="--d:400ms">
+      <a class="btn btn--gold magnetic" href="https://www.instagram.com/lojafocofsa/" target="_blank" rel="noopener" data-cursor="Abrir">Abrir @lojafocofsa <i>→</i></a>
+      <a class="btn btn--ghost magnetic" href="https://ig.me/m/lojafocofsa" target="_blank" rel="noopener" data-cursor="Direct">Chamar no Direct</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span class="mono dim">Foco · Moda Feminina, Masculina e Infantil</span>
+  <button class="mono replay" id="replay" type="button"><span aria-hidden="true">↺</span> Rever abertura</button>
+  <a class="mono dim" href="https://www.instagram.com/lojafocofsa/" target="_blank" rel="noopener">@lojafocofsa</a>
+</footer>
+
+<noscript><p class="ns">Ative o JavaScript para ver a vitrine animada — ou visite <a href="https://www.instagram.com/lojafocofsa/">@lojafocofsa</a>.</p></noscript>
+
+<script>
+/* =====================================================================
+   VITRINE — edite aqui.
+
+   Os cards abaixo seguem as três linhas da loja (Feminina, Masculina e
+   Infantil). Para colocar os produtos reais, troque em cada item:
+
+     nome  → nome da peça como está no post
+     desc  → uma linha curta sobre ela
+     foto  → a foto da peça. Salve a imagem nesta mesma pasta e escreva só
+             o nome do arquivo, ex.: "vestido-midi.jpg". (Evite colar o
+             endereço da imagem do Instagram: esses links expiram.)
+             Vazio mostra a ilustração em traço.
+     link  → o link do post, ex.: "https://www.instagram.com/p/XXXXXXXX/"
+             Vazio leva ao perfil da loja.
+     preco → só o preço real, ex.: "R$ 129,90". Vazio mostra
+             "Consulte no Direct". Nunca invente preço.
+     arte  → ilustração usada quando não há foto: vestido, blusa, calca,
+             camisa, polo, bermuda, vestidinho, kids
+
+   Funciona com 3 a 12 itens.
+   ===================================================================== */
+const PERFIL = "lojafocofsa";
+const PRODUTOS = [
+  { linha: "Feminina",  nome: "Vestidos",          desc: "Leveza para o dia a dia e para as ocasiões especiais.", arte: "vestido",    foto: "", link: "", preco: "" },
+  { linha: "Feminina",  nome: "Blusas",            desc: "Caimento fluido, fácil de combinar com tudo.",          arte: "blusa",      foto: "", link: "", preco: "" },
+  { linha: "Feminina",  nome: "Calças",            desc: "Modelagens que alongam e acompanham o movimento.",      arte: "calca",      foto: "", link: "", preco: "" },
+  { linha: "Masculina", nome: "Camisas",           desc: "Do trabalho ao fim de semana, sem perder o alinhamento.", arte: "camisa",   foto: "", link: "", preco: "" },
+  { linha: "Masculina", nome: "Polos & Camisetas", desc: "Básicos com acabamento para usar todo dia.",            arte: "polo",       foto: "", link: "", preco: "" },
+  { linha: "Masculina", nome: "Bermudas",          desc: "Conforto para os dias quentes.",                        arte: "bermuda",    foto: "", link: "", preco: "" },
+  { linha: "Infantil",  nome: "Vestidinhos",       desc: "Cor e conforto para brincar à vontade.",                arte: "vestidinho", foto: "", link: "", preco: "" },
+  { linha: "Infantil",  nome: "Conjuntos Kids",    desc: "Looks completos para os pequenos.",                     arte: "kids",       foto: "", link: "", preco: "" },
+];
+const LINHAS = [
+  { linha: "Feminina",  arte: "vestido",    texto: "Peças para compor o seu estilo, do dia a dia às ocasiões especiais." },
+  { linha: "Masculina", arte: "camisa",     texto: "Do casual ao arrumado, com caimento e conforto." },
+  { linha: "Infantil",  arte: "vestidinho", texto: "Conforto e cor para os pequenos acompanharem o ritmo." },
+];
+/* ===================================================================== */
+
+(() => {
+  "use strict";
+  const $ = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer = matchMedia("(pointer: fine)").matches;
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const esc = s => String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]);
+  const E = {
+    outCubic: t => 1 - Math.pow(1 - t, 3),
+    outQuart: t => 1 - Math.pow(1 - t, 4),
+    outExpo: t => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+    inCubic: t => t * t * t,
+    inOutCubic: t => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
+    inOutQuart: t => (t < .5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2),
+  };
+  const tween = ({ from = 0, to = 1, dur = 1000, ease = E.outCubic, delay = 0, update }) =>
+    new Promise(res => {
+      const t0 = performance.now() + delay;
+      const f = now => {
+        if (now < t0) return requestAnimationFrame(f);
+        const t = dur <= 0 ? 1 : clamp((now - t0) / dur);
+        update(lerp(from, to, ease(t)), t);
+        t < 1 ? requestAnimationFrame(f) : res();
+      };
+      requestAnimationFrame(f);
+    });
+  const IG = `https://www.instagram.com/${PERFIL}/`;
+
+  /* -------------------- ilustrações das peças -------------------- */
+  const ARTE = {
+    vestido: `<path class="o" d="M84 22 L90 22 L92 54 Q96 62 100 58 Q104 62 108 54 L110 22 L116 22 L118 60 Q121 82 114 100 L150 206 Q100 222 50 206 L86 100 Q79 82 82 60 Z"/>
+      <path class="d" d="M86 100 Q100 106 114 100"/><path class="d" d="M100 106 L100 213"/><path class="d" d="M93 106 Q82 160 72 211"/><path class="d" d="M107 106 Q118 160 128 211"/><path class="d" d="M91 74 Q100 80 109 74"/>`,
+    blusa: `<path class="o" d="M86 34 Q100 60 114 34 L140 44 L172 110 L150 122 L138 80 Q142 140 146 196 Q100 206 54 196 Q58 140 62 80 L50 122 L28 110 L60 44 Z"/>
+      <path class="d" d="M90 37 Q100 53 110 37"/><path class="d" d="M58 184 Q100 194 142 184"/><path class="d" d="M152 72 L161 112"/><path class="d" d="M48 72 L39 112"/><path class="d" d="M80 92 Q82 140 78 182"/><path class="d" d="M120 92 Q118 140 122 182"/>`,
+    calca: `<path class="o" d="M64 26 L136 26 L150 214 L108 218 L100 88 L92 218 L50 214 Z"/>
+      <path class="d" d="M63 40 L137 40"/><path class="d" d="M100 40 Q98 66 100 84"/><path class="d" d="M70 42 Q80 60 72 72"/><path class="d" d="M130 42 Q120 60 128 72"/><path class="d" d="M78 26 L78 40"/><path class="d" d="M122 26 L122 40"/><path class="d" d="M79 96 L67 211"/><path class="d" d="M121 96 L133 211"/>`,
+    camisa: `<path class="o" d="M84 30 L100 44 L116 30 L144 40 L168 150 L152 156 L136 92 L138 208 L62 208 L64 92 L48 156 L32 150 L56 40 Z"/>
+      <path class="d" d="M84 30 L90 20 L110 20 L116 30"/><path class="d" d="M84 30 L94 56 L100 44 L106 56 L116 30"/><path class="d" d="M100 44 L100 208"/><path class="d" d="M105 52 L105 208"/>
+      <path class="d" d="M112 76 L128 76 L128 94 L120 98 L112 94 Z"/><path class="d" d="M51 143 L35 138"/><path class="d" d="M149 143 L165 138"/>
+      <circle class="d" cx="102.5" cy="76" r="1.8"/><circle class="d" cx="102.5" cy="108" r="1.8"/><circle class="d" cx="102.5" cy="140" r="1.8"/><circle class="d" cx="102.5" cy="172" r="1.8"/>`,
+    polo: `<path class="o" d="M80 30 Q100 40 120 30 L150 40 L176 86 L154 98 L140 78 L140 206 L60 206 L60 78 L46 98 L24 86 L50 40 Z"/>
+      <path class="d" d="M80 30 L88 50 L100 42 L112 50 L120 30"/><path class="d" d="M100 42 L100 78"/><path class="d" d="M169 74 L148 86"/><path class="d" d="M31 74 L52 86"/><path class="d" d="M60 195 L140 195"/>
+      <circle class="d" cx="100" cy="55" r="1.8"/><circle class="d" cx="100" cy="67" r="1.8"/>`,
+    bermuda: `<path class="o" d="M58 44 L142 44 L154 184 L108 190 L100 110 L92 190 L46 184 Z"/>
+      <path class="d" d="M59 58 L141 58"/><path class="d" d="M100 58 Q98 88 100 106"/><path class="d" d="M66 60 Q76 80 64 94"/><path class="d" d="M134 60 Q124 80 136 94"/><path class="d" d="M76 44 L76 58"/><path class="d" d="M124 44 L124 58"/><path class="d" d="M48 170 L93 176"/><path class="d" d="M152 170 L107 176"/>`,
+    vestidinho: `<path class="o" d="M86 56 Q100 64 114 56 L124 60 Q140 62 138 80 L126 84 L124 98 L148 188 Q100 202 52 188 L76 98 L74 84 L62 80 Q60 62 76 60 Z"/>
+      <path class="d" d="M86 57 Q88 72 100 68 Q112 72 114 57"/><path class="d" d="M76 102 Q100 108 124 102"/><path class="d" d="M100 105 L90 99 L90 111 Z M100 105 L110 99 L110 111 Z"/><path class="d" d="M88 110 Q80 150 70 190"/><path class="d" d="M112 110 Q120 150 130 190"/><path class="d" d="M57 181 Q100 195 143 181"/>`,
+    kids: `<path class="o" d="M84 40 Q100 50 116 40 L134 46 L152 72 L138 80 L128 68 L128 124 L72 124 L72 68 L62 80 L48 72 L66 46 Z"/>
+      <path class="o" d="M76 138 L124 138 L130 204 L104 206 L100 172 L96 206 L70 204 Z"/>
+      <path class="d" d="M100 78 L103.5 87 L113 87 L105.5 93 L108.5 102 L100 96.5 L91.5 102 L94.5 93 L87 87 L96.5 87 Z"/><path class="d" d="M76 146 L124 146"/><path class="d" d="M145 64 L132 72"/><path class="d" d="M55 64 L68 72"/>`,
+  };
+  const art = key => `<svg class="art" viewBox="0 0 200 240" aria-hidden="true">${(ARTE[key] || ARTE.vestido).replace(/<(path|circle)/g, '<$1 pathLength="1"')}</svg>`;
+
+  /* ícone de diafragma (logo) */
+  function aperture(blades = 6) {
+    const R = 11, r = 4.6, a = (Math.PI * 2) / blades, H = [];
+    for (let k = 0; k < blades; k++) H.push([r * Math.cos(k * a + .3), r * Math.sin(k * a + .3)]);
+    let d = "";
+    for (let k = 0; k < blades; k++) {
+      const [x0, y0] = H[k], [x1, y1] = H[(k + 1) % blades];
+      const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
+      const b = x0 * ux + y0 * uy, c = x0 * x0 + y0 * y0 - R * R, t = -b + Math.sqrt(b * b - c);
+      d += `M${x0.toFixed(2)} ${y0.toFixed(2)}L${(x0 + ux * t).toFixed(2)} ${(y0 + uy * t).toFixed(2)}`;
+    }
+    return `<svg viewBox="-12 -12 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"><circle r="${R}"/><path d="${d}"/></svg>`;
+  }
+  $$("[data-ap]").forEach(el => (el.innerHTML = aperture()));
+
+  /* -------------------- split de texto -------------------- */
+  function split(el) {
+    if (el.dataset.done) return;
+    el.dataset.done = 1;
+    if (!el.hasAttribute("aria-label")) el.setAttribute("aria-label", el.textContent.replace(/\s+/g, " ").trim());
+    const walk = node => {
+      [...node.childNodes].forEach(n => {
+        if (n.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(part => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) return frag.appendChild(document.createTextNode(" "));
+            const w = document.createElement("span");
+            w.className = "w";
+            w.setAttribute("aria-hidden", "true");
+            [...part].forEach(ch => {
+              const c = document.createElement("span");
+              c.className = "c";
+              c.textContent = ch;
+              w.appendChild(c);
+            });
+            frag.appendChild(w);
+          });
+          n.replaceWith(frag);
+        } else if (n.nodeType === 1 && n.tagName !== "BR") walk(n);
+      });
+    };
+    walk(el);
+    $$(".c", el).forEach((c, i) => c.style.setProperty("--ci", i));
+  }
+  $$(".split").forEach(split);
+  $("#eyebrow").dataset.text = $("#eyebrow").textContent;
+
+  function scramble(el, dur = 1400) {
+    const final = el.dataset.text || el.textContent;
+    el.dataset.text = final;
+    const pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/+·";
+    const t0 = performance.now();
+    const f = now => {
+      const p = clamp((now - t0) / dur), n = final.length, head = Math.floor(p * n);
+      let out = final.slice(0, head);
+      for (let i = head; i < Math.min(n, head + 7); i++) out += final[i] === " " ? " " : pool[(Math.random() * pool.length) | 0];
+      el.textContent = out;
+      if (p < 1) requestAnimationFrame(f);
+      else el.textContent = final;
+    };
+    requestAnimationFrame(f);
+  }
+
+  /* =====================================================================
+     VITRINE 3D
+     ===================================================================== */
+  const N = PRODUTOS.length, STEP = 360 / N;
+  const ringEl = $("#ring"), scene = $("#scene"), stage = $("#stage");
+  const pad2 = n => String(n).padStart(2, "0");
+  const linkOf = p => p.link || IG;
+
+  ringEl.innerHTML = PRODUTOS.map((p, i) => {
+    const media = p.foto
+      ? `<img class="face__photo" src="${esc(p.foto)}" alt="${esc(p.nome)}" loading="lazy" draggable="false"><i class="face__shade"></i>`
+      : art(p.arte);
+    return `<article class="card" data-line="${esc(p.linha)}" data-i="${i}">
+      <a class="face face--front fab" href="${esc(linkOf(p))}" target="_blank" rel="noopener" tabindex="-1" draggable="false" aria-label="${esc(p.nome)} — ver no Instagram">
+        ${media}<i class="face__frame"></i>
+        <div class="face__top mono"><span>${pad2(i + 1)}</span><span>${esc(p.linha)}</span></div>
+        <div class="face__bottom"><div class="face__name">${esc(p.nome)}</div>
+          <div class="face__cta mono"><span>${esc(p.preco || "Consulte no Direct")}</span><span aria-hidden="true">→</span></div></div>
+        <i class="face__shine"></i>
+      </a>
+      <div class="face face--back" aria-hidden="true"><span class="mono-f">F</span><div class="face__top mono"><span>Foco</span><span>${pad2(i + 1)}</span></div></div>
+    </article>`;
+  }).join("");
+  const cards = $$(".card", ringEl);
+  const faces = cards.map(c => $$(".face", c));
+  $("#nowTotal").textContent = pad2(N);
+
+  const ticks = $("#ticks");
+  ticks.innerHTML = PRODUTOS.map((p, i) => `<button type="button" aria-label="${esc(p.nome)}"></button>`).join("");
+  const tickBtns = $$("button", ticks);
+
+  const ring = {
+    A: 0, z: 0, r: 420, vel: 0, tw: null, drag: null, active: -1,
+    nextAt: Infinity, hover: false, sp: 0, mx: 0, my: 0, smx: 0, smy: 0, live: false, entry: false,
+  };
+  const cache = cards.map(() => ({ bl: -1, br: -1, sh: -9, fo: -1 }));
+
+  function measure() {
+    const cw = parseFloat(getComputedStyle(scene).width) || 200;
+    const wide = innerWidth > 900;
+    ring.r = Math.round(Math.max(cw * (wide ? 2.05 : 1.8), (cw / 2) / Math.tan(Math.PI / N) * 1.25));
+    scene.style.setProperty("--r", ring.r + "px");
+    cards.forEach((c, i) => (c.style.transform = `rotateY(${i * STEP}deg) translateZ(${ring.r}px)`));
+  }
+  const norm = a => ((((a + 180) % 360) + 360) % 360) - 180;
+  const idxFromAngle = A => ((Math.round(-A / STEP) % N) + N) % N;
+
+  function applyRing() {
+    const tiltX = -7 - ring.sp * 16 + ring.smy * 5;
+    const tiltY = ring.smx * 9;
+    const back = -ring.r * .55 + ring.z;
+    scene.style.transform = `translateZ(${back.toFixed(1)}px) translateY(${(ring.sp * 60).toFixed(1)}px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg)`;
+    ringEl.style.transform = `rotateY(${ring.A.toFixed(3)}deg)`;
+    const maxBlur = innerWidth < 700 ? 3.2 : 6.5;
+    for (let i = 0; i < N; i++) {
+      const rel = norm(i * STEP + ring.A), rad = rel * Math.PI / 180;
+      const depth = (1 - Math.cos(rad)) / 2;
+      const bl = Math.round(Math.pow(depth, 1.15) * maxBlur * 4) / 4;
+      const br = Math.round((1 - depth * .5) * 50) / 50;
+      const fo = Math.round((1 - depth * .42) * 50) / 50;
+      const sh = Math.round(Math.sin(rad) * 40) / 40;
+      const c = cache[i];
+      if (bl !== c.bl) { cards[i].style.setProperty("--bl", bl + "px"); c.bl = bl; }
+      if (br !== c.br) { cards[i].style.setProperty("--br", br); c.br = br; }
+      if (sh !== c.sh) { cards[i].style.setProperty("--sh", sh); c.sh = sh; }
+      if (fo !== c.fo) { cards[i].style.setProperty("--fo", fo); c.fo = fo; }
+    }
+    const idx = idxFromAngle(ring.A);
+    if (idx !== ring.active) setActive(idx);
+  }
+
+  /* -------------------- troca do produto em foco -------------------- */
+  const nowName = $("#nowName"), nowDesc = $("#nowDesc"), nowIdx = $("#nowIdx"), nowLine = $("#nowLine");
+  function swapText(el, text, dir) {
+    const tok = (el._tok = (el._tok || 0) + 1);
+    const old = $$("span", el);
+    const outDur = old.length ? 320 : 0;
+    old.forEach((c, i) =>
+      c.animate([{ transform: "none", opacity: 1, filter: "blur(0)" }, { transform: `translateY(${-dir * 55}%)`, opacity: 0, filter: "blur(6px)" }],
+        { duration: 320, delay: i * 10, easing: "cubic-bezier(.7,0,.84,0)", fill: "forwards" }));
+    setTimeout(() => {
+      if (tok !== el._tok) return;
+      el.innerHTML = [...text].map(ch => `<span>${esc(ch)}</span>`).join("");
+      $$("span", el).forEach((c, i) =>
+        c.animate([{ transform: `translateY(${dir * 70}%) rotate(${dir * 6}deg)`, opacity: 0, filter: "blur(8px)" }, { transform: "none", opacity: 1, filter: "blur(0)" }],
+          { duration: reduce ? 1 : 900, delay: reduce ? 0 : i * 24, easing: "cubic-bezier(.16,1,.3,1)", fill: "backwards" }));
+    }, outDur + old.length * 6);
+  }
+  function setActive(idx) {
+    const dir = ring.active < 0 ? 1 : (norm((idx - ring.active) * STEP) >= 0 ? 1 : -1);
+    ring.active = idx;
+    const p = PRODUTOS[idx];
+    cards.forEach((c, i) => {
+      const on = i === idx;
+      c.classList.toggle("is-active", on);
+      const a = faces[i][0];
+      a.tabIndex = -1;
+      if (on) { c.classList.remove("draw"); void c.offsetWidth; c.classList.add("draw"); }
+    });
+    tickBtns.forEach((b, i) => b.classList.toggle("on", i === idx));
+    if (!ring.live) return;
+    swapText(nowName, p.nome, dir);
+    nowIdx.textContent = pad2(idx + 1);
+    nowLine.textContent = p.linha;
+    nowDesc.style.opacity = 0;
+    setTimeout(() => { nowDesc.textContent = p.desc || ""; nowDesc.style.opacity = 1; }, 300);
+  }
+
+  function goTo(i, dur = 1250, ease = E.inOutCubic) {
+    const base = -i * STEP;
+    const k = Math.round((ring.A - base) / 360);
+    ring.tw = { from: ring.A, to: base + k * 360, t0: performance.now(), dur, ease };
+    ring.vel = 0;
+    ring.entry = false;
+  }
+  const step = d => { goTo(ring.active + d); hold(); };
+  const hold = (ms = 6500) => (ring.nextAt = performance.now() + ms);
+
+  function ringFrame(now) {
+    if (ring.tw) {
+      const t = clamp((now - ring.tw.t0) / ring.tw.dur);
+      ring.A = lerp(ring.tw.from, ring.tw.to, ring.tw.ease(t));
+      if (t >= 1) { ring.tw = null; if (ring.nextAt < now + 3600) ring.nextAt = now + 3600; }
+    } else if (!ring.drag && Math.abs(ring.vel) > 0) {
+      ring.A += ring.vel;
+      ring.vel *= .93;
+      if (Math.abs(ring.vel) < .45) {
+        const target = Math.round(-(ring.A + ring.vel * 10) / STEP);
+        ring.vel = 0;
+        goTo(((target % N) + N) % N, 900, E.outCubic);
+      }
+    } else if (!ring.drag && ring.live && !reduce && !ring.hover && now > ring.nextAt && !document.hidden) {
+      goTo(ring.active + 1);
+    }
+    ring.smx = lerp(ring.smx, ring.mx, .06);
+    ring.smy = lerp(ring.smy, ring.my, .06);
+    applyRing();
+    requestAnimationFrame(ringFrame);
+  }
+
+  /* arrastar / tocar */
+  let suppressClick = false;
+  stage.addEventListener("pointerdown", e => {
+    if (e.button !== 0 || !ring.live) return;
+    ring.drag = { x: e.clientX, y: e.clientY, A: ring.A, lastX: e.clientX, lastT: performance.now(), moved: false, id: e.pointerId };
+    ring.tw = null;
+    ring.vel = 0;
+    ring.entry = false;
+    hold(8000);
+  });
+  addEventListener("pointermove", e => {
+    const d = ring.drag;
+    if (!d || e.pointerId !== d.id) return;
+    const dx = e.clientX - d.x;
+    if (!d.moved && Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(e.clientY - d.y)) {
+      d.moved = true;
+      try { stage.setPointerCapture(e.pointerId); } catch (_) {}
+    }
+    if (!d.moved) return;
+    const sens = innerWidth < 700 ? .42 : .24;
+    ring.A = d.A + dx * sens;
+    const now = performance.now(), dt = Math.max(1, now - d.lastT);
+    ring.vel = lerp(ring.vel, ((e.clientX - d.lastX) * sens) / dt * 16.7, .5);
+    d.lastX = e.clientX;
+    d.lastT = now;
+  });
+  const endDrag = e => {
+    const d = ring.drag;
+    if (!d || (e && e.pointerId !== d.id)) return;
+    ring.drag = null;
+    if (d.moved) {
+      suppressClick = true;
+      setTimeout(() => (suppressClick = false), 60);
+      ring.vel = clamp(ring.vel, -14, 14);
+      if (Math.abs(ring.vel) < .45) {
+        const t = Math.round(-ring.A / STEP);
+        goTo(((t % N) + N) % N, 800, E.outCubic);
+      }
+    }
+    hold();
+  };
+  addEventListener("pointerup", endDrag);
+  addEventListener("pointercancel", endDrag);
+  stage.addEventListener("click", e => {
+    const face = e.target.closest(".face--front");
+    if (suppressClick) { e.preventDefault(); return; }
+    if (!face) return;
+    const i = +face.parentElement.dataset.i;
+    if (i !== ring.active) { e.preventDefault(); goTo(i, 1000); hold(); }
+  }, true);
+  stage.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+    else if (e.key === "Enter") window.open(linkOf(PRODUTOS[ring.active]), "_blank", "noopener");
+  });
+  stage.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") ring.hover = true; });
+  stage.addEventListener("pointerleave", () => { ring.hover = false; hold(2400); });
+  $("#prev").addEventListener("click", () => step(-1));
+  $("#next").addEventListener("click", () => step(1));
+  tickBtns.forEach((b, i) => b.addEventListener("click", () => { goTo(i); hold(); }));
+  addEventListener("pointermove", e => {
+    ring.mx = e.clientX / innerWidth * 2 - 1;
+    ring.my = e.clientY / innerHeight * 2 - 1;
+  }, { passive: true });
+
+  measure();
+  addEventListener("resize", () => { measure(); sizeBokeh(); });
+
+  /* =====================================================================
+     BOKEH — luzes fora de foco
+     ===================================================================== */
+  const cv = $("#bokeh"), cx = cv.getContext("2d");
+  let bw = 0, bh = 0, dots = [];
+  function sizeBokeh() {
+    const dpr = Math.min(1.5, devicePixelRatio || 1);
+    bw = cv.clientWidth; bh = cv.clientHeight;
+    cv.width = bw * dpr; cv.height = bh * dpr;
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = bw < 700 ? 16 : 30;
+    dots = Array.from({ length: count }, () => ({
+      x: Math.random() * bw, y: Math.random() * bh, r: 8 + Math.random() ** 2 * 70,
+      z: .2 + Math.random() * .8, a: .05 + Math.random() * .14, s: .08 + Math.random() * .25,
+      ph: Math.random() * 6.28, hue: Math.random() < .7 ? "201,169,110" : "242,236,226",
+    }));
+  }
+  sizeBokeh();
+  let heroVisible = true;
+  new IntersectionObserver(([en]) => (heroVisible = en.isIntersecting)).observe($("#vitrine"));
+  function bokehFrame(t) {
+    if (heroVisible) {
+      cx.clearRect(0, 0, bw, bh);
+      cx.globalCompositeOperation = "lighter";
+      for (const d of dots) {
+        if (!reduce) { d.y -= d.s * d.z; d.x += Math.sin(t / 3000 + d.ph) * .12; }
+        if (d.y < -d.r) { d.y = bh + d.r; d.x = Math.random() * bw; }
+        const px = d.x - ring.smx * 26 * d.z, py = d.y - ring.smy * 18 * d.z;
+        const tw = .7 + .3 * Math.sin(t / 900 + d.ph);
+        const g = cx.createRadialGradient(px, py, 0, px, py, d.r);
+        g.addColorStop(0, `rgba(${d.hue},${d.a * tw})`);
+        g.addColorStop(.72, `rgba(${d.hue},${d.a * .55 * tw})`);
+        g.addColorStop(1, `rgba(${d.hue},0)`);
+        cx.fillStyle = g;
+        cx.beginPath(); cx.arc(px, py, d.r, 0, 6.2832); cx.fill();
+      }
+    }
+    requestAnimationFrame(bokehFrame);
+  }
+
+  /* =====================================================================
+     SEÇÕES — letreiro, painéis, película
+     ===================================================================== */
+  const mqItem = (w) => `<span>${w} <span class="st">✦</span></span>`;
+  const words = ["Feminina", "Masculina", "Infantil"];
+  const mqHTML = (arr) => { let s = ""; for (let i = 0; i < 4; i++) arr.forEach(w => (s += mqItem(w))); return s; };
+  $("#mq1").innerHTML = mqHTML(words);
+  $("#mq2").innerHTML = mqHTML(["Moda", "Estilo", "Família", "Foco"]);
+  const mqs = [{ el: $("#mq1"), x: 0, dir: -1 }, { el: $("#mq2"), x: 0, dir: 1 }];
+
+  $("#panels").innerHTML = LINHAS.map((l, i) => `
+    <div class="reveal" style="--d:${i * 140}ms"><a class="panel" data-line="${esc(l.linha)}" href="${IG}" target="_blank" rel="noopener" data-cursor="Ver">
+      <div class="fab"></div>
+      <div class="panel__art">${art(l.arte)}</div>
+      <div class="panel__top mono"><span>${pad2(i + 1)}</span><span>Linha</span></div>
+      <div class="panel__body"><h3>${esc(l.linha)}</h3><p>${esc(l.texto)}</p><span class="panel__cta mono">Ver no Instagram <i>→</i></span></div>
+      <i class="panel__glare"></i>
+    </a></div>`).join("");
+
+  const frameHTML = (p, i, shift) => `
+    <div class="cell"><span class="cell__edge">FOCO 400 ▸ ${pad2(((i + shift) % 36) + 1)}${i % 2 ? "A" : ""}</span>
+      <div class="frame fab" data-line="${esc(p.linha)}">${p.foto ? `<img class="face__photo" src="${esc(p.foto)}" alt="" loading="lazy">` : art(p.arte)}
+        <div class="frame__lbl"><b>${esc(p.nome)}</b><span class="mono">${esc(p.linha)}</span></div></div></div>`;
+  const reel = (shift) => { let s = ""; for (let k = 0; k < 2; k++) PRODUTOS.forEach((p, i) => (s += frameHTML(p, i + k * N, shift))); return s; };
+  $("#stripFront").innerHTML = reel(0);
+  $("#stripBack").innerHTML = reel(12);
+  const strips = [{ el: $("#stripFront"), rot: -4, dir: 1, x: 0 }, { el: $("#stripBack"), rot: 3, dir: -1, x: 0 }];
+  const filmSec = $("#em-cena");
+
+  /* painéis com inclinação 3D */
+  if (finePointer && !reduce) {
+    $$(".panel").forEach(p => {
+      p.addEventListener("pointermove", e => {
+        const r = p.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        p.classList.add("is-tilt");
+        p.style.setProperty("--ty", ((x - .5) * 12).toFixed(2) + "deg");
+        p.style.setProperty("--tx", ((.5 - y) * 12).toFixed(2) + "deg");
+        p.style.setProperty("--px", (x - .5).toFixed(3));
+        p.style.setProperty("--py", (y - .5).toFixed(3));
+        p.style.setProperty("--gx", (x * 100).toFixed(1) + "%");
+        p.style.setProperty("--gy", (y * 100).toFixed(1) + "%");
+      });
+      p.addEventListener("pointerleave", () => {
+        p.classList.remove("is-tilt");
+        ["--tx", "--ty", "--px", "--py"].forEach(k => p.style.removeProperty(k));
+      });
+    });
+  }
+
+  /* botões magnéticos */
+  if (finePointer && !reduce) {
+    $$(".magnetic").forEach(b => {
+      b.addEventListener("pointermove", e => {
+        const r = b.getBoundingClientRect();
+        const x = e.clientX - (r.left + r.width / 2), y = e.clientY - (r.top + r.height / 2);
+        b.style.transform = `translate(${x * .22}px,${y * .32}px)`;
+      });
+      b.addEventListener("pointerleave", () => (b.style.transform = ""));
+    });
+  }
+
+  /* holofote do CTA */
+  const cta = $("#instagram"), spot = $("#spot");
+  cta.addEventListener("pointermove", e => {
+    const r = cta.getBoundingClientRect();
+    spot.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
+    spot.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
+  });
+
+  /* revelações ao rolar */
+  const io = new IntersectionObserver(ents => ents.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+  }), { threshold: .18, rootMargin: "0px 0px -6% 0px" });
+  const watchReveals = () => $$(".reveal:not(.in), .sec .split:not(.in), .cta .split:not(.in)").forEach(el => io.observe(el));
+
+  /* índice lateral */
+  const sideIdx = $("#sideIdx"), sideName = $("#sideName");
+  const sio = new IntersectionObserver(ents => ents.forEach(en => {
+    if (!en.isIntersecting) return;
+    const [n, name] = en.target.dataset.side.split("|");
+    if (sideIdx.textContent !== n) { sideIdx.textContent = n; sideName.dataset.text = name; scramble(sideName, 500); }
+  }), { threshold: .45 });
+  $$("[data-side]").forEach(s => sio.observe(s));
+
+  /* laço de rolagem */
+  const nav = $("#nav"), prog = $("#progress"), hero = $("#vitrine");
+  let lastY = scrollY, vel = 0, prevT = performance.now();
+  function scrollFrame(now) {
+    const dt = Math.min(3, (now - prevT) / 16.7); prevT = now;
+    const y = scrollY, vh = innerHeight;
+    vel = lerp(vel, y - lastY, .12); lastY = y;
+    nav.classList.toggle("is-solid", y > 40);
+    const max = document.documentElement.scrollHeight - vh;
+    prog.style.transform = `scaleX(${max > 0 ? (y / max).toFixed(4) : 0})`;
+    ring.sp = clamp(y / (hero.offsetHeight || vh));
+
+    if (!reduce) {
+      mqs.forEach(m => {
+        const half = m.el.scrollWidth / 2;
+        m.x += m.dir * (.7 + Math.min(14, Math.abs(vel) * .5)) * dt;
+        if (m.x <= -half) m.x += half;
+        if (m.x > 0) m.x -= half;
+        m.el.style.transform = `translate3d(${m.x.toFixed(1)}px,0,0) skewX(${clamp(-vel * .35, -10, 10).toFixed(2)}deg)`;
+      });
+      const r = filmSec.getBoundingClientRect();
+      if (r.bottom > -200 && r.top < vh + 200) {
+        const p = clamp((vh - r.top) / (vh + r.height));
+        strips.forEach(s => {
+          const travel = s.el.scrollWidth / 2;
+          const target = -(innerWidth * .3 + (s.dir > 0 ? p : 1 - p) * travel);
+          s.x = lerp(s.x, target, .09);
+          s.el.style.transform = `translateY(-50%) rotate(${s.rot}deg) translateX(${s.x.toFixed(1)}px)`;
+        });
+      }
+    }
+    requestAnimationFrame(scrollFrame);
+  }
+
+  /* cursor */
+  if (finePointer && !reduce) {
+    document.body.classList.add("has-cursor");
+    const cur = $("#cursor"), dot = $("#cDot"), ringC = $("#cRing"), lbl = $("#cLabel");
+    let tx = innerWidth / 2, ty = innerHeight / 2, rx = tx, ry = ty;
+    document.documentElement.addEventListener("pointerleave", () => cur.classList.remove("is-on"));
+    addEventListener("pointermove", e => {
+      if (!cur.classList.contains("is-on")) { rx = e.clientX; ry = e.clientY; cur.classList.add("is-on"); }
+      tx = e.clientX; ty = e.clientY;
+      dot.style.transform = `translate(${tx}px,${ty}px)`;
+      const t = e.target.closest("[data-cursor]");
+      cur.classList.toggle("is-big", !!t);
+      if (t) lbl.textContent = t.dataset.cursor;
+    }, { passive: true });
+    (function cf() {
+      rx = lerp(rx, tx, .2); ry = lerp(ry, ty, .2);
+      ringC.style.transform = `translate(${rx.toFixed(1)}px,${ry.toFixed(1)}px)`;
+      lbl.style.transform = `translate(${rx.toFixed(1)}px,${(ry + 58).toFixed(1)}px) translate(-50%,-50%)`;
+      requestAnimationFrame(cf);
+    })();
+  }
+
+  /* =====================================================================
+     INTRO — foco, trava, obturador, diafragma
+     ===================================================================== */
+  const intro = $("#intro"), hud = $("#hud"), bars = $("#bars"), barT = $("#barT"), barB = $("#barB");
+  const vf = $("#vf"), word = $("#introWord"), pct = $("#pct"), tc = $("#tc"), afLabel = $("#afLabel");
+  const scaleEl = $("#scale"), track = $("#scaleTrack"), scaleBar = $("#scaleBar");
+  const iris = $("#iris"), irisBlades = $("#irisBlades"), irisRim = $("#irisRim"), flash = $("#flash");
+
+  const introSub = $("#introSub");
+  introSub.innerHTML = [...introSub.textContent].map(ch => `<span>${esc(ch)}</span>`).join("");
+  const subChars = $$("span", introSub);
+
+  const LABELS = ["∞", "20", "10", "7", "5", "3", "2", "1.5", "1.2", "1", "0.8", "0.7"];
+  const GAP = 58, TRAVEL = 7 * GAP;
+  let th = "";
+  for (let k = 0; k <= (LABELS.length - 1) * 5; k++) {
+    const x = k * GAP / 5;
+    th += `<i class="${k % 5 ? "" : "mj"}" style="left:${x}px"></i>`;
+    if (k % 5 === 0) th += `<span style="left:${x}px">${LABELS[k / 5]}</span>`;
+  }
+  track.innerHTML = th;
+
+  const blades = Array.from({ length: 8 }, (_, k) => {
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    p.setAttribute("fill", k % 2 ? "url(#bladeA)" : "url(#bladeB)");
+    p.setAttribute("stroke", "rgba(201,169,110,.28)");
+    p.setAttribute("stroke-width", "1");
+    irisBlades.appendChild(p);
+    return p;
+  });
+  function drawIris(open, rot) {
+    const w = innerWidth, h = innerHeight, n = 8, a = Math.PI * 2 / n;
+    iris.setAttribute("viewBox", `${-w / 2} ${-h / 2} ${w} ${h}`);
+    const r = open * Math.hypot(w, h) / 2 * 1.06, rv = r / Math.cos(a / 2), L = Math.max(w, h) * 4;
+    const V = [], U = [];
+    for (let k = 0; k < n; k++) {
+      const ang = rot + k * a, ua = rot + (k + .5) * a + Math.PI / 2;
+      V.push([rv * Math.cos(ang), rv * Math.sin(ang)]);
+      U.push([Math.cos(ua), Math.sin(ua)]);
+    }
+    const f = v => v.toFixed(1);
+    for (let k = 0; k < n; k++) {
+      const [x, y] = V[k], u = U[k], up = U[(k + n - 1) % n];
+      blades[k].setAttribute("points", `${f(x)},${f(y)} ${f(x + u[0] * L)},${f(y + u[1] * L)} ${f(x + up[0] * L)},${f(y + up[1] * L)}`);
+    }
+    irisRim.setAttribute("points", V.map(([x, y]) => `${f(x)},${f(y)}`).join(" "));
+    irisRim.style.opacity = open > .02 && open < .98 ? 1 : 0;
+  }
+
+  const timecode = ms => {
+    const fr = Math.floor(ms / (1000 / 24)), s = Math.floor(fr / 24);
+    return `00:${pad2(Math.floor(s / 60))}:${pad2(s % 60)}:${pad2(fr % 24)}`;
+  };
+
+  /* a intro segura em 90% até as fontes chegarem — no máximo 3,2 s */
+  let loaded = false;
+  const gf = $("#gf");
+  const cssReady = new Promise(r => {
+    if (!gf || gf.media === "all") return r();
+    gf.addEventListener("load", r, { once: true });
+    gf.addEventListener("error", r, { once: true });
+  });
+  const fontsReady = cssReady.then(() => document.fonts
+    ? Promise.all(['500 1em "Bodoni Moda"', 'italic 400 1em "Bodoni Moda"', '500 1em "JetBrains Mono"', '400 1em "Manrope"'].map(f => document.fonts.load(f).catch(() => 0)))
+    : 0);
+  Promise.race([fontsReady, wait(3200)]).then(() => (loaded = true));
+
+  let skipReq = false, introBusy = false;
+  $("#skip").addEventListener("click", () => (skipReq = true));
+  addEventListener("keydown", e => { if (introBusy && (e.key === "Escape" || e.key === "Enter")) skipReq = true; });
+
+  function renderIntro(p, t) {
+    const q = 1 - p;
+    const hunt = Math.sin(t / 105) * Math.sin(t / 380) * q * (p < .9 ? 1 : 0);
+    const blur = Math.max(0, q * q * 24 + hunt * 6);
+    word.style.setProperty("--bl", blur.toFixed(2) + "px");
+    word.style.setProperty("--ls", (q * q * .5 + .02).toFixed(3) + "em");
+    word.style.setProperty("--ws", (1 + q * .12 + hunt * .02).toFixed(4));
+    const ca = (q * 9 + Math.abs(hunt) * 5).toFixed(1);
+    word.style.textShadow = q > .002 ? `${-ca}px 0 rgba(229,72,77,${(.55 * q).toFixed(3)}), ${ca}px 0 rgba(80,170,255,${(.5 * q).toFixed(3)})` : "none";
+    vf.style.setProperty("--vfs", (1 + q * .24 + hunt * .03).toFixed(4));
+    pct.textContent = String(Math.round(p * 100)).padStart(3, "0");
+    scaleBar.style.setProperty("--p", p.toFixed(4));
+    track.style.transform = `translateX(${(-p * TRAVEL).toFixed(1)}px)`;
+    tc.textContent = timecode(t);
+    const n = subChars.length;
+    subChars.forEach((c, i) => {
+      const l = clamp((p - (.12 + (i / n) * .6)) / .14);
+      c.style.opacity = l.toFixed(3);
+      c.style.filter = l < 1 ? `blur(${((1 - l) * 7).toFixed(1)}px)` : "none";
+      c.style.transform = `translateY(${((1 - l) * 9).toFixed(1)}px)`;
+    });
+  }
+
+  function focusLoop(min) {
+    return new Promise(res => {
+      const t0 = performance.now();
+      let p = 0;
+      const f = now => {
+        const t = now - t0;
+        let target = E.inOutCubic(clamp(t / min));
+        if (!loaded) target = Math.min(target, .9);
+        if (skipReq) target = 1;
+        p += (target - p) * (skipReq ? .25 : .2);
+        if (target === 1 && 1 - p < .004) p = 1;
+        renderIntro(p, t);
+        p < 1 ? requestAnimationFrame(f) : res(t);
+      };
+      requestAnimationFrame(f);
+    });
+  }
+
+  function resetHero() {
+    ring.live = false;
+    $$(".bigword span").forEach(s => (s.style.opacity = 0));
+    faces.flat().forEach(f => f.style.setProperty("--op", 0));
+    ring.z = -1400;
+    ring.A = 540;
+    ring.tw = null;
+    ring.vel = 0;
+    $("#eyebrow").textContent = "";
+    ["#lnL", "#lnR"].forEach(s => ($(s).style.transform = "scaleX(0)"));
+    $("#tagline").classList.remove("in");
+    $("#heroFoot").style.opacity = 0;
+    $$(".nav > *").forEach(el => (el.style.opacity = 0));
+    nowName.innerHTML = ""; nowDesc.textContent = "";
+    ring.active = -1;
+  }
+
+  function heroEntrance() {
+    const slow = reduce ? 0 : 1;
+    hero.animate([{ transform: "scale(1.12)" }, { transform: "none" }], { duration: 2400 * slow + 1, easing: "cubic-bezier(.16,1,.3,1)" });
+    $$(".nav > *").forEach((el, i) => el.animate(
+      [{ opacity: 0, transform: "translateY(-18px)" }, { opacity: 1, transform: "none" }],
+      { duration: 1100 * slow + 1, delay: (500 + i * 120) * slow, easing: "cubic-bezier(.16,1,.3,1)", fill: "both" }).finished.then(() => (el.style.opacity = "")));
+    $$(".bigword span").forEach((s, i) => {
+      s.style.opacity = "";
+      s.animate([{ transform: "translateY(38%) rotateX(-96deg)", opacity: 0, filter: "blur(10px)" }, { transform: "none", opacity: 1, filter: "blur(0)" }],
+        { duration: 1600 * slow + 1, delay: (250 + i * 120) * slow, easing: "cubic-bezier(.16,1,.3,1)", fill: "backwards" });
+    });
+    ring.entry = true;
+    tween({ from: ring.A, to: 0, dur: 2900 * slow + 1, delay: 150 * slow, ease: E.outExpo, update: v => { if (ring.entry) ring.A = v; } });
+    tween({ from: ring.z, to: 0, dur: 2400 * slow + 1, delay: 150 * slow, ease: E.outQuart, update: v => (ring.z = v) });
+    faces.forEach((pair, i) => tween({ from: 0, to: 1, dur: 900 * slow + 1, delay: (300 + i * 70) * slow, ease: E.outCubic,
+      update: v => pair.forEach(f => f.style.setProperty("--op", v.toFixed(3))) }));
+    setTimeout(() => {
+      scramble($("#eyebrow"), 1300);
+      ["#lnL", "#lnR"].forEach(s => $(s).animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 1300, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" }));
+    }, 700 * slow);
+    setTimeout(() => $("#tagline").classList.add("in"), 1300 * slow);
+    setTimeout(() => {
+      $("#heroFoot").animate([{ opacity: 0, transform: "translateY(24px)" }, { opacity: 1, transform: "none" }], { duration: 1200, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" })
+        .finished.then(() => ($("#heroFoot").style.opacity = 1));
+      ring.live = true;
+      ring.active = -1;
+      hold(4200);
+    }, 1500 * slow);
+    setTimeout(() => { faces.flat().forEach(f => f.style.removeProperty("--op")); }, 3200 * slow + 50);
+  }
+
+  async function runIntro() {
+    if (introBusy) return;
+    introBusy = true;
+    skipReq = false;
+    scrollTo(0, 0);
+    document.body.classList.add("is-locked");
+    [intro, hud, bars].forEach(el => el.classList.remove("is-gone"));
+    vf.classList.remove("is-lock", "is-on");
+    hud.classList.remove("is-on");
+    scaleEl.classList.remove("is-on");
+    afLabel.textContent = "AF · Focando";
+    resetHero();
+    renderIntro(0, 0);
+    const lbPx = Math.max(44, Math.min(104, innerHeight * .1));
+    barT.style.height = barB.style.height = "50vh";
+    word.querySelectorAll("span").forEach((s, i) => s.animate(
+      [{ transform: "translateY(40%)", opacity: 0 }, { transform: "none", opacity: 1 }],
+      { duration: reduce ? 1 : 1400, delay: reduce ? 0 : 300 + i * 90, easing: "cubic-bezier(.16,1,.3,1)", fill: "backwards" }));
+
+    if (reduce) {
+      renderIntro(1, 0);
+      await wait(500);
+    } else {
+      [barT, barB].forEach(b => b.animate([{ height: "50vh" }, { height: lbPx + "px" }], { duration: 1150, easing: "cubic-bezier(.77,0,.18,1)", fill: "forwards" }));
+      setTimeout(() => { hud.classList.add("is-on"); vf.classList.add("is-on"); scaleEl.classList.add("is-on"); }, 550);
+      await wait(350);
+      await focusLoop(2300);
+      vf.classList.add("is-lock");
+      afLabel.textContent = "AF · Foco travado";
+      flash.animate([{ opacity: 0 }, { opacity: .22 }, { opacity: 0 }], { duration: 480, easing: "ease-out" });
+      await wait(skipReq ? 220 : 480);
+
+      iris.style.display = "block";
+      await tween({ from: 1, to: 0, dur: 480, ease: E.inCubic, update: v => drawIris(v, (1 - v) * .55) });
+      flash.animate([{ opacity: .12 }, { opacity: 0 }], { duration: 260 });
+      await wait(120);
+    }
+
+    intro.classList.add("is-gone");
+    hud.classList.add("is-gone");
+    [barT, barB].forEach(b => { b.getAnimations().forEach(a => a.cancel()); b.style.height = reduce ? "0px" : lbPx + "px"; });
+    heroEntrance();
+    watchReveals();
+
+    if (!reduce) {
+      [barT, barB].forEach(b => b.animate([{ height: lbPx + "px" }, { height: "0px" }], { duration: 1200, delay: 300, easing: "cubic-bezier(.77,0,.18,1)", fill: "forwards" }));
+      await tween({ from: 0, to: 1, dur: 1400, ease: E.outQuart, update: v => drawIris(v, .55 - v * 1.05) });
+      iris.style.display = "none";
+      await wait(250);
+    }
+    bars.classList.add("is-gone");
+    [barT, barB].forEach(b => b.getAnimations().forEach(a => a.cancel()));
+    document.body.classList.remove("is-locked");
+    introBusy = false;
+  }
+  $("#replay").addEventListener("click", runIntro);
+
+  /* -------------------- partida -------------------- */
+  requestAnimationFrame(ringFrame);
+  requestAnimationFrame(bokehFrame);
+  requestAnimationFrame(scrollFrame);
+  runIntro();
+})();
+</script>
+</body>
+</html>
