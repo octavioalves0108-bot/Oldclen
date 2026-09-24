@@ -785,6 +785,27 @@ $('#introCity').textContent = CONFIG.cidade;
 const MAPS = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.mapa);
 $$('[data-maps]').forEach(a => { a.href = MAPS; a.target = '_blank'; a.rel = 'noopener'; });
 if (WA) $$('[data-canal]').forEach(e => e.textContent = 'WhatsApp');
+
+/* Abertura dos links externos (WhatsApp, Instagram, mapa).
+   Dentro de navegadores de apps (Instagram, WhatsApp) e de pré-visualizações, o "abrir em nova aba"
+   costuma ser bloqueado sem aviso e o clique não faz nada. Aqui: no celular abre na mesma aba (é assim
+   que o app do WhatsApp abre direto); no computador tenta nova aba e, se for bloqueada, usa a janela principal. */
+const TOUCH = matchMedia('(hover:none),(pointer:coarse)').matches;
+function abrirExterno(url) {
+  if (!TOUCH) {
+    let w = null;
+    try { w = window.open(url, '_blank'); } catch (_) {}
+    if (w) { try { w.opener = null; } catch (_) {} return; }
+  }
+  try { if (window.top !== window.self) { window.top.location.href = url; return; } } catch (_) {}
+  location.href = url;
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="https://wa.me/"],a[href^="https://ig.me/"],a[href^="https://www.instagram.com/"],a[data-maps]');
+  if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  abrirExterno(a.href);
+});
 $('#igBtn').href = $('#igFoot').href = 'https://www.instagram.com/' + CONFIG.instagram + '/';
 $('#year').textContent = new Date().getFullYear();
 
