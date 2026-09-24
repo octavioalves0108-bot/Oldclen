@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Du Valle Barbearia — Formosa-GO</title>
+<meta name="description" content="Corte masculino, barba, bigode e visagismo no Centro de Formosa-GO. Agende seu horário.">
+<!-- Demonstração: remova a linha abaixo quando o cliente aprovar e a página for publicada no domínio dele -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#12291f">
+<meta property="og:title" content="Du Valle Barbearia">
+<meta property="og:description" content="Corte masculino, barba, bigode e visagismo em Formosa-GO.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@300;400;500;600&family=Bebas+Neue&family=Yellowtail&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:#16362b;--g2:#0f261d;--g3:#0a1b14;--g4:#1f4838;--brass:#eda33b;--brass2:#ffc873;--brass3:#b8751e;--cream:#f3ead9;--cream2:#d9ccb3;
+  --tx:#f3ead9;--tx2:#b8b09e;--tx3:#7f8a80;--line:rgba(243,234,217,.1);--line2:rgba(243,234,217,.18);
+  --ease:cubic-bezier(.16,1,.3,1);--ease2:cubic-bezier(.7,0,.3,1);--back:cubic-bezier(.34,1.56,.64,1);
+  --fd:"Bebas Neue",Impact,sans-serif;--fc:"Barlow Condensed",system-ui,sans-serif;--fb:"Barlow",system-ui,sans-serif;--fs:"Yellowtail",cursive;
+  --wrap:1200px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
+body{background:var(--g2);color:var(--tx);font:16px/1.6 var(--fb);font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-x:clip}
+body.is-loading{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+svg{display:block}
+[hidden]{display:none!important}
+.wrap{width:min(var(--wrap),100% - 40px);margin-inline:auto}
+::selection{background:var(--brass);color:var(--g3)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.b{color:var(--brass)}
+
+/* ---------- camadas de cinema ---------- */
+.grain{position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.08;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation:grain 1s steps(6) infinite}
+@keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-7%,4%)}40%{transform:translate(5%,-6%)}60%{transform:translate(-3%,7%)}80%{transform:translate(7%,2%)}}
+.vignette{position:fixed;inset:0;z-index:89;pointer-events:none;background:radial-gradient(120% 90% at 50% 40%,transparent 50%,rgba(0,0,0,.55) 100%)}
+.flicker{position:fixed;inset:0;z-index:88;pointer-events:none;background:rgba(255,220,160,.025);animation:flick 5s steps(1) infinite}
+@keyframes flick{0%,100%{opacity:1}12%{opacity:.4}13%{opacity:1}57%{opacity:.6}58%{opacity:1}}
+.progress{position:fixed;left:0;right:0;top:0;height:3px;z-index:60;pointer-events:none}
+.progress i{position:absolute;inset:0;background:linear-gradient(90deg,var(--brass3),var(--brass2));transform-origin:left;transform:scaleX(0)}
+
+/* ---------- poste de barbearia 3D ---------- */
+.pole{--r:30px;--h:230px;position:relative;width:calc(var(--r)*2);height:calc(var(--h) + 70px);perspective:600px}
+.pole-3d{position:absolute;left:50%;top:32px;width:0;height:var(--h);transform-style:preserve-3d;transform:rotateX(-6deg) rotateY(var(--pry,0deg))}
+.pole-3d i{position:absolute;top:0;left:-4px;width:8.3px;height:var(--h);
+  background:repeating-linear-gradient(-35deg,var(--brass) 0 16px,var(--cream) 16px 26px,var(--g4) 26px 42px,var(--cream) 42px 52px);
+  background-position:calc(var(--k)*-7.8px) 0;box-shadow:inset 0 0 0 999px rgba(0,0,0,var(--sh,0));
+  transform:rotateY(calc(var(--k)*15deg)) translateZ(var(--r));animation:stripes 1.4s linear infinite}
+@keyframes stripes{to{background-position:calc(var(--k)*-7.8px) -63.5px}}
+.pole-glass{position:absolute;left:0;right:0;top:32px;height:var(--h);border-radius:6px;background:linear-gradient(90deg,rgba(0,0,0,.45) 0,rgba(255,255,255,.0) 22%,rgba(255,255,255,.45) 34%,rgba(255,255,255,.08) 44%,rgba(0,0,0,0) 70%,rgba(0,0,0,.5) 100%);pointer-events:none}
+.pole-cap{position:absolute;left:-10%;width:120%;height:34px;border-radius:12px 12px 6px 6px;background:linear-gradient(90deg,#6e5a3a,#ffe3a8 35%,#c9974a 55%,#5a4526);box-shadow:0 8px 20px rgba(0,0,0,.45)}
+.pole-cap.t{top:0}.pole-cap.bt{bottom:0;border-radius:6px 6px 12px 12px}
+.pole-cap::after{content:"";position:absolute;left:50%;top:-16px;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3d0,#e9b567 40%,#6e5a3a 80%)}
+.pole-cap.bt::after{top:auto;bottom:-12px;width:18px;height:18px;margin-left:-9px}
+
+/* ---------- intro ---------- */
+.intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;cursor:pointer;overflow:hidden;background:#15362a}
+.intro.out{background:transparent}
+.ihalf{position:absolute;inset:0;background:radial-gradient(80% 70% at 50% 42%,#1f4838 0%,#12291f 55%,#0a1b14 100%);transition:transform 1.1s var(--ease2)}
+.ihalf.a{clip-path:polygon(0 0,100% 0,100% 44%,0 62%)}
+.ihalf.b{clip-path:polygon(0 62%,100% 44%,100% 100%,0 100%)}
+.intro.out .ihalf.a{transform:translate(-4%,-100%)}
+.intro.out .ihalf.b{transform:translate(4%,100%)}
+.slash{position:absolute;left:-15%;right:-15%;top:53%;height:2px;margin-top:-1px;background:linear-gradient(90deg,transparent,var(--brass2) 30%,#fff 50%,var(--brass2) 70%,transparent);
+  box-shadow:0 0 24px 4px rgba(255,200,115,.7);transform:rotate(calc(-1*var(--sa,6.4deg))) scaleX(0);transform-origin:50% 50%;z-index:3;opacity:0}
+.intro.cut .slash{animation:slash .45s var(--ease2) forwards}
+@keyframes slash{0%{opacity:1;transform:rotate(calc(-1*var(--sa,6.4deg))) scaleX(0)}70%{opacity:1;transform:rotate(calc(-1*var(--sa,6.4deg))) scaleX(1)}100%{opacity:0;transform:rotate(calc(-1*var(--sa,6.4deg))) scaleX(1)}}
+.intro-core{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;transition:opacity .35s,transform .5s var(--ease2)}
+.intro.cut .intro-core{opacity:0;transform:scale(.96)}
+.intro .pole{--r:26px;--h:170px;margin-bottom:14px;opacity:0;transform:translateY(-30px) scale(.8)}
+.intro.play .pole{animation:poleIn 1s var(--back) .15s forwards}
+@keyframes poleIn{to{opacity:1;transform:none}}
+.iword{display:flex;gap:.16em;font:400 clamp(70px,12vw,150px)/.85 var(--fd);letter-spacing:.02em;color:var(--cream)}
+.iword .c{display:inline-block;opacity:0;transform:scale(2.2);filter:blur(14px)}
+.intro.play .iword .c{animation:slam .55s cubic-bezier(.2,.9,.3,1.2) forwards;animation-delay:calc(1.05s + var(--i)*80ms)}
+@keyframes slam{to{opacity:1;transform:none;filter:blur(0)}}
+.intro.play .iword{animation:shake .35s linear 1.75s}
+@keyframes shake{20%{transform:translate(3px,-2px)}40%{transform:translate(-3px,2px)}60%{transform:translate(2px,1px)}80%{transform:translate(-1px,-1px)}}
+.imust{width:clamp(150px,20vw,230px);margin-top:4px}
+.imust path{fill:transparent;stroke:var(--brass);stroke-width:2.5;stroke-dasharray:1;stroke-dashoffset:1}
+.intro.play .imust path{animation:mustDraw 1s var(--ease2) 1.7s forwards,mustFill .5s ease 2.5s forwards}
+@keyframes mustDraw{to{stroke-dashoffset:0}}
+@keyframes mustFill{to{fill:var(--brass)}}
+.iscript{font:400 clamp(34px,5vw,58px)/1 var(--fs);color:var(--brass);margin-top:-6px;clip-path:inset(-30% 100% -30% 0)}
+.intro.play .iscript{animation:write 1.1s var(--ease2) 2.3s forwards}
+@keyframes write{to{clip-path:inset(-30% 0 -30% 0)}}
+.iload{position:absolute;left:clamp(16px,4vw,48px);right:clamp(16px,4vw,48px);bottom:clamp(22px,5vh,48px);z-index:2;display:flex;align-items:flex-end;gap:24px;opacity:0;transition:opacity .3s}
+.intro.play .iload{animation:fadeIn .8s ease .5s forwards}
+.intro.cut .iload{opacity:0!important;animation:none}
+@keyframes fadeIn{to{opacity:1}}
+.iload small{font:600 11px/1.5 var(--fc);letter-spacing:.3em;text-transform:uppercase;color:var(--tx3);white-space:nowrap}
+.itrack{position:relative;flex:1;height:30px}
+.itrack::before{content:"";position:absolute;left:0;right:0;bottom:6px;height:1px;background:var(--line2)}
+.itrack i{position:absolute;left:0;bottom:6px;height:1px;width:100%;background:var(--brass);transform-origin:left;transform:scaleX(var(--p,0))}
+.irazor{position:absolute;bottom:2px;left:0;width:58px;height:20px;transform:translateX(calc(var(--p,0)*(100% * 0) + var(--px,0px) - 29px))}
+.inum{font:400 clamp(40px,5vw,60px)/.8 var(--fd);color:var(--cream);min-width:2.2em;text-align:right}
+.inum sup{font-size:.4em;color:var(--brass);vertical-align:top}
+.iskip{position:absolute;top:clamp(16px,3vw,30px);right:clamp(16px,4vw,48px);z-index:2;font:600 11px/1 var(--fc);letter-spacing:.3em;text-transform:uppercase;color:var(--tx3);opacity:0}
+.intro.play .iskip{animation:fadeIn 1s ease 1s forwards}
+.intro.cut .iskip{opacity:0!important;animation:none}
+
+/* ---------- navegação ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:18px max(20px,calc((100% - var(--wrap))/2));transition:transform .7s var(--ease),opacity .7s var(--ease),background .4s,padding .4s,border-color .4s;border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(10,27,20,.8);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);border-color:var(--line);padding-block:10px}
+.nav.hide{transform:translateY(-110%)}
+body.is-loading .nav{opacity:0;transform:translateY(-24px)}
+.brand{display:flex;flex-direction:column;align-items:center;line-height:1}
+.brand b{font:400 27px/.9 var(--fd);letter-spacing:.04em;color:var(--cream)}
+.brand svg{width:62px;margin-top:1px}
+.brand em{font:400 17px/1 var(--fs);color:var(--brass);margin-top:-4px}
+.nav-links{display:flex;gap:30px}
+.nav-links a{position:relative;font:600 14px/1 var(--fc);letter-spacing:.2em;text-transform:uppercase;color:var(--tx2);padding:6px 0;transition:color .3s}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--brass);transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease)}
+.nav-links a:hover{color:var(--cream)}
+.nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+
+/* ---------- botões ---------- */
+.btn{--bx:0px;--by:0px;position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;height:56px;padding:0 28px;border-radius:3px;
+  font:700 16px/1 var(--fc);letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;overflow:hidden;isolation:isolate;
+  transform:translate(var(--bx),var(--by));transition:transform .45s var(--ease),box-shadow .4s,background .4s,color .4s,border-color .4s}
+.btn svg{width:17px;height:17px;transition:transform .45s var(--ease)}
+.btn:hover svg{transform:translateX(4px)}
+.btn::before{content:"";position:absolute;inset:-2px;z-index:-1;background:repeating-linear-gradient(-35deg,var(--brass) 0 10px,var(--cream) 10px 16px,var(--g4) 16px 26px,var(--cream) 26px 32px);
+  transform:translateY(101%);transition:transform .5s var(--ease)}
+.btn-brass{background:linear-gradient(180deg,var(--brass2),var(--brass) 55%,var(--brass3));color:var(--g3);box-shadow:0 14px 30px -14px rgba(237,163,59,.8),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-brass:hover::before{transform:none}
+.btn-brass:hover{color:var(--g3);text-shadow:0 0 6px var(--cream)}
+.btn-line{border:1.5px solid var(--line2);color:var(--cream);background:rgba(243,234,217,.03)}
+.btn-line::before{background:var(--cream)}
+.btn-line:hover::before{transform:none}
+.btn-line:hover{color:var(--g3);border-color:var(--cream)}
+.btn-sm{height:42px;padding:0 18px;font-size:14px}
+.btn-lg{height:66px;padding:0 38px;font-size:18px}
+
+/* ---------- revelações ---------- */
+.rv{opacity:0;transform:translateY(26px);filter:blur(5px);transition:opacity 1s var(--ease),transform 1.1s var(--ease),filter 1s var(--ease);transition-delay:var(--d,0s)}
+.rv.in{opacity:1;transform:none;filter:blur(0)}
+[data-slam] .w{display:inline-block;white-space:nowrap}
+[data-slam] .c{display:inline-block;opacity:0;transform:scale(1.8) translateY(-10%);filter:blur(10px);transition:opacity .6s var(--ease),transform .7s cubic-bezier(.2,.9,.3,1.15),filter .6s var(--ease);transition-delay:calc(var(--d0,0s) + var(--i)*32ms)}
+[data-slam].in .c{opacity:1;transform:none;filter:blur(0)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:120px 0 90px;overflow:hidden;
+  background:radial-gradient(70% 70% at 78% 35%,rgba(237,163,59,.12),transparent 60%),radial-gradient(90% 80% at 20% 0%,#1f4838 0%,#12291f 45%,#0f261d 100%)}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(243,234,217,.025) 0 2px,transparent 2px 26px);pointer-events:none}
+.beam{position:absolute;left:62%;top:-20%;width:40vw;height:140%;background:linear-gradient(180deg,rgba(255,215,150,.13),transparent 70%);filter:blur(20px);transform-origin:50% 0;animation:beam 10s ease-in-out infinite alternate;pointer-events:none}
+@keyframes beam{from{transform:rotate(14deg)}to{transform:rotate(4deg)}}
+.dust{position:absolute;inset:0;pointer-events:none}
+.dust i{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(255,215,150,.6);box-shadow:0 0 6px rgba(255,215,150,.6);animation:dust linear infinite}
+@keyframes dust{from{transform:translate(0,0);opacity:0}15%{opacity:1}85%{opacity:1}to{transform:translate(40px,-60vh);opacity:0}}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center}
+.kicker{display:inline-flex;align-items:center;gap:12px;font:600 14px/1 var(--fc);letter-spacing:.28em;text-transform:uppercase;color:var(--brass)}
+.kicker svg{width:36px}
+.h1{margin:20px 0 22px;font:400 clamp(66px,9vw,142px)/.86 var(--fd);letter-spacing:.01em;color:var(--cream)}
+.lead{max-width:30em;color:var(--tx2);font-size:clamp(16px,1.3vw,18.5px);font-weight:300}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.hero-meta{display:flex;align-items:center;gap:12px;margin-top:36px;font:600 14px/1.3 var(--fc);letter-spacing:.14em;text-transform:uppercase;color:var(--tx2)}
+.hero-meta svg{width:20px;height:20px;flex:none}
+.photo-stage{position:relative;height:clamp(560px,56vw,680px);perspective:1400px;display:flex;align-items:center;justify-content:center}
+.frame{--rx:0deg;--ry:0deg;position:relative;width:min(340px,70vw);aspect-ratio:253/600;transform:rotateX(var(--rx)) rotateY(var(--ry));transform-style:preserve-3d;transition:transform .8s var(--ease)}
+.frame-in{position:absolute;inset:0;border-radius:999px 999px 8px 8px;overflow:hidden;background:#8a877f;box-shadow:0 0 0 2px var(--brass),0 0 0 10px var(--g2),0 0 0 12px rgba(237,163,59,.5),0 60px 90px -40px rgba(0,0,0,.9)}
+.frame-in img{position:absolute;left:-6%;top:-3%;width:112%;height:auto;transform:translate(var(--px,0px),var(--py,0px)) scale(1.02);filter:contrast(1.06) saturate(.92)}
+.frame-in::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,38,29,0) 55%,rgba(15,38,29,.85) 100%),linear-gradient(115deg,transparent 40%,rgba(255,230,180,.18) 50%,transparent 60%);background-size:100% 100%,300% 100%;animation:sweep 6s var(--ease2) infinite}
+@keyframes sweep{0%{background-position:0 0,120% 0}60%,100%{background-position:0 0,-120% 0}}
+.frame .reveal{position:absolute;inset:0;border-radius:999px 999px 8px 8px;background:var(--brass);transform-origin:50% 0;transform:scaleY(1);transition:transform 1.2s var(--ease2) .3s}
+.hero.go .frame .reveal{transform:scaleY(0);transform-origin:50% 100%}
+.frame .cap{position:absolute;left:50%;bottom:26px;transform:translate(-50%,20px) translateZ(40px);opacity:0;white-space:nowrap;text-align:center;transition:opacity .8s var(--ease) 1.4s,transform .8s var(--ease) 1.4s}
+.hero.go .frame .cap{opacity:1;transform:translate(-50%,0) translateZ(40px)}
+.frame .cap b{display:block;font:400 34px/1 var(--fd);letter-spacing:.06em}
+.frame .cap em{font:400 22px/1 var(--fs);color:var(--brass)}
+.stamp{position:absolute;right:calc(50% - min(340px,70vw)/2 - 56px);top:12%;width:130px;height:130px;transform:translateZ(80px);animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.stamp text{font:600 11.5px var(--fc);letter-spacing:.34em;fill:var(--cream);text-transform:uppercase}
+.stamp-c{position:absolute;right:calc(50% - min(340px,70vw)/2 - 56px);top:12%;width:130px;height:130px;display:grid;place-items:center}
+.stamp-c svg{width:54px}
+.photo-stage .pole{position:absolute;left:calc(50% - min(340px,70vw)/2 - 70px);bottom:9%}
+.badge{position:absolute;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 10px;border-radius:3px;background:rgba(10,27,20,.88);border:1px solid var(--line2);
+  font:600 15px/1.1 var(--fc);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;opacity:0;transform:translateY(14px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.badge i{width:32px;height:32px;display:grid;place-items:center;background:var(--brass);border-radius:2px}
+.badge i svg{width:18px}
+.hero.go .badge{opacity:1;transform:none;transition-delay:var(--bd)}
+.badge.b1{right:0;bottom:22%;animation:floatB 6s ease-in-out infinite}
+@keyframes floatB{50%{margin-top:-10px}}
+
+/* ---------- faixa ---------- */
+.band{position:relative;z-index:3;overflow:hidden;background:var(--brass);color:var(--g3);padding:clamp(14px,1.5vw,20px) 0;border-block:4px solid var(--g3);box-shadow:0 0 0 1px var(--brass) inset}
+.track{display:inline-flex;white-space:nowrap;animation:mq 30s linear infinite}
+.track span{display:inline-flex;align-items:center;gap:clamp(22px,3vw,40px);padding-right:clamp(22px,3vw,40px);font:400 clamp(30px,3.6vw,48px)/1 var(--fd);letter-spacing:.06em}
+.track span svg{width:.9em}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- seções ---------- */
+.sec{position:relative;padding:clamp(100px,12vw,160px) 0}
+.sec-head{display:flex;flex-direction:column;gap:16px;max-width:760px}
+.eyebrow{display:flex;align-items:center;gap:12px;font:600 14px/1 var(--fc);letter-spacing:.3em;text-transform:uppercase;color:var(--brass)}
+.eyebrow .n{font:400 22px/1 var(--fs);letter-spacing:0}
+.eyebrow .ln{width:40px;height:1px;background:currentColor;opacity:.5}
+.h2{font:400 clamp(54px,7vw,110px)/.88 var(--fd);letter-spacing:.01em;color:var(--cream)}
+.sec-lead{max-width:33em;color:var(--tx2);font-size:clamp(15.5px,1.2vw,17.5px);font-weight:300}
+
+/* ---------- serviços: fita de cinema 3D ---------- */
+.svc{background:var(--g3);overflow:hidden}
+.film{position:relative;margin-top:56px;height:clamp(470px,40vw,520px);perspective:1300px;perspective-origin:50% 50%;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none}
+.film.dragging{cursor:grabbing}
+.film::before,.film::after{content:"";position:absolute;left:0;right:0;height:26px;z-index:3;pointer-events:none;background-color:#07130e;
+  background-image:repeating-linear-gradient(90deg,transparent 0 12px,rgba(243,234,217,.85) 12px 30px,transparent 30px 44px);background-size:44px 12px;background-repeat:repeat-x;background-position:var(--sp,0px) 7px}
+.film::before{top:0}.film::after{bottom:0}
+.film-track{position:absolute;inset:26px 0;transform-style:preserve-3d;pointer-events:none}
+.fr{--fw:clamp(250px,22vw,300px);position:absolute;pointer-events:auto;left:0;top:18px;width:var(--fw);height:calc(100% - 36px);will-change:transform}
+.fr-in{position:absolute;inset:0;display:flex;flex-direction:column;padding:18px 20px 20px;background:linear-gradient(180deg,#1b3d30,#12291f);border:1px solid rgba(237,163,59,.25);border-radius:4px;overflow:hidden;
+  transition:transform .5s var(--ease),border-color .5s,box-shadow .5s}
+.fr:hover .fr-in{transform:translateZ(40px) scale(1.03);border-color:rgba(237,163,59,.7);box-shadow:0 30px 60px -20px rgba(0,0,0,.8),0 0 40px -10px rgba(237,163,59,.4)}
+.fr-in::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,220,160,.08) 50%,transparent 60%);pointer-events:none}
+.fr-top{display:flex;justify-content:space-between;font:600 12px/1 var(--fc);letter-spacing:.24em;text-transform:uppercase;color:var(--tx3)}
+.fr-top b{color:var(--brass);font-weight:600}
+.fr-art{flex:1;display:grid;place-items:center;min-height:0;position:relative}
+.fr-art::before{content:"";position:absolute;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(237,163,59,.16),transparent 65%)}
+.fr-art svg{position:relative;width:76%;height:auto;max-height:100%;overflow:visible}
+.fr h3{font:400 34px/.95 var(--fd);letter-spacing:.03em;color:var(--cream)}
+.fr p{margin:6px 0 12px;font-size:14px;font-weight:300;color:var(--tx2);min-height:4.4em}
+.fr-cta{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;font:700 14px/1 var(--fc);letter-spacing:.2em;text-transform:uppercase;color:var(--brass)}
+.fr-cta svg{width:15px;height:15px;transition:transform .45s var(--ease)}
+.fr-cta:hover svg{transform:translateX(5px)}
+.film-hint{display:flex;justify-content:center;gap:10px;margin-top:22px;font:600 13px/1 var(--fc);letter-spacing:.24em;text-transform:uppercase;color:var(--tx3)}
+.film-hint i{width:30px;height:1px;background:var(--line2);align-self:center}
+/* animações das ilustrações */
+.a-bladeA{transform-box:view-box;transform-origin:100px 92px;animation:bladeA 1.2s ease-in-out infinite}
+.a-bladeB{transform-box:view-box;transform-origin:100px 92px;animation:bladeB 1.2s ease-in-out infinite}
+@keyframes bladeA{50%{transform:rotate(-14deg)}}
+@keyframes bladeB{50%{transform:rotate(14deg)}}
+.a-fall{animation:fall 2.4s linear infinite}
+.a-fall.f2{animation-delay:.8s}.a-fall.f3{animation-delay:1.6s}
+@keyframes fall{from{transform:translate(0,-10px) rotate(0);opacity:0}20%{opacity:1}to{transform:translate(10px,70px) rotate(40deg);opacity:0}}
+.a-razor{animation:razor 3s var(--ease2) infinite}
+@keyframes razor{0%,100%{transform:translate(0,0)}50%{transform:translate(-34px,30px)}}
+.a-foam{animation:foam 3s ease-in-out infinite}
+@keyframes foam{0%,100%{opacity:1}50%{opacity:.25}}
+.a-twirl{transform-box:fill-box;transform-origin:50% 50%;animation:twirl 3s ease-in-out infinite}
+@keyframes twirl{50%{transform:scale(1.08) rotate(-3deg)}}
+.a-grid{stroke-dasharray:4 5;animation:dash 1.4s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-18}}
+.a-buzz{animation:buzz .12s linear infinite}
+@keyframes buzz{50%{transform:translate(1px,-1px)}}
+.a-comb{animation:comb 2.6s var(--ease2) infinite}
+@keyframes comb{50%{transform:translate(0,22px)}}
+.a-spark{transform-box:fill-box;transform-origin:50% 50%;animation:spark 1.6s ease-in-out infinite}
+@keyframes spark{0%,100%{transform:scale(.3);opacity:0}50%{transform:scale(1);opacity:1}}
+.a-drop{animation:drop 2.2s ease-in infinite}
+@keyframes drop{0%{transform:translateY(0) scale(1,.6);opacity:0}20%{opacity:1;transform:translateY(0) scale(1)}100%{transform:translateY(46px);opacity:0}}
+
+/* ---------- o ritual (rolagem fixa) ---------- */
+.rit{position:relative;height:320vh;background:var(--g2)}
+.rit-sticky{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.rit-num{position:absolute;right:max(20px,calc((100% - var(--wrap))/2));top:14vh;font:400 clamp(160px,26vw,380px)/.8 var(--fd);color:transparent;-webkit-text-stroke:1px rgba(237,163,59,.22)}
+.rit-num span{display:inline-block;transition:transform .8s var(--ease),opacity .6s}
+.rit-steps{position:relative;height:clamp(200px,26vh,260px);margin-top:36px}
+.rstep{position:absolute;inset:0;max-width:640px;opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .8s var(--ease)}
+.rstep.on{opacity:1;transform:none}
+.rstep h3{font:400 clamp(44px,5.4vw,80px)/.9 var(--fd);letter-spacing:.02em}
+.rstep p{margin-top:12px;color:var(--tx2);font-weight:300;font-size:clamp(16px,1.3vw,18.5px);max-width:30em}
+.rit-line{position:relative;height:60px;margin-top:40px}
+.rit-line .base{position:absolute;left:0;right:0;top:30px;height:2px;background:var(--line2)}
+.rit-line .fill{position:absolute;left:0;right:0;top:30px;height:2px;background:linear-gradient(90deg,var(--brass3),var(--brass2));transform-origin:left;transform:scaleX(var(--rp,0));box-shadow:0 0 12px rgba(237,163,59,.6)}
+.rit-line .node{position:absolute;top:22px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--g2);border:2px solid var(--line2);transition:background .4s,border-color .4s,transform .5s var(--back)}
+.rit-line .node.on{background:var(--brass);border-color:var(--brass);transform:scale(1.25)}
+.rit-line .node span{position:absolute;top:28px;left:50%;transform:translateX(-50%);white-space:nowrap;font:600 12px/1 var(--fc);letter-spacing:.2em;text-transform:uppercase;color:var(--tx3)}
+.rit-line .razor{position:absolute;top:0;left:0;width:76px;transform:translateX(calc(var(--rx,0px) - 38px)) rotate(var(--rr,0deg));transition:none;filter:drop-shadow(0 8px 10px rgba(0,0,0,.5))}
+
+/* ---------- manifesto (navalha) ---------- */
+.man{position:relative;height:240vh;background:var(--g3)}
+.man-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
+.man-lines{display:flex;flex-direction:column;gap:clamp(4px,1vh,12px)}
+.mline{position:relative;width:fit-content;font:400 clamp(58px,9vw,150px)/.9 var(--fd);letter-spacing:.01em}
+.mline .ghost{color:rgba(243,234,217,.06)}
+.mline .real{position:absolute;inset:0;color:var(--cream);clip-path:inset(-10% calc((1 - var(--q,0))*100%) -10% 0)}
+.mline .real .b{color:var(--brass)}
+.mline .blade{position:absolute;top:50%;left:calc(var(--q,0)*100%);width:clamp(60px,6vw,90px);transform:translate(-50%,-50%) rotate(-12deg);opacity:var(--bo,0);filter:drop-shadow(0 6px 10px rgba(0,0,0,.6))}
+
+/* ---------- agende (ingresso 3D) ---------- */
+.book{background:radial-gradient(70% 70% at 70% 40%,rgba(237,163,59,.1),transparent 60%),var(--g2);overflow:hidden}
+.book-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:center}
+.ticket-stage{position:relative;height:clamp(300px,28vw,360px);perspective:1400px}
+.ticket{--rx:0deg;--ry:0deg;position:absolute;left:50%;top:50%;width:min(520px,90vw);aspect-ratio:2.3;margin-left:calc(min(520px,90vw)/-2);
+  transform:translateY(-50%) rotateX(var(--rx)) rotateY(calc(var(--ry) + var(--flip,0deg))) rotateZ(-4deg);transform-style:preserve-3d;transition:transform 1s var(--ease)}
+.tface{position:absolute;inset:0;display:grid;grid-template-columns:.3fr 1fr;border-radius:8px;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;
+  background:linear-gradient(180deg,#f6ecda,#e9dcc2);color:var(--g3);box-shadow:0 40px 70px -30px rgba(0,0,0,.8)}
+.tface::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 0 50%,var(--g2) 0 14px,transparent 15px),radial-gradient(circle at 100% 50%,var(--g2) 0 14px,transparent 15px)}
+.tface.back{transform:rotateY(180deg);background:linear-gradient(180deg,#1f4838,#16362b);color:var(--cream)}
+.tstub{position:relative;display:grid;place-items:center;border-right:2px dashed rgba(15,38,29,.35);font:400 20px/1 var(--fd);letter-spacing:.2em;writing-mode:vertical-rl;transform:rotate(180deg)}
+.tface.back .tstub{border-color:rgba(243,234,217,.25)}
+.tmain{position:relative;display:flex;flex-direction:column;justify-content:center;padding:18px 26px;gap:6px}
+.tmain small{font:600 11px/1 var(--fc);letter-spacing:.3em;text-transform:uppercase;opacity:.7}
+.tmain b{font:400 clamp(36px,4vw,54px)/.9 var(--fd);letter-spacing:.03em}
+.tmain em{font:400 26px/1 var(--fs);color:var(--brass3)}
+.tface.back .tmain em{color:var(--brass)}
+.tmain .row{display:flex;justify-content:space-between;margin-top:6px;font:600 12px/1 var(--fc);letter-spacing:.2em;text-transform:uppercase;opacity:.75}
+.tface .shine{position:absolute;inset:0;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.35) 48%,transparent 58%);transform:translateX(-80%);animation:shine 5s var(--ease2) infinite}
+@keyframes shine{60%,100%{transform:translateX(80%)}}
+.book-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+
+/* ---------- endereço (placa esmaltada) ---------- */
+.loc{background:var(--g3);overflow:hidden}
+.loc-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(40px,6vw,80px);align-items:center}
+.plate-stage{perspective:1200px}
+.plate{--rx:0deg;--ry:0deg;position:relative;display:block;padding:34px 36px 30px;border-radius:18px;background:linear-gradient(180deg,#1f4838,#16362b);color:var(--cream);text-align:center;
+  box-shadow:inset 0 0 0 5px var(--cream),inset 0 0 0 9px #16362b,inset 0 0 0 11px var(--brass),0 50px 80px -40px rgba(0,0,0,.9);transform:rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(2deg);transition:transform .8s var(--ease);overflow:hidden}
+.plate::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.18) 47%,transparent 58%);animation:shine 6s var(--ease2) infinite;transform:translateX(-80%)}
+.plate .scr{position:absolute;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#b9a57f 60%,#5a4526);box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.plate .scr::after{content:"";position:absolute;left:2px;right:2px;top:5px;height:2px;background:rgba(0,0,0,.4);transform:rotate(35deg)}
+.plate small{display:block;font:600 12px/1 var(--fc);letter-spacing:.34em;text-transform:uppercase;color:var(--brass)}
+.plate b{display:block;margin:12px 0 6px;font:400 clamp(44px,5vw,70px)/.9 var(--fd);letter-spacing:.04em}
+.plate span{font:600 16px/1.3 var(--fc);letter-spacing:.2em;text-transform:uppercase;color:var(--tx2)}
+.loc-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+
+/* ---------- final ---------- */
+.finale{position:relative;padding:clamp(110px,13vw,170px) 0 clamp(90px,10vw,130px);text-align:center;overflow:hidden;background:radial-gradient(60% 60% at 50% 40%,#1f4838,#0f261d 70%)}
+.must3d-stage{position:relative;height:clamp(90px,10vw,130px);perspective:900px}
+.must3d{position:absolute;left:50%;top:50%;width:clamp(200px,24vw,300px);aspect-ratio:200/60;transform:translate(-50%,-50%) rotateY(var(--my3,0deg)) rotateX(var(--mx3,0deg));transform-style:preserve-3d}
+.must3d svg{position:absolute;inset:0;width:100%;height:100%}
+.fin-word{font:400 clamp(100px,19vw,300px)/.8 var(--fd);letter-spacing:.02em;color:var(--cream);text-shadow:0 20px 60px rgba(0,0,0,.5)}
+.fin-word .w{display:inline-block;white-space:nowrap}
+.fin-word .c{display:inline-block;opacity:0;transform:translateY(40%) rotateX(-70deg);transform-origin:50% 100%;transition:opacity .6s var(--ease),transform 1s var(--back);transition-delay:calc(var(--i)*60ms)}
+.fin-word.in .c{opacity:1;transform:none}
+.fin-script{margin-top:-.2em;font:400 clamp(44px,6vw,86px)/1 var(--fs);color:var(--brass)}
+.fin-cta{display:flex;flex-direction:column;align-items:center;gap:20px;margin-top:34px}
+.fin-cta p{font:600 clamp(16px,1.5vw,19px)/1.4 var(--fc);letter-spacing:.2em;text-transform:uppercase;color:var(--tx2)}
+.foot{background:var(--g3);border-top:1px solid var(--line)}
+.foot-in{display:grid;grid-template-columns:1.2fr 1fr auto;gap:30px;padding:50px 0 30px}
+.foot .brand{align-items:flex-start}
+.foot p{margin-top:14px;color:var(--tx3);font-size:14px;font-weight:300;max-width:24em}
+.foot h4{font:600 12px/1 var(--fc);letter-spacing:.28em;text-transform:uppercase;color:var(--tx3);margin-bottom:12px}
+.foot address{font-style:normal;color:var(--tx2);font-size:14.5px}
+.foot-links{display:flex;flex-direction:column;gap:8px;font-size:14.5px;color:var(--tx2)}
+.foot-links a:hover{color:var(--brass)}
+.copy{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:22px 0;border-top:1px solid var(--line);font-size:12.5px;color:var(--tx3)}
+
+/* ---------- cursor ---------- */
+.mdot{position:fixed;left:0;top:0;z-index:95;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;border:1.5px solid var(--brass);pointer-events:none;opacity:0;
+  transition:opacity .4s,width .35s var(--ease),height .35s var(--ease),margin .35s var(--ease),background .35s}
+.mdot.hover{width:70px;height:70px;margin:-35px 0 0 -35px;background:rgba(237,163,59,.12)}
+body.has-cursor .mdot{opacity:1}
+
+/* ---------- responsivo ---------- */
+@media (max-width:1100px){.badge{display:none}}
+@media (max-width:980px){
+  .hero{padding-top:110px}
+  .hero-grid{grid-template-columns:1fr}
+  .photo-stage{height:620px}
+  .frame{width:auto;height:calc(100% - 44px)}
+  .photo-stage .pole{left:calc(50% - 124px - 70px)}
+  .book-grid,.loc-grid{grid-template-columns:1fr}
+  .foot-in{grid-template-columns:1fr}
+  .rit-num{top:10vh;opacity:.7}
+}
+@media (max-width:820px){.nav-links{display:none}}
+@media (max-width:600px){
+  .photo-stage{height:600px}
+  .photo-stage .pole{--r:20px;--h:150px;left:4px;bottom:4%}
+  .stamp,.stamp-c{right:0;width:100px;height:100px}
+  .btn:not(.btn-sm){height:52px;padding:0 20px}
+  .hero-ctas .btn{flex:1 1 auto}
+  .nav .btn-sm{padding:0 12px;font-size:12.5px;letter-spacing:.1em}
+  .rit-line .node span{font-size:10px;letter-spacing:.1em}
+  .rit-line .node:nth-child(3) span{left:-2px;transform:none}
+  .rit-line .node:nth-child(6) span{left:auto;right:-2px;transform:none}
+  .iload small{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;animation-delay:0s!important;transition-duration:.001ms!important;transition-delay:0s!important}
+  html{scroll-behavior:auto}
+  .grain,.flicker{display:none}
+}
+</style>
+</head>
+<body class="is-loading">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="must" viewBox="0 0 200 60"><path d="M100 22C92 10 74 8 60 14 44 20 34 34 20 32 10 31 6 24 10 16 6 28 16 40 32 42 52 44 70 42 84 36 92 33 97 29 100 28 103 29 108 33 116 36 130 42 148 44 168 42 184 40 194 28 190 16 194 24 190 31 180 32 166 34 156 20 140 14 126 8 108 10 100 22Z"/></symbol>
+    <symbol id="arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/></symbol>
+    <symbol id="razorS" viewBox="0 0 120 40"><path d="M6 20h52l6-6h40q10 0 10 6t-10 6H64l-6-6" fill="#1b1b1b" stroke="#e8d7b6" stroke-width="1.5"/><path d="M58 20 64 14h40q10 0 10 6H64z" fill="#e8e3da"/><path d="M64 20h50" stroke="#fff" stroke-width="1.2" opacity=".8"/><circle cx="12" cy="20" r="3" fill="#eda33b"/></symbol>
+    <symbol id="pin" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="scis" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8 16 19 3M16 16 5 3"/></g></symbol>
+  </defs>
+</svg>
+
+<!-- ===================== INTRO ===================== -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="ihalf a"></div><div class="ihalf b"></div>
+  <div class="slash"></div>
+  <span class="iskip">Toque para pular</span>
+  <div class="intro-core">
+    <div class="pole" data-pole><div class="pole-3d"></div><span class="pole-glass"></span><span class="pole-cap t"></span><span class="pole-cap bt"></span></div>
+    <div class="iword" id="iword">DU VALLE</div>
+    <svg class="imust" viewBox="0 0 200 60"><path pathLength="1" d="M100 22C92 10 74 8 60 14 44 20 34 34 20 32 10 31 6 24 10 16 6 28 16 40 32 42 52 44 70 42 84 36 92 33 97 29 100 28 103 29 108 33 116 36 130 42 148 44 168 42 184 40 194 28 190 16 194 24 190 31 180 32 166 34 156 20 140 14 126 8 108 10 100 22Z"/></svg>
+    <div class="iscript">barbearia</div>
+  </div>
+  <div class="iload"><small>Afiando<br>a navalha</small>
+    <div class="itrack" id="itrack"><i id="ifill"></i><svg class="irazor" id="irazor"><use href="#razorS"/></svg></div>
+    <span class="inum"><span id="inum">00</span><sup>%</sup></span></div>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="flicker" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"><i id="prog"></i></div>
+<div class="mdot" id="mdot" aria-hidden="true"></div>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Du Valle Barbearia, voltar ao início"><b>DU VALLE</b><svg viewBox="0 0 200 60" fill="#eda33b"><use href="#must"/></svg></a>
+  <nav class="nav-links" aria-label="Seções"><a href="#servicos">Serviços</a><a href="#ritual">O ritual</a><a href="#endereco">Endereço</a></nav>
+  <a class="btn btn-brass btn-sm magnetic" data-cta href="#"><span class="lbl">Agendar</span></a>
+</header>
+
+<main>
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="top">
+  <div class="beam" aria-hidden="true"></div>
+  <div class="dust" id="dust" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <p class="kicker rv"><svg viewBox="0 0 200 60" fill="#eda33b"><use href="#must"/></svg>Barbearia · <span data-city>Formosa-GO</span></p>
+      <h1 class="h1" data-slam>Corte na <span class="b">régua.</span><br>Barba no capricho.</h1>
+      <p class="lead rv" style="--d:.7s">Corte masculino, barba e bigode com atenção a cada detalhe. E visagismo: o corte pensado pro formato do seu rosto.</p>
+      <div class="hero-ctas rv" style="--d:.9s">
+        <a class="btn btn-brass magnetic" data-cta href="#"><span class="lbl">Agendar horário</span> <svg><use href="#arrow"/></svg></a>
+        <a class="btn btn-line magnetic" href="#servicos">Ver serviços</a>
+      </div>
+      <a class="hero-meta rv" style="--d:1.1s" data-maps href="#"><svg><use href="#pin"/></svg><span data-addr-short>Rua Antônio Dutra, 25 · Centro</span></a>
+    </div>
+    <div class="photo-stage" id="photoStage" aria-hidden="true">
+      <div class="pole" data-pole><div class="pole-3d"></div><span class="pole-glass"></span><span class="pole-cap t"></span><span class="pole-cap bt"></span></div>
+      <div class="frame" id="frame">
+        <div class="frame-in"><img src="barbeiro.png" alt="" id="photo"></div>
+        <span class="reveal"></span>
+        <div class="cap"><b>DU VALLE</b><em>barbearia</em></div>
+      </div>
+      <svg class="stamp" viewBox="0 0 130 130"><defs><path id="circ" d="M65 65m-50 0a50 50 0 1 1 100 0a50 50 0 1 1-100 0"/></defs><circle cx="65" cy="65" r="62" fill="#0f261d" stroke="#eda33b" stroke-width="1.5"/><text><textPath href="#circ" textLength="306" lengthAdjust="spacing">Du Valle · barbearia · Formosa-GO ·</textPath></text></svg>
+      <div class="stamp-c"><svg viewBox="0 0 200 60" fill="#eda33b"><use href="#must"/></svg></div>
+      <div class="badge b1" style="--bd:1.8s"><i><svg viewBox="0 0 24 24" color="#0a1b14"><use href="#scis"/></svg></i>Visagismo</div>
+    </div>
+  </div>
+</section>
+
+<div class="band" aria-hidden="true"><div class="track" data-marquee="Corte masculino|Barba|Bigode|Visagismo|Du Valle"></div></div>
+
+<!-- ===================== SERVIÇOS ===================== -->
+<section class="sec svc" id="servicos">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow rv"><span class="n">i.</span><span class="ln"></span><span data-scramble>Serviços</span></p>
+      <h2 class="h2" data-slam>Na cadeira da <span class="b">Du Valle.</span></h2>
+      <p class="sec-lead rv" style="--d:.3s">A fita roda sozinha: arraste pra passar, toque em "Agendar" no serviço que você quer. Valores e horários, é só chamar.</p>
+    </div>
+  </div>
+  <div class="film" id="film" tabindex="0" role="region" aria-label="Serviços da barbearia"><div class="film-track" id="filmTrack"></div></div>
+  <div class="film-hint" aria-hidden="true"><i></i>Arraste a fita<i></i></div>
+</section>
+
+<!-- ===================== RITUAL ===================== -->
+<section class="rit" id="ritual" aria-label="O ritual">
+  <div class="rit-sticky">
+    <div class="rit-num" aria-hidden="true"><span id="ritNum">01</span></div>
+    <div class="wrap">
+      <p class="eyebrow"><span class="n">ii.</span><span class="ln"></span>O ritual</p>
+      <div class="rit-steps">
+        <div class="rstep"><h3>Senta, que é <span class="b">sua vez.</span></h3><p>Horário marcado, cadeira pronta. Aqui o tempo é seu.</p></div>
+        <div class="rstep"><h3>Primeiro, a <span class="b">conversa.</span></h3><p>O que você quer, o que combina com o seu rosto e com a sua rotina. É o visagismo antes da tesoura.</p></div>
+        <div class="rstep"><h3>Corte e barba no <span class="b">detalhe.</span></h3><p>Máquina, tesoura e navalha, cada uma na hora certa, sem pressa.</p></div>
+        <div class="rstep"><h3>Espelho e <span class="b">confiança.</span></h3><p>Acabamento conferido, cabelo na régua e você saindo do jeito que entrou pensando.</p></div>
+      </div>
+      <div class="rit-line" id="ritLine"><span class="base"></span><span class="fill"></span>
+        <span class="node" style="left:0"><span>Chegada</span></span><span class="node" style="left:33.33%"><span>Conversa</span></span><span class="node" style="left:66.66%"><span>Corte</span></span><span class="node" style="left:100%"><span>Espelho</span></span>
+        <svg class="razor" viewBox="0 0 120 40"><use href="#razorS"/></svg></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MANIFESTO ===================== -->
+<section class="man" id="man" aria-label="Manifesto">
+  <div class="man-sticky"><div class="wrap">
+    <p class="sr">Cabelo na régua. Barba alinhada. Cabeça leve.</p>
+    <div class="man-lines" aria-hidden="true">
+      <div class="mline"><span class="ghost">Cabelo na régua.</span><span class="real">Cabelo na <span class="b">régua.</span></span><svg class="blade" viewBox="0 0 120 40"><use href="#razorS"/></svg></div>
+      <div class="mline"><span class="ghost">Barba alinhada.</span><span class="real">Barba <span class="b">alinhada.</span></span><svg class="blade" viewBox="0 0 120 40"><use href="#razorS"/></svg></div>
+      <div class="mline"><span class="ghost">Cabeça leve.</span><span class="real">Cabeça <span class="b">leve.</span></span><svg class="blade" viewBox="0 0 120 40"><use href="#razorS"/></svg></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ===================== AGENDE ===================== -->
+<section class="sec book" id="agende">
+  <div class="wrap book-grid">
+    <div>
+      <div class="sec-head">
+        <p class="eyebrow rv"><span class="n">iii.</span><span class="ln"></span><span data-scramble>Agende</span></p>
+        <h2 class="h2" data-slam>Seu horário, <span class="b">sua cadeira.</span></h2>
+        <p class="sec-lead rv" style="--d:.3s">Chama no <span data-canal>WhatsApp</span>, diz o serviço e o melhor dia. A gente confirma o horário com você.</p>
+      </div>
+      <div class="book-ctas rv" style="--d:.45s">
+        <a class="btn btn-brass magnetic" data-cta href="#"><span class="lbl">Agendar horário</span> <svg><use href="#arrow"/></svg></a>
+        <a class="btn btn-line magnetic" id="igBtn" href="#"><span data-ig>@du_vallebarbearia</span></a>
+      </div>
+    </div>
+    <div class="ticket-stage rv" style="--d:.2s" id="ticketStage" aria-hidden="true">
+      <div class="ticket" id="ticket">
+        <div class="tface front"><div class="tstub">Nº 0001</div><div class="tmain"><small>Admite um</small><b>DU VALLE</b><em>barbearia</em><div class="row"><span>Corte · Barba</span><span data-city>Formosa-GO</span></div></div><span class="shine"></span></div>
+        <div class="tface back"><div class="tstub">Agende</div><div class="tmain"><small>Seu horário pelo <span data-canal>WhatsApp</span></small><b data-phone>(61) 98326-1479</b><em>te esperamos</em><div class="row"><span data-ig>@du_vallebarbearia</span></div></div><span class="shine"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ENDEREÇO ===================== -->
+<section class="sec loc" id="endereco">
+  <div class="wrap loc-grid">
+    <div>
+      <div class="sec-head">
+        <p class="eyebrow rv"><span class="n">iv.</span><span class="ln"></span><span data-scramble>Endereço</span></p>
+        <h2 class="h2" data-slam>No <span class="b">Centro</span> de Formosa.</h2>
+        <p class="sec-lead rv" style="--d:.3s">Fácil de chegar. Marque o horário antes pra não esperar.</p>
+      </div>
+      <div class="loc-ctas rv" style="--d:.45s">
+        <a class="btn btn-brass magnetic" data-maps href="#">Abrir no mapa <svg><use href="#arrow"/></svg></a>
+        <a class="btn btn-line magnetic" data-cta href="#"><span class="lbl">Agendar</span></a>
+      </div>
+    </div>
+    <div class="plate-stage rv" style="--d:.2s">
+      <a class="plate" data-tilt data-maps href="#" aria-label="Abrir o endereço no mapa">
+        <i class="scr" style="left:16px;top:16px"></i><i class="scr" style="right:16px;top:16px"></i><i class="scr" style="left:16px;bottom:16px"></i><i class="scr" style="right:16px;bottom:16px"></i>
+        <small>Du Valle Barbearia</small><b data-addr1>R. Antônio Dutra, 25</b><span data-addr2>Centro · Formosa-GO</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FINAL ===================== -->
+<section class="finale" id="finale">
+  <div class="must3d-stage" aria-hidden="true"><div class="must3d" id="must3d"></div></div>
+  <h2 class="fin-word" id="finWord">DU VALLE</h2>
+  <div class="fin-script rv">barbearia</div>
+  <div class="fin-cta">
+    <p class="rv" style="--d:.2s">Sua cadeira está esperando.</p>
+    <a class="btn btn-brass btn-lg magnetic rv" style="--d:.35s" data-cta href="#"><span class="lbl">Agendar horário</span> <svg><use href="#arrow"/></svg></a>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div>
+      <a class="brand" href="#top" aria-label="Du Valle Barbearia, voltar ao início"><b>DU VALLE</b><svg viewBox="0 0 200 60" fill="#eda33b"><use href="#must"/></svg><em>barbearia</em></a>
+      <p>Corte masculino, barba, bigode e visagismo.</p>
+    </div>
+    <div>
+      <h4>Endereço</h4>
+      <address><span data-addr1>R. Antônio Dutra, 25</span><br><span data-addr2>Centro · Formosa-GO</span></address>
+    </div>
+    <div>
+      <h4>Contato</h4>
+      <div class="foot-links"><a data-cta href="#"><span data-phone>(61) 98326-1479</span></a><a id="igFoot" href="#"><span data-ig>@du_vallebarbearia</span></a></div>
+    </div>
+  </div>
+  <div class="wrap copy"><span>© <span id="year">2026</span> Du Valle Barbearia</span><span data-city>Formosa-GO</span></div>
+</footer>
+
+<script>
+(() => {
+/* =========================================================
+   CONFIGURAÇÃO: edite aqui e a página inteira se atualiza
+   ========================================================= */
+const CONFIG = {
+  instagram: 'du_vallebarbearia',
+  whatsapp: '+55 61 98326-1479',   /* número público da barbearia (Facebook/Instagram). Confirme com o dono */
+  endereco1: 'R. Antônio Dutra, 25',
+  endereco2: 'Centro · Formosa-GO',
+  enderecoCurto: 'Rua Antônio Dutra, 25 · Centro',
+  cidade: 'Formosa-GO',
+  mapa: 'Rua Antônio Dutra, 25 - Centro, Formosa - GO, 73801-200'
+};
+
+/* Serviços da fita. Tirados das hashtags da própria barbearia (#cortemasculino, #barba, #bigode, #visagismo).
+   Troque ou complete com a lista real e os preços que o dono passar. */
+const SERVICOS = [
+  {nome:'Corte masculino', desc:'Máquina e tesoura no ponto certo, do clássico ao degradê.', art:'tesoura'},
+  {nome:'Barba', desc:'Desenho, alinhamento e acabamento na navalha.', art:'navalha'},
+  {nome:'Bigode', desc:'Aparado e modelado, do discreto ao que chama atenção.', art:'bigode'},
+  {nome:'Visagismo', desc:'O corte pensado pro formato do seu rosto e pro seu estilo.', art:'rosto'},
+  {nome:'Corte + barba', desc:'O serviço completo numa sentada só.', art:'maquina'},
+  {nome:'Acabamento', desc:'Pezinho, contorno e aquele detalhe que faz o corte durar.', art:'acabamento'}
+];
+
+const $ = (s, c = document) => c.querySelector(s);
+const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE = matchMedia('(hover:hover) and (pointer:fine)').matches;
+const TOUCH = matchMedia('(hover:none),(pointer:coarse)').matches;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const mod = (n, m) => ((n % m) + m) % m;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- contato: WhatsApp, Instagram, endereço ---------- */
+const WA = (() => {
+  let d = String(CONFIG.whatsapp || '').replace(/\D/g, '').replace(/^0+/, '');
+  if (d.length === 10 || d.length === 11) d = '55' + d;
+  return d.length >= 12 ? d : '';
+})();
+const fone = WA ? `(${WA.slice(2, 4)}) ${WA.slice(4, WA.length - 4)}-${WA.slice(-4)}` : '';
+const ctaHref = item => {
+  if (WA) {
+    const msg = item ? `Olá! Vi a página da Du Valle e quero agendar ${item}.` : 'Olá! Vi a página da Du Valle e quero agendar um horário.';
+    return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+  }
+  return `https://ig.me/m/${CONFIG.instagram}`;
+};
+$$('[data-cta]').forEach(a => { a.href = ctaHref(); a.target = '_blank'; a.rel = 'noopener'; });
+$$('[data-canal]').forEach(e => e.textContent = WA ? 'WhatsApp' : 'Direct');
+$$('[data-phone]').forEach(e => e.textContent = fone || '@' + CONFIG.instagram);
+$$('[data-ig]').forEach(e => e.textContent = '@' + CONFIG.instagram);
+$$('[data-addr1]').forEach(e => e.textContent = CONFIG.endereco1);
+$$('[data-addr2]').forEach(e => e.textContent = CONFIG.endereco2);
+$$('[data-addr-short]').forEach(e => e.textContent = CONFIG.enderecoCurto);
+$$('[data-city]').forEach(e => e.textContent = CONFIG.cidade);
+$('#igBtn').href = $('#igFoot').href = 'https://www.instagram.com/' + CONFIG.instagram + '/';
+[$('#igBtn'), $('#igFoot')].forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
+if (CONFIG.mapa) $$('[data-maps]').forEach(a => { a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.mapa); a.target = '_blank'; a.rel = 'noopener'; });
+else { $$('[data-maps]').forEach(a => a.hidden = true); $('#endereco').hidden = true; }
+$('#year').textContent = new Date().getFullYear();
+
+/* Links externos: no celular abrem na mesma aba (é assim que o app do WhatsApp abre direto);
+   no computador tentam nova aba e, se o navegador bloquear, usam a janela principal. */
+function abrirExterno(url) {
+  if (!TOUCH) {
+    let w = null;
+    try { w = window.open(url, '_blank'); } catch (_) {}
+    if (w) { try { w.opener = null; } catch (_) {} return; }
+  }
+  try { if (window.top !== window.self) { window.top.location.href = url; return; } } catch (_) {}
+  location.href = url;
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="https://wa.me/"],a[href^="https://ig.me/"],a[href^="https://www.instagram.com/"],a[data-maps]');
+  if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  abrirExterno(a.href);
+});
+
+/* ---------- texto em letras ---------- */
+function splitChars(el, start = 0) {
+  let i = start;
+  const walk = node => {
+    [...node.childNodes].forEach(n => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(part => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+          const w = document.createElement('span'); w.className = 'w';
+          [...part].forEach(ch => { const c = document.createElement('span'); c.className = 'c'; c.textContent = ch; c.style.setProperty('--i', i++); w.appendChild(c); });
+          frag.appendChild(w);
+        });
+        n.replaceWith(frag);
+      } else if (n.nodeType === 1 && n.tagName !== 'BR') walk(n);
+    });
+  };
+  walk(el);
+  return i;
+}
+$$('[data-slam], #finWord').forEach(el => { el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim()); splitChars(el); $$('.w', el).forEach(w => w.setAttribute('aria-hidden', 'true')); });
+splitChars($('#iword'));
+function scramble(el, speed = 40) {
+  const final = el.dataset.final || (el.dataset.final = el.textContent);
+  if (RM) { el.textContent = final; return; }
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let f = 0; const total = 18;
+  const run = () => {
+    el.textContent = [...final].map((ch, i) => ch === ' ' ? ' ' : (i < (f / total) * final.length ? ch : chars[(Math.random() * chars.length) | 0])).join('');
+    if (++f <= total) setTimeout(run, speed); else el.textContent = final;
+  };
+  run();
+}
+$$('[data-marquee]').forEach(t => {
+  const one = t.dataset.marquee.split('|').map(x => `<span>${esc(x)}<svg viewBox="0 0 200 60" fill="#0a1b14"><use href="#must"/></svg></span>`).join('');
+  t.innerHTML = one + one + one + one;
+});
+
+/* ---------- postes de barbearia 3D ---------- */
+$$('[data-pole] .pole-3d').forEach(p => {
+  let h = '';
+  for (let k = 0; k < 24; k++) {
+    const ang = k * 15 * Math.PI / 180;
+    const sh = (.62 * (1 - Math.cos(ang)) / 2 + (Math.sin(ang) > 0 ? .08 : 0)).toFixed(3);
+    h += `<i style="--k:${k};--sh:${sh}"></i>`;
+  }
+  p.innerHTML = h;
+});
+
+/* ---------- poeira na luz ---------- */
+$('#dust').innerHTML = Array.from({length: 22}, () => `<i style="left:${(40 + Math.random() * 55).toFixed(1)}%;top:${(40 + Math.random() * 60).toFixed(1)}%;animation-duration:${(9 + Math.random() * 9).toFixed(1)}s;animation-delay:${(-Math.random() * 12).toFixed(1)}s;opacity:${(.3 + Math.random() * .7).toFixed(2)}"></i>`).join('');
+
+/* ---------- serviços: fita de cinema ---------- */
+const A = 'stroke="#eda33b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"';
+const ART = {
+  tesoura: () => `<svg viewBox="0 0 200 200">
+    <g class="a-bladeA"><path d="M100 92 160 30" ${A}/><path d="M100 92 150 36" stroke="#f3ead9" stroke-width="1.5" opacity=".6"/><circle cx="76" cy="128" r="18" ${A}/><path d="M100 92 86 114" ${A}/></g>
+    <g class="a-bladeB"><path d="M100 92 40 30" ${A}/><path d="M100 92 50 36" stroke="#f3ead9" stroke-width="1.5" opacity=".6"/><circle cx="124" cy="128" r="18" ${A}/><path d="M100 92 114 114" ${A}/></g>
+    <circle cx="100" cy="92" r="4" fill="#eda33b"/>
+    <path class="a-fall" d="M70 150q4 8 0 16" stroke="#f3ead9" stroke-width="2" fill="none" stroke-linecap="round"/><path class="a-fall f2" d="M104 152q4 8 0 16" stroke="#f3ead9" stroke-width="2" fill="none" stroke-linecap="round"/><path class="a-fall f3" d="M130 150q-4 8 0 16" stroke="#f3ead9" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+  navalha: () => `<svg viewBox="0 0 200 200">
+    <path d="M58 64c-8 30 0 70 42 92 42-22 50-62 42-92" fill="#0f261d" ${A}/><path d="M70 110c10 14 50 14 60 0" ${A}/>
+    <g class="a-foam"><circle cx="80" cy="96" r="7" fill="#f3ead9"/><circle cx="92" cy="104" r="5" fill="#f3ead9"/><circle cx="118" cy="98" r="6" fill="#f3ead9"/><circle cx="108" cy="130" r="5" fill="#f3ead9"/></g>
+    <g class="a-razor"><use href="#razorS" x="104" y="44" width="90" height="30"/></g></svg>`,
+  bigode: () => `<svg viewBox="0 0 200 200"><g class="a-twirl"><use href="#must" x="20" y="60" width="160" height="48" fill="#eda33b"/></g>
+    <path d="M40 140h120" stroke="#f3ead9" stroke-width="2" opacity=".3"/><path d="M60 150h80" stroke="#f3ead9" stroke-width="2" opacity=".2"/>
+    <path class="a-spark" d="M160 44l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#ffc873"/></svg>`,
+  rosto: () => `<svg viewBox="0 0 200 200">
+    <path d="M100 30c-34 0-50 26-50 58 0 36 22 70 50 76 28-6 50-40 50-76 0-32-16-58-50-58z" fill="#0f261d" ${A}/>
+    <path class="a-grid" d="M40 80h120M40 112h120M100 20v160M62 40l76 120M138 40 62 160" stroke="#f3ead9" stroke-width="1.2" opacity=".55"/>
+    <circle cx="82" cy="92" r="4" fill="#eda33b"/><circle cx="118" cy="92" r="4" fill="#eda33b"/><path d="M86 132q14 8 28 0" ${A}/></svg>`,
+  maquina: () => `<svg viewBox="0 0 200 200">
+    <g class="a-buzz"><rect x="74" y="50" width="52" height="110" rx="20" fill="#0f261d" ${A}/><rect x="70" y="40" width="60" height="16" rx="4" fill="#eda33b"/>
+    <path d="M74 44v-10M84 44v-10M94 44v-10M104 44v-10M114 44v-10M124 44v-10" stroke="#f3ead9" stroke-width="2.5" stroke-linecap="round"/><circle cx="100" cy="92" r="7" fill="#eda33b"/></g>
+    <g class="a-comb"><rect x="140" y="60" width="16" height="90" rx="3" fill="#f3ead9"/><path d="M140 70h-10M140 80h-10M140 90h-10M140 100h-10M140 110h-10M140 120h-10M140 130h-10M140 140h-10" stroke="#f3ead9" stroke-width="2.5" stroke-linecap="round"/></g></svg>`,
+  acabamento: () => `<svg viewBox="0 0 200 200">
+    <path d="M60 40c30-10 70-6 86 20 12 20 8 50-6 64-8 8-8 22-6 34" fill="none" stroke="#f3ead9" stroke-width="3" stroke-linecap="round"/>
+    <path d="M70 150c10 10 40 14 64 8" ${A} stroke-dasharray="6 6"/>
+    <g class="a-razor"><use href="#razorS" x="96" y="116" width="80" height="26"/></g>
+    <path class="a-spark" d="M58 128l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#ffc873"/><path class="a-spark" style="animation-delay:.8s" d="M150 60l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#ffc873"/></svg>`
+};
+const film = $('#film'), filmTrack = $('#filmTrack');
+const NS = SERVICOS.length, COPIES = 3;
+filmTrack.innerHTML = Array.from({length: NS * COPIES}, (_, k) => {
+  const s = SERVICOS[k % NS], n = k % NS + 1;
+  return `<article class="fr"${k >= NS ? ' aria-hidden="true"' : ''}><div class="fr-in"><div class="fr-top"><span>DV · ${String(n).padStart(2, '0')}</span><b>Consulte</b></div>
+    <div class="fr-art">${ART[s.art]()}</div><h3>${esc(s.nome)}</h3><p>${esc(s.desc)}</p>
+    <a class="fr-cta" href="${ctaHref(s.nome.toLowerCase())}" target="_blank" rel="noopener"${k >= NS ? ' tabindex="-1"' : ''}>Agendar <svg><use href="#arrow"/></svg></a></div></article>`;
+}).join('');
+const frames = $$('.fr', filmTrack);
+let fw = 280, gap = 26, stepW = 306, totalW = stepW * NS * COPIES, fpos = 0, fvel = 0, hoverF = false, focusF = false, fdrag = false, fmoved = false, fsx = 0, fsy = 0, flastX = 0, fpid = null, filmVisible = false;
+const measureFilm = () => { fw = frames[0].offsetWidth; gap = Math.round(fw * .09); stepW = fw + gap; totalW = stepW * NS * COPIES; };
+function layoutFilm() {
+  const vw = film.clientWidth, half = vw / 2;
+  frames.forEach((f, k) => {
+    let x = mod(k * stepW + fpos, totalW) - stepW;
+    if (x > vw + stepW) x -= totalW;
+    const n = clamp((x + fw / 2 - half) / half, -1.6, 1.6);
+    const ry = -n * 24 + clamp(fvel * .8, -14, 14);
+    const z = -Math.abs(n) * 150;
+    f.style.transform = `translate3d(${x.toFixed(1)}px,0,${z.toFixed(1)}px) rotateY(${ry.toFixed(2)}deg)`;
+    f.style.opacity = Math.abs(n) > 1.45 ? 0 : 1;
+  });
+  film.style.setProperty('--sp', (fpos % 44).toFixed(1) + 'px');
+}
+film.addEventListener('pointerenter', () => hoverF = true);
+film.addEventListener('pointerleave', () => hoverF = false);
+film.addEventListener('focusin', () => focusF = true);
+film.addEventListener('focusout', () => focusF = false);
+film.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') { fvel = -18; e.preventDefault(); }
+  if (e.key === 'ArrowLeft') { fvel = 18; e.preventDefault(); }
+});
+film.addEventListener('pointerdown', e => { if (e.button !== 0) return; fdrag = true; fmoved = false; fsx = flastX = e.clientX; fsy = e.clientY; fpid = e.pointerId; fvel = 0; });
+addEventListener('pointermove', e => {
+  if (!fdrag || e.pointerId !== fpid) return;
+  if (!fmoved && Math.abs(e.clientX - fsx) > 8 && Math.abs(e.clientX - fsx) > Math.abs(e.clientY - fsy)) { fmoved = true; film.classList.add('dragging'); try { film.setPointerCapture(fpid); } catch (_) {} }
+  if (fmoved) { const dx = e.clientX - flastX; fpos += dx; fvel = dx; flastX = e.clientX; }
+});
+const fEnd = () => { if (!fdrag) return; fdrag = false; film.classList.remove('dragging'); };
+addEventListener('pointerup', fEnd); addEventListener('pointercancel', fEnd);
+film.addEventListener('click', e => { if (fmoved) { e.preventDefault(); e.stopPropagation(); fmoved = false; } }, true);
+measureFilm();
+addEventListener('resize', measureFilm);
+
+/* ---------- bigode 3D ---------- */
+$('#must3d').innerHTML = Array.from({length: 10}, (_, k) => `<svg viewBox="0 0 200 60" style="transform:translateZ(${(-k * 1.6).toFixed(1)}px)" fill="${k === 0 ? '#eda33b' : `hsl(35,${70 - k * 3}%,${40 - k * 2}%)`}"><use href="#must"/></svg>`).join('');
+
+/* ---------- inclinação 3D, botões magnéticos, cursor ---------- */
+$$('[data-tilt]').forEach(el => {
+  if (!FINE) return;
+  el.addEventListener('pointermove', e => {
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    el.style.setProperty('--ry', ((x - .5) * 14).toFixed(2) + 'deg');
+    el.style.setProperty('--rx', ((.5 - y) * 12).toFixed(2) + 'deg');
+  });
+  el.addEventListener('pointerleave', () => { el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg'); });
+});
+if (FINE) $$('.magnetic').forEach(b => {
+  b.addEventListener('pointermove', e => {
+    const r = b.getBoundingClientRect();
+    b.style.setProperty('--bx', ((e.clientX - r.left - r.width / 2) * .2).toFixed(1) + 'px');
+    b.style.setProperty('--by', ((e.clientY - r.top - r.height / 2) * .3).toFixed(1) + 'px');
+  });
+  b.addEventListener('pointerleave', () => { b.style.setProperty('--bx', '0px'); b.style.setProperty('--by', '0px'); });
+});
+const mdot = $('#mdot');
+let px = innerWidth / 2, py = innerHeight / 2, cx1 = px, cy1 = py, mx = 0, my = 0;
+addEventListener('pointermove', e => {
+  px = e.clientX; py = e.clientY; mx = px / innerWidth * 2 - 1; my = py / innerHeight * 2 - 1;
+  if (FINE && e.pointerType === 'mouse') {
+    document.body.classList.add('has-cursor');
+    mdot.classList.toggle('hover', !!e.target.closest('a,button,.film,[data-tilt]'));
+  }
+}, {passive: true});
+document.addEventListener('pointerleave', () => document.body.classList.remove('has-cursor'));
+
+/* ---------- visibilidade e revelações ---------- */
+let heroVisible = true, ticketVisible = false, finVisible = false;
+new IntersectionObserver(es => es.forEach(e => heroVisible = e.isIntersecting)).observe($('#top'));
+new IntersectionObserver(es => es.forEach(e => filmVisible = e.isIntersecting)).observe(film);
+new IntersectionObserver(es => es.forEach(e => ticketVisible = e.isIntersecting)).observe($('#ticketStage'));
+new IntersectionObserver(es => es.forEach(e => finVisible = e.isIntersecting)).observe($('#finale'));
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add('in');
+  $$('[data-scramble]', e.target).forEach(el => scramble(el));
+  io.unobserve(e.target);
+}), {threshold: .2, rootMargin: '0px 0px -6% 0px'});
+const heroEls = $$('#top .rv, #top [data-slam]');
+$$('.rv, [data-slam], #finWord').forEach(el => { if (!heroEls.includes(el)) io.observe(el); });
+
+/* ---------- rolagem ---------- */
+const nav = $('#nav'), prog = $('#prog');
+const rit = $('#ritual'), rsteps = $$('.rstep'), rnodes = $$('#ritLine .node'), ritLine = $('#ritLine'), ritNum = $('#ritNum');
+const man = $('#man'), mlines = $$('.mline');
+let lastY = 0, lastStep = -1;
+function onScroll(y) {
+  const H = document.documentElement.scrollHeight - innerHeight;
+  prog.style.transform = `scaleX(${H > 0 ? (y / H).toFixed(4) : 0})`;
+  nav.classList.toggle('scrolled', y > 30);
+  if (y > lastY + 6 && y > 300) nav.classList.add('hide'); else if (y < lastY - 6) nav.classList.remove('hide');
+  lastY = y;
+  /* ritual: a navalha corre pela linha */
+  const r = rit.getBoundingClientRect();
+  const p = clamp(-r.top / (r.height - innerHeight), 0, 1);
+  const lw = ritLine.clientWidth;
+  ritLine.style.setProperty('--rp', p.toFixed(4));
+  ritLine.style.setProperty('--rx', (p * lw).toFixed(1) + 'px');
+  ritLine.style.setProperty('--rr', (Math.sin(p * 40) * 4).toFixed(2) + 'deg');
+  const step = Math.min(3, Math.floor(p * 3.999));
+  rnodes.forEach((n, i) => n.classList.toggle('on', p >= i / 3 - .001));
+  if (step !== lastStep) {
+    rsteps.forEach((s, i) => s.classList.toggle('on', i === step));
+    ritNum.textContent = String(step + 1).padStart(2, '0');
+    lastStep = step;
+  }
+  /* manifesto: cada linha é "cortada" pela navalha */
+  const mr = man.getBoundingClientRect();
+  const mp = clamp(-mr.top / (mr.height - innerHeight), 0, 1) * 1.15;
+  mlines.forEach((l, i) => {
+    const q = clamp(mp * 3 - i, 0, 1);
+    l.style.setProperty('--q', q.toFixed(3));
+    l.style.setProperty('--bo', q > 0 && q < 1 ? 1 : 0);
+  });
+}
+
+/* ---------- laço principal ---------- */
+const frame = $('#frame'), photo = $('#photo'), poles = $$('[data-pole] .pole-3d'), must3d = $('#must3d'), ticket = $('#ticket');
+let dLast = 0, sy = -1, frx = 0, fry = 0;
+function loop(t) {
+  if (scrollY !== sy) { sy = scrollY; onScroll(sy); }
+  const dt = dLast ? Math.min(t - dLast, 100) : 16; dLast = t;
+  if (heroVisible) {
+    frx = lerp(frx, -my * 7, .06); fry = lerp(fry, mx * 10, .06);
+    frame.style.setProperty('--rx', frx.toFixed(2) + 'deg'); frame.style.setProperty('--ry', fry.toFixed(2) + 'deg');
+    photo.style.setProperty('--px', (-mx * 8).toFixed(1) + 'px'); photo.style.setProperty('--py', (-my * 6 + scrollY * .06).toFixed(1) + 'px');
+  }
+  poles.forEach(p => p.style.setProperty('--pry', (mx * 18).toFixed(2) + 'deg'));
+  if (filmVisible) {
+    if (!fdrag) {
+      fvel *= .94;
+      const drift = (!RM && !hoverF && !focusF && !document.hidden) ? -.045 * dt : 0;
+      fpos += fvel + drift;
+    }
+    layoutFilm();
+  }
+  if (ticketVisible) {
+    const flip = RM ? 0 : (Math.floor(t / 4500) % 2) * 180;
+    ticket.style.setProperty('--flip', flip + 'deg');
+    ticket.style.setProperty('--ry', (mx * 14).toFixed(2) + 'deg');
+    ticket.style.setProperty('--rx', (-my * 10).toFixed(2) + 'deg');
+  }
+  if (finVisible) {
+    must3d.style.setProperty('--my3', ((RM ? 0 : Math.sin(t / 1400) * 28) + mx * 20).toFixed(2) + 'deg');
+    must3d.style.setProperty('--mx3', (-my * 14).toFixed(2) + 'deg');
+  }
+  cx1 = lerp(cx1, px, .22); cy1 = lerp(cy1, py, .22);
+  mdot.style.transform = `translate3d(${cx1.toFixed(1)}px,${cy1.toFixed(1)}px,0)`;
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ---------- intro ---------- */
+const intro = $('#intro'), ifill = $('#ifill'), inum = $('#inum'), irazor = $('#irazor'), itrack = $('#itrack');
+let introDone = false;
+function startHero() {
+  document.body.classList.remove('is-loading');
+  $('#top').classList.add('go');
+  heroEls.forEach(el => el.classList.add('in'));
+}
+function finishIntro() {
+  if (introDone) return;
+  introDone = true;
+  if (RM) { intro.remove(); startHero(); return; }
+  intro.style.setProperty('--sa', Math.atan2(.18 * innerHeight, innerWidth) + 'rad');
+  intro.classList.add('cut');
+  setTimeout(() => intro.classList.add('out'), 380);
+  setTimeout(startHero, 700);
+  setTimeout(() => intro.remove(), 1600);
+}
+intro.addEventListener('click', finishIntro);
+addEventListener('keydown', e => { if (!introDone && ['Escape', 'Enter', ' '].includes(e.key)) finishIntro(); });
+if (RM) finishIntro();
+else {
+  requestAnimationFrame(() => intro.classList.add('play'));
+  let loaded = document.readyState === 'complete', v = 0;
+  addEventListener('load', () => loaded = true);
+  const t0 = performance.now(), MIN = 3500;
+  const tick = now => {
+    if (introDone) return;
+    let p = clamp((now - t0 - 300) / (MIN - 300), 0, 1);
+    p = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    const target = loaded ? p : Math.min(p, .92);
+    v = lerp(v, target, .16);
+    if (target === 1 && v > .995) v = 1;
+    ifill.style.setProperty('--p', v.toFixed(4));
+    irazor.style.transform = `translateX(${(v * itrack.clientWidth - 29).toFixed(1)}px)`;
+    inum.textContent = String(Math.round(v * 100)).padStart(2, '0');
+    if (v === 1) { setTimeout(finishIntro, 350); return; }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+  setTimeout(finishIntro, 9000);
+}
+})();
+</script>
+</body>
+</html>
