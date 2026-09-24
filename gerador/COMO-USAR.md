@@ -10,6 +10,8 @@ possíveis em dois dias.
 
 ## O fluxo (uma página do começo ao fim)
 
+0. **Deixe o Modo em "Demonstração".** A página não entra no Google enquanto
+   ele não fechar. Só troque para "Cliente" na entrega
 1. **Clique em "Carregar exemplo"** na primeira vez, só para ver como fica
    pronto. Depois "Limpar tudo" e comece a valer
 2. **Escolha o ramo primeiro.** Ele já preenche cor, frase e uma lista de
@@ -17,10 +19,21 @@ possíveis em dois dias.
 3. **Preencha com os dados reais** do negócio (seção abaixo: onde achar)
 4. **Confira no modo Celular.** É nele que a pessoa vai ver. Sempre confira
    no celular antes de desktop
-5. **"Baixar página"** → sai um arquivo `index.html`
-6. **Publique:** abra [app.netlify.com/drop](https://app.netlify.com/drop) e
-   arraste o arquivo. Em 30 segundos você tem um link no ar
+5. **"Baixar página"** → sai um arquivo `index.html`. Coloque dentro de uma
+   pasta com o nome do negócio (`studio-bella/index.html`) e **guarde essa
+   pasta**: o arquivo é também o seu backup (veja "Alterar uma página já
+   publicada", abaixo)
+6. **Publique no Cloudflare Pages:** no painel do Cloudflare, **Workers &
+   Pages → Create → aba Pages → Upload assets (Direct Upload)**. Dê ao projeto
+   o nome do negócio e arraste a pasta. O link fica `studio-bella.pages.dev`
+   *(os nomes dos botões mudam de vez em quando; procure "Pages" e "Direct
+   Upload")*
 7. **Salve o link** na coluna `Link_Demo` do `crm/pipeline.csv`
+
+> **Por que não o Netlify Drop:** contas novas do Netlify (desde 4/9/2025)
+> têm cerca de 20 publicações grátis por mês, e ao estourar **todos os sites
+> da conta pausam**, inclusive os de clientes pagantes. Detalhes em
+> [`../docs/00-plano-mestre.md`](../docs/00-plano-mestre.md), seção 1.1.
 
 ---
 
@@ -74,7 +87,8 @@ compromisso". Preço errado na tela vira discussão em vez de venda.
 ## Se ele pedir uma mudança na hora
 
 **Faça na frente dele.** Abra o gerador, mude, baixe, publique de novo no
-Netlify. Leva menos de dois minutos.
+Cloudflare Pages (no mesmo projeto: *Create deployment* e arraste a pasta).
+Leva menos de dois minutos.
 
 Essa demonstração é o argumento mais forte que você tem para os R$ 250/mês —
 é literalmente o serviço acontecendo na frente dele. Veja a objeção 3 em
@@ -82,11 +96,30 @@ Essa demonstração é o argumento mais forte que você tem para os R$ 250/mês 
 
 ---
 
+## Alterar uma página já publicada
+
+Toda página baixada pelo gerador leva dentro dela os dados do formulário.
+Para mudar um preço daqui a três meses:
+
+1. Clique em **"Abrir página salva (.html)"** e escolha o `index.html` do
+   cliente (do seu backup no Google Drive)
+2. O formulário volta preenchido. Mude o que ele pediu
+3. Baixe e publique de novo no mesmo projeto do Cloudflare
+4. Substitua o arquivo do backup pelo novo
+
+Páginas feitas antes desta versão não têm esses dados: preencha uma última
+vez e, daí em diante, elas abrem normalmente.
+
+---
+
 ## Quando o cliente fechar
 
-O Netlify grátis dá um endereço tipo `nome-do-negocio.netlify.app`, e ele
-serve perfeitamente para a demo.
+O `nome-do-negocio.pages.dev` serve para a demo. Na entrega:
 
-Quando fechar, registre o domínio próprio (`nomedonegocio.com.br`) no
-Registro.br — custa cerca de R$ 40 por ano. É parte do que ele está pagando
-nos R$ 800, e é o que faz a página parecer profissional de verdade.
+1. Troque o **Modo para "Cliente"**, confira os dados com ele e baixe de novo
+2. O domínio (`nomedonegocio.com.br`) é registrado **no nome do cliente**, na
+   conta dele no Registro.br. Ele paga os R$ 40 por ano direto para o
+   Registro.br
+3. Siga o checklist de entrega de
+   [`../docs/00-plano-mestre.md`](../docs/00-plano-mestre.md), seção 11
+   (domínio, HTTPS, estatísticas, Google e backup)

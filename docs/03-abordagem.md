@@ -114,6 +114,11 @@ Agora sim, o preço.
 
 ### 1.4 O fechamento
 
+> **Oferta atualizada:** a meta agora é a assinatura de R$ 250/mês. Use a
+> apresentação com dois planos de [`00-plano-mestre.md`](00-plano-mestre.md),
+> seção 8. O roteiro abaixo continua valendo para o **Plano Livre**, e as
+> explicações de cada palavra valem para os dois.
+
 > *"Ó, vou te falar o que é isso na prática.*
 >
 > *Essa página é sua, já tá feita. Se você quiser, eu coloco ela no ar hoje
@@ -180,7 +185,7 @@ que trabalha a seu favor.
 |---|---|
 | "site" | "página", "seu endereço no Google" |
 | "mensalidade" | "eu cuido dela", "manutenção" |
-| "contrato" | "sem contrato, para quando quiser" |
+| "contrato", "fidelidade" | "um combinado de uma página", "6 meses e depois sai quando quiser" |
 | "marketing digital" | (nunca use — soa golpe) |
 | "presença online" | (jargão vazio, ele não sente nada) |
 | "posso te tomar 5 minutinhos?" | (pede antes de dar — nunca peça primeiro) |
@@ -189,6 +194,11 @@ que trabalha a seu favor.
 ---
 
 ## PARTE 2 — WHATSAPP
+
+> **Atualizado:** para mensagens, siga [`06-whatsapp-operacao.md`](06-whatsapp-operacao.md).
+> Ele manda o print (não o link) na primeira mensagem e usa **no máximo 3
+> mensagens para quem não responde** (D+0, D+2 e D+5), por causa do limite
+> mensal do WhatsApp. Esta parte ficou como resumo das ideias.
 
 Por mensagem você vai ser ignorado muito mais do que presencialmente, e isso
 é normal — não é falha sua. Trate o WhatsApp como o que ele é: **um canal de

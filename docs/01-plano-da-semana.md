@@ -12,7 +12,8 @@ Não 30. Os 30 são consequência desta semana — veja
 
 1. **Um WhatsApp Business** com foto, nome e uma descrição curta.
    Não venda de um número sem foto — desconfiança é o seu maior inimigo
-2. **Uma conta no Netlify** (grátis) para publicar as páginas em 30 segundos
+2. **Uma conta no Cloudflare** (grátis) para publicar as páginas no Cloudflare
+   Pages. Não use o Netlify grátis: veja [`00-plano-mestre.md`](00-plano-mestre.md), seção 1.1
 3. **Sua chave PIX à mão**, para receber na hora que ele disser sim.
    Procurar chave PIX na frente do cliente esfria a venda
 
@@ -52,7 +53,7 @@ primeiro dia, e quem desiste desiste aqui.
 - Releia [`03-abordagem.md`](03-abordagem.md) pensando no que travou ontem.
   Ajuste o roteiro com as palavras que **você** fala naturalmente
 - Gere mais **8 demos**
-- Dispare os follow-ups D+1 de segunda
+- Dispare os follow-ups de segunda
 
 ### Tarde — 3h. Rota: CNB / CSB
 - **10 abordagens.** Terça à tarde é o melhor dia da semana para
@@ -86,7 +87,7 @@ O dia mais lucrativo por hora trabalhada: hoje você colhe quem já te conhece.
 
 ### Manhã — 2h — Bloco de follow-up
 - Ligue ou mande áudio para **todo mundo** que aceitou o teste de 7 dias
-- Mande os prints (D+3) de quem não respondeu
+- Mande o D+2 para quem não respondeu
 - Fale com os indicados que apareceram — **em até 48h**, sempre
 
 ### Tarde — 3h. Rota: Pistão Sul (a pé, da sua porta)

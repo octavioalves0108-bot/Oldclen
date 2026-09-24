@@ -8,7 +8,7 @@ Sistema completo para vender só por mensagem, sem porta fria.
 
 ### WhatsApp não fecha. WhatsApp abre.
 
-Ninguém decide gastar R$ 800 + R$ 250/mês lendo texto de um desconhecido.
+Ninguém decide assinar R$ 250/mês lendo texto de um desconhecido.
 Se você tentar fechar no chat, a conversa morre no "vou pensar" e você nunca
 mais tem notícia — é assim que a maioria das suas conversas some hoje.
 
@@ -60,6 +60,7 @@ em 24 a 48 horas**, e você perde o número, o histórico e a semana.
 | **Sem link na primeira mensagem de número novo** | Link para desconhecido é o maior sinal de spam. Veja a solução na seção 4 |
 | **Use WhatsApp Business com o perfil completo** | Foto, nome, descrição, horário. Perfil vazio gera denúncia |
 | **Se alguém pedir pra parar, pare na hora** | Denúncia é o que realmente derruba número |
+| **No máximo 3 mensagens para quem não responde** | O WhatsApp está testando um limite mensal de mensagens sem resposta, e cada follow-up ignorado conta. Se aparecer o aviso de limite, pare o WhatsApp frio no mês e siga pelo Direct e pela rua |
 
 ### Tenha um número reserva
 Compre um chip pré-pago de reserva antes de começar. Se o principal cair na
@@ -129,10 +130,12 @@ Ele vê o negócio dele na tela sem precisar clicar em nada, sem medo de vírus,
 sem sair do WhatsApp. Imagem também abre sozinha na prévia da conversa —
 ele vê mesmo sem responder.
 
-```
-[1º: manda o PRINT da página, sem texto]
+Mande **uma mensagem só: o print com o texto na legenda da imagem.** Print e
+texto separados contam como duas mensagens no limite de mensagens sem
+resposta (seção 2).
 
-[2º, 10 segundos depois:]
+```
+[PRINT da página, com esta legenda:]
 Boa tarde! Sou o [seu nome], moro aqui em Taguatinga.
 
 Montei essa página pra [Nome do Negócio] no fim de semana,
@@ -158,7 +161,7 @@ Grave em pé, sem pressa, tom de quem está resolvendo uma coisa boba:
 
 **Nunca mande áudio de primeira para número desconhecido** — muita gente não
 ouve áudio de quem não conhece. Mande o print primeiro, o texto depois, e o
-áudio no follow-up do dia seguinte.
+áudio só depois que ele responder.
 
 ### Varie sempre — quatro aberturas diferentes
 
@@ -218,9 +221,13 @@ de nada.
 Aqui está seu dinheiro. Quase todo mundo desiste na primeira sem resposta —
 e é exatamente por isso que quase todo mundo não fecha.
 
-**D+0** — print + texto (ou o gancho de uma linha)
+> **Atualizado:** são **3 mensagens no máximo** para quem não responde, por
+> causa do limite mensal do WhatsApp (seção 2). O áudio e o link ficam para
+> quem responder.
 
-**D+1** — sem resposta. **Esta é a mensagem com maior taxa de resposta de todas:**
+**D+0** — print com o texto na legenda (ou o gancho de uma linha)
+
+**D+2** — sem resposta. **Esta é a mensagem com maior taxa de resposta de todas:**
 ```
 Oi [nome], só passando pra saber se você chegou a ver.
 Se não for do seu interesse, pode falar tranquilo que eu paro
@@ -228,8 +235,6 @@ de te incomodar — sem problema nenhum.
 ```
 Dar permissão explícita para recusar tira toda a pressão e aciona a educação
 natural das pessoas. Boa parte das suas respostas da semana vai vir daqui.
-
-**D+3** — sem resposta. Agora sim o **áudio** (seção 4) + o link da página.
 
 **D+5** — a mensagem de encerramento, a que mais converte:
 ```
@@ -244,7 +249,8 @@ existe com o nome dele.
 Blefe queimado vira reputação ruim, e Taguatinga é pequena para quem
 trabalha com comércio local.
 
-**D+6** — marque `PERDIDO` no CRM e volte em 60 dias. Não insista mais.
+**D+6** — marque `PERDIDO` no CRM, apague o projeto da demo e volte em 60
+dias. Não insista mais.
 
 ---
 
@@ -265,8 +271,8 @@ Hoje 15h ou amanhã 10h?
 recebe "depois eu vejo".
 
 ### Ele pergunta o preço primeiro
-Não dispare o número no chat. Sem contexto, R$ 800 vira "caro" e a conversa
-morre.
+Não dispare o número no chat. Sem contexto, qualquer valor vira "caro" e a
+conversa morre.
 ```
 Te falo certinho, é bem mais barato do que você tá imaginando.
 
@@ -277,15 +283,16 @@ Hoje 15h ou amanhã 10h?
 
 Se ele insistir, **responda** — fugir duas vezes destrói a confiança:
 ```
-São R$ 800 pra montar tudo e deixar no ar no seu nome, ligado
-no seu WhatsApp e registrado no Google.
-
-E R$ 250 por mês eu cuido dela: toda vez que você mudar preço,
-fizer promoção ou tirar foto nova, me manda aqui que eu atualizo
-no mesmo dia. Sem contrato, para quando quiser.
+São R$ 250 por mês, e você não paga nada pra montar.
+Eu coloco a página no seu endereço próprio, ligada no seu
+WhatsApp e no Google, e cuido dela: mudou preço, fez promoção,
+tirou foto nova, me manda aqui que eu atualizo no mesmo dia.
 
 Te mostro tudo funcionando numa chamada de 10 min. Hoje 15h?
 ```
+
+Os detalhes dos dois planos (com e sem permanência) você explica na chamada,
+com o roteiro de [`00-plano-mestre.md`](00-plano-mestre.md), seção 8.
 
 ### Ele aponta um erro ("o telefone tá errado")
 **Sinal verde disfarçado** — ele já está editando mentalmente, já é dele.
@@ -317,16 +324,18 @@ permite, e é muito mais forte que texto.
 
 Depois:
 ```
-Ó, resumindo:
+Resumindo pra você:
 
-✅ A página tá pronta e no ar
-✅ R$ 800 pra colocar no seu nome, com seu domínio, ligada no
-   seu WhatsApp e registrada no Google
-✅ R$ 250/mês eu cuido: qualquer mudança você me manda aqui e
-   eu faço no mesmo dia
-✅ Sem contrato e sem multa — para quando você quiser
+✅ A página já tá pronta
+✅ Coloco no seu endereço próprio, ligada no seu WhatsApp e no Google
+✅ R$ 250/mês eu cuido: mudou algo, me manda aqui e eu atualizo no mesmo dia
+✅ Relatório de visitas todo mês
 
-Quer que eu deixe no ar ainda hoje?
+Dois jeitos de começar:
+1️⃣ R$ 0 de montagem, só a assinatura, ficando pelo menos 6 meses
+2️⃣ R$ 800 de montagem, sem compromisso de tempo
+
+Qual dos dois faz mais sentido pra você?
 ```
 
 **E aí para de escrever.** Quem fala primeiro depois da pergunta de
@@ -358,9 +367,9 @@ exatamente como funciona pessoalmente.
 
 | Bloco | Tempo | O quê |
 |---|---|---|
-| **Montagem** | 2h | 8-10 demos dos Tier A de hoje. Publica no Netlify, tira os prints |
+| **Montagem** | 2h | 8-10 demos dos Tier A de hoje. Publica no Cloudflare Pages, tira os prints |
 | **Disparo 1** | 1h | 11h-12h: manda as demos (print + texto), espalhado |
-| **Follow-up** | 1h | 14h-15h: D+1, D+3 e D+5 de todo mundo das listas antigas |
+| **Follow-up** | 1h | 14h-15h: D+2 e D+5 de todo mundo das listas antigas |
 | **Disparo 2** | 45min | 15h-16h30: 30-40 ganchos de uma linha (Nível 2) |
 | **Fechamento** | 15min | Atualiza o CRM, agenda as chamadas de amanhã |
 

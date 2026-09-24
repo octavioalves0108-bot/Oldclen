@@ -83,7 +83,7 @@ Isso não é mais porta fria. Você entrou pela porta da frente.
 > não fechar, não muda nada pra você."*
 
 Custo zero se não funcionar. E se funcionar, R$ 250 de desconto compraram um
-cliente de R$ 800 + R$ 250/mês. É o cliente mais barato que você vai adquirir
+cliente de R$ 250 todo mês. É o cliente mais barato que você vai adquirir
 na vida.
 
 ---

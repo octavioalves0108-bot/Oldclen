@@ -102,9 +102,19 @@
 
 <div class="side">
   <h1>Gerador de <span>Demos</span></h1>
-  <p class="sub">Preencha, baixe o arquivo e publique em
-    <a href="https://app.netlify.com/drop" target="_blank" style="color:var(--ac)">netlify.com/drop</a>.
+  <p class="sub">Preencha, baixe o arquivo e publique no
+    <a href="https://dash.cloudflare.com/" target="_blank" style="color:var(--ac)">Cloudflare Pages</a>.
     Meta: 10 minutos por página.</p>
+
+  <fieldset>
+    <legend>Publicação</legend>
+    <label>Modo</label>
+    <select id="modo">
+      <option value="demo">Demonstração (não aparece no Google)</option>
+      <option value="cliente">Cliente fechado (liberar no Google)</option>
+    </select>
+    <p class="hint">Demo é proposta, não o site oficial do negócio. Só troque para "Cliente" depois que ele fechar.</p>
+  </fieldset>
 
   <fieldset>
     <legend>O negócio</legend>
@@ -171,6 +181,8 @@
   <div class="actions">
     <button class="btn ok" id="baixar">Baixar página (.html)</button>
     <button class="btn sec" id="copiar">Copiar código</button>
+    <button class="btn sec" id="abrir">Abrir página salva (.html)</button>
+    <input type="file" id="arquivo" accept=".html,text/html" hidden>
     <button class="btn sec" id="exemplo">Carregar exemplo</button>
     <button class="btn sec" id="limpar">Limpar tudo</button>
   </div>
@@ -213,7 +225,7 @@ const RAMOS = {
 
 /* ============ estado ============ */
 let S = {
-  nome:'',categoria:'estetica',slogan:'',sobre:'',whatsapp:'',instagram:'',
+  modo:'demo',nome:'',categoria:'estetica',slogan:'',sobre:'',whatsapp:'',instagram:'',
   endereco:'',horario:'',cor:'#c026d3',tema:'escuro',heroImg:'',nota:'',numAval:'',
   servicos:[], fotos:[''], depoimentos:[]
 };
@@ -235,7 +247,7 @@ Object.keys(RAMOS).forEach(k=>{
   const o=document.createElement('option'); o.value=k; o.textContent=RAMOS[k].n; sel.appendChild(o);
 });
 
-['nome','categoria','slogan','sobre','whatsapp','instagram','endereco',
+['modo','nome','categoria','slogan','sobre','whatsapp','instagram','endereco',
  'horario','cor','tema','heroImg','nota','numAval'].forEach(k=>{
   $(k).addEventListener('input', e=>{
     S[k]=e.target.value;
@@ -321,6 +333,7 @@ function build(){
   h += '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n';
   h += '<meta charset="UTF-8">\n';
   h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n';
+  if(S.modo !== 'cliente') h += '<meta name="robots" content="noindex, nofollow">\n';
   h += '<title>'+esc(nome)+(S.endereco?' — Taguatinga, DF':'')+'</title>\n';
   h += '<meta name="description" content="'+esc(S.slogan||sobre.slice(0,150))+'">\n';
   h += '<meta name="theme-color" content="'+S.cor+'">\n';
@@ -526,6 +539,8 @@ function build(){
   if(S.nota) schema.aggregateRating = {"@type":"AggregateRating",
     "ratingValue":S.nota, "reviewCount":S.numAval||'1'};
   h += '<script type="application/ld+json">'+JSON.stringify(schema)+'<\/script>\n';
+  /* ---- dados do gerador: permitem reabrir e editar esta página depois ---- */
+  h += '<script type="application/json" id="gerador-dados">'+JSON.stringify(S).replace(/</g,'\\u003c')+'<\/script>\n';
   h += '</body>\n</html>';
   return h;
 }
@@ -538,7 +553,7 @@ function render(){
     $('frame').srcdoc = build();
     const n = S.nome ? S.nome.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
       .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') : 'preview';
-    $('urlbar').textContent = n + '.netlify.app';
+    $('urlbar').textContent = n + '.pages.dev';
   }, 180);
 }
 
@@ -553,7 +568,7 @@ $('baixar').onclick=()=>{
   const a = document.createElement('a');
   a.href = URL.createObjectURL(b); a.download = 'index.html'; a.click();
   URL.revokeObjectURL(a.href);
-  const btn=$('baixar'); btn.textContent='Baixado! Agora arraste em netlify.com/drop';
+  const btn=$('baixar'); btn.textContent='Baixado! Agora publique no Cloudflare Pages';
   setTimeout(()=>btn.textContent='Baixar página (.html)',3200);
 };
 
@@ -564,9 +579,24 @@ $('copiar').onclick=async()=>{
   }catch(e){ alert('Não consegui copiar. Use o botão Baixar.'); }
 };
 
+$('abrir').onclick=()=>$('arquivo').click();
+$('arquivo').onchange=async e=>{
+  const f = e.target.files[0]; e.target.value=''; if(!f) return;
+  const doc = new DOMParser().parseFromString(await f.text(),'text/html');
+  const el = doc.getElementById('gerador-dados');
+  if(!el){ alert('Esta página não foi feita por esta versão do gerador. Preencha de novo e baixe: daí em diante ela abre aqui.'); return; }
+  try{
+    const d = JSON.parse(el.textContent);
+    S = Object.assign({modo:'demo',nome:'',categoria:'estetica',slogan:'',sobre:'',whatsapp:'',
+      instagram:'',endereco:'',horario:'',cor:'#c026d3',tema:'escuro',heroImg:'',nota:'',numAval:'',
+      servicos:[],fotos:[''],depoimentos:[]}, d);
+    sync();
+  }catch(err){ alert('Não consegui ler os dados desta página.'); }
+};
+
 $('exemplo').onclick=()=>{
   S = {
-    nome:'Studio Bella Estética', categoria:'estetica',
+    modo:'demo', nome:'Studio Bella Estética', categoria:'estetica',
     slogan:'Sua beleza cuidada por quem entende do assunto',
     sobre:'Há 8 anos em Taguatinga cuidando da autoestima das nossas clientes. Equipe formada, produtos de primeira linha e um atendimento que trata cada pessoa pelo nome.',
     whatsapp:'61 99999-0000', instagram:'@studiobella',
@@ -586,14 +616,14 @@ $('exemplo').onclick=()=>{
 
 $('limpar').onclick=()=>{
   if(!confirm('Limpar todos os campos?')) return;
-  S = {nome:'',categoria:'estetica',slogan:'',sobre:'',whatsapp:'',instagram:'',
+  S = {modo:'demo',nome:'',categoria:'estetica',slogan:'',sobre:'',whatsapp:'',instagram:'',
     endereco:'',horario:'',cor:'#c026d3',tema:'escuro',heroImg:'',nota:'',numAval:'',
     servicos:[],fotos:[''],depoimentos:[]};
   sync();
 };
 
 function sync(){
-  ['nome','categoria','slogan','sobre','whatsapp','instagram','endereco',
+  ['modo','nome','categoria','slogan','sobre','whatsapp','instagram','endereco',
    'horario','cor','tema','heroImg','nota','numAval'].forEach(k=>$(k).value=S[k]||'');
   listas(); render();
 }

@@ -153,10 +153,11 @@ Pergunta legítima. Responda com honestidade, não com promessa.
 > *"Boa pergunta, e sinceramente: você ainda não tem como saber. A gente
 > acabou de se conhecer.*
 >
-> *Por isso não tem contrato e não tem fidelidade. Se eu sumir, você para de
-> pagar no mês seguinte e perdeu um mês — não perdeu um ano.*
+> *Por isso você não paga nada adiantado: a primeira mensalidade é só no dia
+> em que a página estiver no ar, no seu endereço. E esse endereço fica
+> registrado no seu nome, não no meu.*
 >
-> *E eu moro aqui, trabalho aqui em Taguatinga. Sumir com R$ 800 de alguém
+> *E eu moro aqui, trabalho aqui em Taguatinga. Sumir com dinheiro de alguém
 > daqui é o pior negócio que eu poderia fazer."*
 
 Se já tiver cliente, é aqui que você cita o nome e oferece o telefone dele.
@@ -166,6 +167,13 @@ número 1 vale muito mais do que R$ 800.**
 ---
 
 ## Preço — as três ofertas
+
+> **Atualizado:** a oferta padrão agora é a **assinatura de R$ 250/mês com
+> R$ 0 de montagem e 6 meses de permanência**, apresentada ao lado do Plano
+> Livre (a Oferta A abaixo). Veja [`00-plano-mestre.md`](00-plano-mestre.md),
+> seção 3. A Oferta B vira: **Plano Assinatura com o 1º mês grátis**, em troca
+> do vídeo, das duas indicações e da autorização de portfólio. A Oferta C
+> continua igual.
 
 Seu problema com R$ 800 + R$ 250/mês não é o valor. É que **são duas decisões
 ao mesmo tempo**, vindas de alguém que ele conheceu há cinco minutos.
@@ -210,8 +218,13 @@ já provou que funciona.
 - O ideal: **R$ 800 agora e eu publico hoje**
 - Se travar: **R$ 400 agora para eu começar, R$ 400 quando estiver no ar**.
   Divide o risco e compromete os dois lados
-- **A mensalidade começa 30 dias depois da publicação**, nunca no ato.
-  Cobrar R$ 1.050 no primeiro dia mata negócio fechado
+- **Plano Livre:** a mensalidade começa 30 dias depois da publicação, nunca
+  no ato. Cobrar R$ 1.050 no primeiro dia mata negócio fechado
+- **Plano Assinatura:** não tem montagem, então a 1ª mensalidade é no dia da
+  publicação. Na entrega, deixe o **Pix agendado recorrente** programado no app
+  dele ([`00-plano-mestre.md`](00-plano-mestre.md), seção 12)
+- **Só conte o pagamento quando ele cair no app do seu banco.** Print de
+  comprovante não vale: o golpe do comprovante falso é comum
 
 ---
 
@@ -235,11 +248,16 @@ Todo dia 5, uma mensagem no WhatsApp de cada cliente:
 Bom dia [nome]! Relatório do mês da sua página:
 
 📈 187 pessoas visitaram
-💬 31 clicaram no botão do WhatsApp
+💬 31 conversas chegaram pelo botão da página
 🔍 A maioria chegou pesquisando "[termo]" no Google
 
 Qualquer mudança que quiser fazer, é só me falar.
 ```
+
+De onde vem cada número, de graça e sem inventar nada:
+[`00-plano-mestre.md`](00-plano-mestre.md), seção 13. As conversas são contadas
+buscando **"Vi a página"** no WhatsApp do cliente, porque é o texto que o botão
+já manda pronto.
 
 Custa cinco minutos e é a diferença entre um cliente que dura 3 meses e um
 que dura 3 anos. **Sem esse relatório, o cliente esquece que você existe e

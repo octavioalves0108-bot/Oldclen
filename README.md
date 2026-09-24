@@ -1,7 +1,15 @@
 # Sistema de Vendas — Landing Pages / Taguatinga-DF
 
 Operação para vender landing pages a micro e pequenos negócios do DF.
-Oferta base: **R$ 800 de montagem + R$ 250/mês de manutenção.**
+Oferta base: **assinatura de R$ 250/mês**, com R$ 0 de montagem e 6 meses de
+permanência, ou R$ 800 de montagem sem permanência.
+
+> **Comece por [`docs/00-plano-mestre.md`](docs/00-plano-mestre.md).** Ele
+> organiza tudo em etapas, do zero à carteira recorrente, e traz cinco
+> correções de segurança que valem mais que os documentos antigos: hospedagem
+> (o Netlify grátis pausa os sites), formalização (criação de sites não pode
+> ser MEI), limite de mensagens do WhatsApp, demo fora do Google e golpe do
+> comprovante.
 
 ---
 
@@ -20,7 +28,8 @@ na quarta-feira.
 | Pedem proposta | 8-12 |
 | **Fecham** | **4-8** |
 
-Isso é **R$ 3.200 a R$ 6.400 à vista + R$ 1.000 a R$ 2.000/mês recorrente**,
+Isso é **R$ 1.000 a R$ 2.000/mês recorrente** (mais R$ 800 de cada cliente
+que escolher o Plano Livre),
 partindo do zero absoluto, em sete dias. Quem promete 30 na primeira semana
 está vendendo curso, não resultado.
 
@@ -55,6 +64,7 @@ portfólio.** Em dois dias você sai do zero e passa a ter 15 páginas para most
 
 | Ordem | Arquivo | O que resolve |
 |---|---|---|
+| 0 | [`docs/00-plano-mestre.md`](docs/00-plano-mestre.md) | **O plano inteiro em etapas**, a oferta de R$ 250/mês, persuasão, cobrança e retenção |
 | 1 | [`docs/01-plano-da-semana.md`](docs/01-plano-da-semana.md) | O que fazer em cada um dos 7 dias |
 | 2 | [`docs/02-prospeccao-taguatinga.md`](docs/02-prospeccao-taguatinga.md) | Quais ruas andar, quais negócios valem a pena |
 | 3 | [`docs/03-abordagem.md`](docs/03-abordagem.md) | O que falar, presencial e por WhatsApp |
@@ -64,6 +74,8 @@ portfólio.** Em dois dias você sai do zero e passa a ter 15 páginas para most
 | 7 | [`docs/07-varredura.md`](docs/07-varredura.md) | As 40 buscas prontas e como achar 40 alvos em 45 min |
 | — | [`gerador/index.html`](gerador/index.html) | A ferramenta que monta a página em 10 min |
 | — | [`crm/pipeline.csv`](crm/pipeline.csv) | Onde você controla quem falou o quê |
+| — | [`crm/clientes-ativos.csv`](crm/clientes-ativos.csv) | Carteira: vencimentos, Pix agendado, relatórios |
+| — | [`docs/modelos/contrato-assinatura.md`](docs/modelos/contrato-assinatura.md) | O termo de uma página que o cliente assina |
 
 ### Se você for trabalhar só por WhatsApp
 
@@ -86,6 +98,15 @@ completa e você baixa um arquivo `.html` pronto para publicar.
 Tempo por página: **10 a 15 minutos.** É isso que torna 15 demos viáveis
 em dois dias de trabalho.
 
-Para publicar de graça e em 30 segundos: arraste o arquivo em
-[app.netlify.com/drop](https://app.netlify.com/drop). Você recebe um link
-no ar imediatamente, e é esse link que você mostra na rua.
+Para publicar de graça: **Cloudflare Pages**, com upload direto da pasta.
+Você recebe um link `nome-do-negocio.pages.dev` no ar na hora, e é esse link
+que você mostra na rua. O plano grátis permite uso comercial e tem tráfego
+ilimitado.
+
+**Não use o Netlify grátis para isso.** Em contas criadas desde 4/9/2025,
+cada publicação consome créditos e, ao estourar (umas 20 publicações por
+mês), todos os sites da conta pausam, inclusive os de clientes pagantes.
+
+O gerador também tem o **Modo Demonstração** (a demo não entra no Google) e
+reabre qualquer página que ele gerou, para você fazer as alterações mensais
+sem digitar tudo de novo.
