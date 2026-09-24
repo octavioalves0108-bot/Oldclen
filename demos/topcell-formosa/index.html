@@ -377,7 +377,7 @@ body.is-loading .nav{opacity:0;transform:translateY(-24px)}
 .addr span{display:block;margin-top:4px;color:var(--tx2);font-size:14px}
 .visit-ctas{display:flex;flex-wrap:wrap;gap:14px}
 .mapwrap{perspective:1200px}
-.map{--rx:0deg;--ry:0deg;position:relative;aspect-ratio:1.12;border-radius:30px;overflow:hidden;border:1px solid var(--line);background:#09090c;
+.map{--rx:0deg;--ry:0deg;display:block;position:relative;cursor:pointer;aspect-ratio:1.12;border-radius:30px;overflow:hidden;border:1px solid var(--line);background:#09090c;
   transform:rotateX(var(--rx)) rotateY(var(--ry));transition:transform .6s var(--ease);box-shadow:0 60px 100px -50px rgba(0,0,0,.9)}
 .map svg{position:absolute;inset:0;width:100%;height:100%}
 .road{fill:none;stroke:#23232b;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.2s var(--ease)}
@@ -663,19 +663,19 @@ body.has-cursor .cur,body.has-cursor .cur-dot{opacity:1}
       <div class="sec-head">
         <p class="eyebrow rv"><span class="n">03</span><span class="ln"></span><span data-scramble>Visite</span></p>
         <h2 class="h2" data-split>Vem ver <span class="gold">de perto.</span></h2>
-        <p class="sec-lead rv" style="--d:.3s">Passa na loja pra conhecer a seleção, ou chama no Direct antes pra saber o que tem disponível.</p>
+        <p class="sec-lead rv" style="--d:.3s">Passa na loja pra conhecer a seleção, ou chama no <span data-canal>Direct</span> antes pra saber o que tem disponível.</p>
       </div>
       <div class="addr rv" style="--d:.4s">
         <span class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="url(#gGold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
         <div><b data-addr1>Rua Visconde de Porto Seguro, 623</b><span data-addr2>Centro · Formosa-GO</span></div>
       </div>
       <div class="visit-ctas rv" style="--d:.5s">
-        <a class="btn btn-gold magnetic" id="mapsBtn" href="#" target="_blank" rel="noopener">Abrir no mapa <svg><use href="#arrow"/></svg></a>
+        <a class="btn btn-gold magnetic" data-maps href="#">Abrir no mapa <svg><use href="#arrow"/></svg></a>
         <a class="btn btn-ghost magnetic" id="igBtn" href="#" target="_blank" rel="noopener"><span data-ig>@topcellfsa</span></a>
       </div>
     </div>
     <div class="mapwrap rv" style="--d:.2s" id="mapwrap">
-      <div class="map" data-tilt aria-hidden="true">
+      <a class="map" data-tilt data-maps href="#" aria-label="Abrir o endereço da loja no Google Maps">
         <svg viewBox="0 0 400 357" preserveAspectRatio="xMidYMid slice">
           <defs><pattern id="mgrid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0v24" fill="none" stroke="rgba(255,255,255,.035)"/></pattern></defs>
           <rect width="400" height="357" fill="url(#mgrid)"/>
@@ -693,7 +693,7 @@ body.has-cursor .cur,body.has-cursor .cur-dot{opacity:1}
           <span class="drop"><svg viewBox="0 0 44 58"><path d="M22 57S2 36 2 21a20 20 0 0 1 40 0c0 15-20 36-20 36z" fill="url(#gGold)"/><circle cx="22" cy="21" r="8" fill="#0a0a0d"/></svg></span>
         </div>
         <div class="map-label"><b>Top Cell</b><span data-addr2>Centro · Formosa-GO</span></div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -733,11 +733,11 @@ body.has-cursor .cur,body.has-cursor .cur-dot{opacity:1}
    ========================================================= */
 const CONFIG = {
   instagram: 'topcellfsa',
-  whatsapp: '',                 // ex.: '5561999990000'. Vazio = os botões abrem o Direct do Instagram
+  whatsapp: '',                 // número da loja com DDD, em qualquer formato: '(61) 99999-0000'. Vazio = os botões abrem o Direct do Instagram
   endereco1: 'Rua Visconde de Porto Seguro, 623',
   endereco2: 'Centro · Formosa-GO',
   cidade: 'Formosa · GO',
-  mapa: 'Rua Visconde de Porto Seguro, 623 - Centro, Formosa - GO'
+  mapa: 'Rua Visconde de Porto Seguro, 623 - Centro, Formosa - GO, 73801-010'
 };
 
 /* Itens da seleção. Troque por produtos reais quando a loja passar a lista (sem inventar preço). */
@@ -760,23 +760,31 @@ const lerp = (a, b, t) => a + (b - a) * t;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 /* ---------- dados da loja nos elementos ---------- */
+/* número só com dígitos e código do país (wa.me não aceita espaço, traço nem parênteses) */
+const WA = (() => {
+  let d = String(CONFIG.whatsapp || '').replace(/\D/g, '').replace(/^0+/, '');
+  if (d.length === 10 || d.length === 11) d = '55' + d;
+  return d.length >= 12 ? d : '';
+})();
 const ctaHref = item => {
-  if (CONFIG.whatsapp) {
+  if (WA) {
     const msg = item ? `Olá! Vi a página da Top Cell e quero saber sobre ${item}.` : 'Olá! Vi a página da Top Cell e quero mais informações.';
-    return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
+    return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
   }
   return `https://ig.me/m/${CONFIG.instagram}`;
 };
 $$('[data-cta]').forEach(a => {
   a.href = ctaHref(); a.target = '_blank'; a.rel = 'noopener';
-  const l = $('.lbl', a); if (l && CONFIG.whatsapp) l.textContent = 'Chamar no WhatsApp';
+  const l = $('.lbl', a); if (l && WA) l.textContent = 'Chamar no WhatsApp';
 });
 $$('[data-ig]').forEach(e => e.textContent = '@' + CONFIG.instagram);
 $$('[data-addr1]').forEach(e => e.textContent = CONFIG.endereco1);
 $$('[data-addr2]').forEach(e => e.textContent = CONFIG.endereco2);
 $$('[data-city]').forEach(e => e.textContent = CONFIG.cidade);
 $('#introCity').textContent = CONFIG.cidade;
-$('#mapsBtn').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.mapa);
+const MAPS = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.mapa);
+$$('[data-maps]').forEach(a => { a.href = MAPS; a.target = '_blank'; a.rel = 'noopener'; });
+if (WA) $$('[data-canal]').forEach(e => e.textContent = 'WhatsApp');
 $('#igBtn').href = $('#igFoot').href = 'https://www.instagram.com/' + CONFIG.instagram + '/';
 $('#year').textContent = new Date().getFullYear();
 

@@ -379,7 +379,7 @@ body.is-loading .nav{opacity:0;transform:translateY(-24px)}
 .addr span{display:block;margin-top:4px;color:var(--tx2);font-size:14px}
 .visit-ctas{display:flex;flex-wrap:wrap;gap:14px}
 .radar-wrap{perspective:1200px}
-.radar{--rx:0deg;--ry:0deg;position:relative;aspect-ratio:1.1;border-radius:28px;overflow:hidden;border:1px solid var(--line);background:#0c0c0f;
+.radar{--rx:0deg;--ry:0deg;display:block;position:relative;cursor:pointer;aspect-ratio:1.1;border-radius:28px;overflow:hidden;border:1px solid var(--line);background:#0c0c0f;
   transform:rotateX(var(--rx)) rotateY(var(--ry));transition:transform .6s var(--ease);box-shadow:0 60px 100px -50px rgba(0,0,0,.9)}
 .radar svg.map{position:absolute;inset:0;width:100%;height:100%}
 .road{fill:none;stroke:#222228;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.2s var(--ease)}
@@ -620,7 +620,7 @@ body.has-cursor .cur,body.has-cursor .cur-dot{opacity:1}
     <div class="sec-head">
       <p class="eyebrow rv"><span class="n">02</span><span data-scramble>Assistência técnica</span></p>
       <h2 class="h2" data-wipe><span class="ln">Quebrou? Parou?</span><span class="ln red">A gente olha.</span></h2>
-      <p class="sec-lead rv" style="--d:.4s">Traga o aparelho ou chame no Direct antes. Você entende o que aconteceu com o seu celular antes de decidir o conserto.</p>
+      <p class="sec-lead rv" style="--d:.4s">Traga o aparelho ou chame no <span data-canal>Direct</span> antes. Você entende o que aconteceu com o seu celular antes de decidir o conserto.</p>
     </div>
     <div class="svc-grid">
       <article class="svc rv"><div class="svc-in" data-tilt><span class="svc-n">01</span>
@@ -648,7 +648,7 @@ body.has-cursor .cur,body.has-cursor .cur-dot{opacity:1}
       <h3 class="rv">Como funciona</h3>
       <div class="steps-row">
         <div class="steps-line"><i id="stepsFill"></i></div>
-        <div class="step"><span class="sd">1</span><b>Você traz ou chama</b><span>Na loja ou pelo Direct</span></div>
+        <div class="step"><span class="sd">1</span><b>Você traz ou chama</b><span>Na loja ou pelo <span data-canal>Direct</span></span></div>
         <div class="step"><span class="sd">2</span><b>Avaliação</b><span>A gente olha o aparelho</span></div>
         <div class="step"><span class="sd">3</span><b>Você decide</b><span>Nada é feito sem o seu ok</span></div>
         <div class="step"><span class="sd">4</span><b>Conserto e teste</b><span>O aparelho é testado</span></div>
@@ -678,19 +678,19 @@ body.has-cursor .cur,body.has-cursor .cur-dot{opacity:1}
       <div class="sec-head">
         <p class="eyebrow rv"><span class="n">03</span><span data-scramble>Visite</span></p>
         <h2 class="h2" data-wipe><span class="ln">Passa aqui</span><span class="ln red">na loja.</span></h2>
-        <p class="sec-lead rv" style="--d:.4s">Vem conhecer os acessórios ou trazer o aparelho pra avaliação. Se preferir, chama no Direct antes.</p>
+        <p class="sec-lead rv" style="--d:.4s">Vem conhecer os acessórios ou trazer o aparelho pra avaliação. Se preferir, chama no <span data-canal>Direct</span> antes.</p>
       </div>
       <div class="addr rv" style="--d:.5s">
         <span class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="url(#gRed)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
         <div><b data-addr1>Praça do Mercado</b><span data-addr2>Centro · Formosa-GO</span></div>
       </div>
       <div class="visit-ctas rv" style="--d:.6s">
-        <a class="btn btn-red magnetic" id="mapsBtn" href="#" target="_blank" rel="noopener">Abrir no mapa <svg><use href="#arrow"/></svg></a>
+        <a class="btn btn-red magnetic" data-maps href="#">Abrir no mapa <svg><use href="#arrow"/></svg></a>
         <a class="btn btn-ghost magnetic" id="igBtn" href="#" target="_blank" rel="noopener"><span data-ig>@formosacelulares</span></a>
       </div>
     </div>
     <div class="radar-wrap rv" id="radarWrap" style="--d:.2s">
-      <div class="radar" data-tilt aria-hidden="true">
+      <a class="radar" data-tilt data-maps href="#" aria-label="Abrir o endereço da loja no Google Maps">
         <svg class="map" viewBox="0 0 400 364" preserveAspectRatio="xMidYMid slice">
           <defs><pattern id="mg" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0v22" fill="none" stroke="rgba(255,255,255,.035)"/></pattern></defs>
           <rect width="400" height="364" fill="url(#mg)"/>
@@ -706,7 +706,7 @@ body.has-cursor .cur,body.has-cursor .cur-dot{opacity:1}
         <div class="rpin">FC</div>
         <div class="rlabel"><b>Formosa celulares</b><span data-addr1>Praça do Mercado</span></div>
         <span class="rhud t1">Centro</span><span class="rhud t2" data-city>Formosa · GO</span>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -746,11 +746,11 @@ body.has-cursor .cur,body.has-cursor .cur-dot{opacity:1}
    ========================================================= */
 const CONFIG = {
   instagram: 'formosacelulares',
-  whatsapp: '',                 // ex.: '5561999990000'. Vazio = os botões abrem o Direct do Instagram
+  whatsapp: '',                 // número da loja com DDD, em qualquer formato: '(61) 99999-0000'. Vazio = os botões abrem o Direct do Instagram
   endereco1: 'Praça do Mercado',
   endereco2: 'Centro · Formosa-GO',
   cidade: 'Formosa · GO',
-  mapa: 'Praça do Mercado, Centro, Formosa - GO'
+  mapa: 'Praça do Mercado, Centro, Formosa - GO, 73801-620'
 };
 
 /* Itens da vitrine. Troque por produtos reais quando a loja passar a lista (sem inventar preço). */
@@ -775,22 +775,30 @@ const mod = (n, m) => ((n % m) + m) % m;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 /* ---------- dados da loja ---------- */
+/* número só com dígitos e código do país (wa.me não aceita espaço, traço nem parênteses) */
+const WA = (() => {
+  let d = String(CONFIG.whatsapp || '').replace(/\D/g, '').replace(/^0+/, '');
+  if (d.length === 10 || d.length === 11) d = '55' + d;
+  return d.length >= 12 ? d : '';
+})();
 const ctaHref = item => {
-  if (CONFIG.whatsapp) {
+  if (WA) {
     const msg = item ? `Olá! Vi a página da Formosa Celulares e quero saber sobre ${item}.` : 'Olá! Vi a página da Formosa Celulares e quero mais informações.';
-    return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
+    return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
   }
   return `https://ig.me/m/${CONFIG.instagram}`;
 };
 $$('[data-cta]').forEach(a => {
   a.href = ctaHref(); a.target = '_blank'; a.rel = 'noopener';
-  const l = $('.lbl', a); if (l && CONFIG.whatsapp) l.textContent = 'Chamar no WhatsApp';
+  const l = $('.lbl', a); if (l && WA) l.textContent = 'Chamar no WhatsApp';
 });
 $$('[data-ig]').forEach(e => e.textContent = '@' + CONFIG.instagram);
 $$('[data-addr1]').forEach(e => e.textContent = CONFIG.endereco1);
 $$('[data-addr2]').forEach(e => e.textContent = CONFIG.endereco2);
 $$('[data-city]').forEach(e => e.textContent = CONFIG.cidade);
-$('#mapsBtn').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.mapa);
+const MAPS = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.mapa);
+$$('[data-maps]').forEach(a => { a.href = MAPS; a.target = '_blank'; a.rel = 'noopener'; });
+if (WA) $$('[data-canal]').forEach(e => e.textContent = 'WhatsApp');
 $('#igBtn').href = $('#igFoot').href = 'https://www.instagram.com/' + CONFIG.instagram + '/';
 $('#year').textContent = new Date().getFullYear();
 
