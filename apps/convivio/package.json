@@ -1,5 +1,5 @@
 {
-  "name": "convivio-login",
+  "name": "skytiktok-login",
   "version": "1.0.0",
   "private": true,
   "description": "Exemplo de autenticação segura (design original inspirado em redes sociais). Nenhuma credencial é enviada, registrada ou encaminhada a terceiros.",

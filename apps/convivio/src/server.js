@@ -1,4 +1,4 @@
-// Servidor de autenticação do Convívio.
+// Servidor de autenticação do SkyTikTok.
 //
 // Princípios de segurança aplicados aqui:
 //  - Senhas nunca são guardadas em texto: só o hash bcrypt fica no banco.
@@ -62,7 +62,7 @@ if (!process.env.SESSION_SECRET && isProd) {
 
 app.use(
   session({
-    name: 'convivio.sid',
+    name: 'skytiktok.sid',
     store: new SqliteStore(),
     secret: process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex'),
     resave: false,
@@ -173,7 +173,7 @@ app.post('/api/login', loginLimiter, async (req, res) => {
 
 app.post('/api/logout', (req, res) => {
   req.session.destroy(() => {
-    res.clearCookie('convivio.sid');
+    res.clearCookie('skytiktok.sid');
     res.json({ ok: true });
   });
 });
@@ -187,7 +187,7 @@ app.use(
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Convívio rodando em http://localhost:${PORT}`);
+  console.log(`SkyTikTok rodando em http://localhost:${PORT}`);
   if (!isProd) {
     console.log('Modo desenvolvimento. Rode "npm run seed" para criar o usuário de teste.');
   }

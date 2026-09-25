@@ -1,4 +1,4 @@
-# Convívio — autenticação segura (exemplo completo)
+# SkyTikTok — autenticação segura (exemplo completo)
 
 Página de login com **design original**, inspirada em interfaces modernas de
 rede social, mas **sem copiar nenhuma plataforma específica**. Traz front-end,
@@ -35,8 +35,8 @@ npm start                     # sobe em http://localhost:3000
 
 Credenciais de teste criadas pelo seed:
 
-- **e-mail:** `demo@convivio.app`
-- **senha:** `ConvivioDemo123`
+- **e-mail:** `demo@skytiktok.app`
+- **senha:** `SkyTikTokDemo123`
 
 Crie outros usuários assim (a senha vira hash na hora, não fica em texto):
 

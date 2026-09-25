@@ -11,7 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const dataDir = join(__dirname, '..', 'data');
 mkdirSync(dataDir, { recursive: true });
 
-const db = new Database(join(dataDir, 'convivio.sqlite'));
+const db = new Database(join(dataDir, 'skytiktok.sqlite'));
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 

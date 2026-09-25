@@ -17,9 +17,9 @@ const COST = 12; // fator de custo do bcrypt (bom equilíbrio em 2026)
 
 const [, , argEmail, argName, argPassword] = process.argv;
 
-const email = normalizeEmail(argEmail || 'demo@convivio.app');
+const email = normalizeEmail(argEmail || 'demo@skytiktok.app');
 const displayName = argName || 'Usuário Demo';
-const password = argPassword || 'ConvivioDemo123';
+const password = argPassword || 'SkyTikTokDemo123';
 
 async function main() {
   const passwordHash = await bcrypt.hash(password, COST);
