@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Convívio — entre na sua conta.">
+  <title>Convívio · Entrar</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <!-- Painel de apresentação (marca fictícia e original) -->
+    <section class="pitch" aria-hidden="true">
+      <div class="pitch-inner">
+        <div class="mark">
+          <span class="mark-dot"></span>
+          <span class="mark-name">Convívio</span>
+        </div>
+        <h1 class="pitch-title">A sua praça digital.</h1>
+        <p class="pitch-text">
+          Reencontre pessoas, compartilhe ideias e acompanhe o que importa —
+          num só lugar, do seu jeito.
+        </p>
+        <ul class="pitch-list">
+          <li>Feed calmo, sem ruído.</li>
+          <li>Grupos por interesse.</li>
+          <li>Você no controle dos seus dados.</li>
+        </ul>
+      </div>
+      <div class="pitch-glow" aria-hidden="true"></div>
+    </section>
+
+    <!-- Cartão de login -->
+    <section class="card" aria-labelledby="card-title">
+      <div class="card-brand">
+        <span class="mark-dot"></span>
+        <span class="mark-name">Convívio</span>
+      </div>
+
+      <h2 id="card-title" class="card-title">Entrar</h2>
+      <p class="card-sub">Bom te ver de novo.</p>
+
+      <!-- Banner de mensagem (erro/sucesso), preenchido via JS -->
+      <div id="banner" class="banner" role="status" aria-live="polite" hidden></div>
+
+      <form id="login-form" class="form" novalidate>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            autocomplete="username"
+            inputmode="email"
+            placeholder="voce@exemplo.com"
+            required
+            aria-describedby="email-error"
+          >
+          <p class="field-error" id="email-error" aria-live="polite"></p>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <label for="password">Senha</label>
+            <a class="link-mini" href="#" tabindex="-1">Esqueci a senha</a>
+          </div>
+          <div class="password-wrap">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="current-password"
+              placeholder="Sua senha"
+              minlength="8"
+              required
+              aria-describedby="password-error"
+            >
+            <button type="button" id="toggle-password" class="toggle" aria-pressed="false" aria-label="Mostrar senha">
+              <span aria-hidden="true">Mostrar</span>
+            </button>
+          </div>
+          <p class="field-error" id="password-error" aria-live="polite"></p>
+        </div>
+
+        <label class="remember">
+          <input type="checkbox" id="remember" name="remember">
+          <span>Manter conectado neste dispositivo</span>
+        </label>
+
+        <button type="submit" id="submit" class="btn-primary">
+          <span class="btn-label">Entrar</span>
+          <span class="spinner" aria-hidden="true"></span>
+        </button>
+      </form>
+
+      <p class="switch">
+        Ainda não tem conta? <a href="#">Criar conta</a>
+      </p>
+
+      <!-- Visão pós-login (mostrada quando a sessão está ativa) -->
+      <div id="logged-view" class="logged" hidden>
+        <p class="logged-hi">Você está conectado como <strong id="logged-name"></strong>.</p>
+        <button type="button" id="logout" class="btn-ghost">Sair</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Demonstração de autenticação segura. Nenhuma credencial é enviada, registrada ou encaminhada a terceiros.</p>
+  </footer>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
