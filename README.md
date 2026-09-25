@@ -68,6 +68,7 @@ portfólio.** Em dois dias você sai do zero e passa a ter 15 páginas para most
 | — | [`demos/odontologica-formosa/`](demos/odontologica-formosa/) | Demo cinematográfica: dente em 3D escaneado + tratamentos |
 | — | [`demos/gente-linda/`](demos/gente-linda/) | Demo cinematográfica: coração do logo em 3D + especialidades |
 | — | [`demos/ultrafisio/`](demos/ultrafisio/) | Demo cinematográfica: coluna vertebral em 3D + tratamentos |
+| — | [`demos/centro-clinico-formosa/`](demos/centro-clinico-formosa/) | Demo cinematográfica: símbolo do logo em 3D + atendimentos |
 
 ### Se você for trabalhar só por WhatsApp
 
