@@ -645,6 +645,292 @@ button.st:hover{background:var(--surface-2)}
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="tip" id="tip" hidden></div>
 
+<script type="text/plain" id="gs-src">
+/**
+ * ALMOX CENTRAL — servidor na sua conta Google (Google Apps Script)
+ *
+ * Instalação (uma vez só, uns 5 minutos):
+ *  1. Crie uma planilha em https://sheets.new e dê o nome "Almox Central".
+ *  2. No menu da planilha: Extensões > Apps Script.
+ *  3. Apague o que estiver em Código.gs e cole ESTE arquivo inteiro.
+ *  4. Clique no "+" ao lado de Arquivos > HTML, dê o nome Index (sem .html)
+ *     e cole o conteúdo inteiro do arquivo almox-central.html.
+ *  5. Salve (Ctrl+S). Clique em Implantar > Nova implantação > engrenagem > App da Web.
+ *     Executar como: Eu. Quem pode acessar: Qualquer pessoa. Clique em Implantar e autorize.
+ *  6. Copie o URL do app da Web e envie para a equipe. Esse é o endereço do sistema.
+ *
+ * Os dados ficam nesta planilha, uma aba por tipo de registro.
+ * Para publicar uma versão nova do sistema depois:
+ *   Implantar > Gerenciar implantações > lápis > Versão: Nova versão > Implantar.
+ */
+
+// Opcional: preencha com um código (ex.: 'almox2026') para exigir esse código
+// no primeiro acesso de cada aparelho. Deixe vazio para acesso livre pelo link.
+const SENHA_EQUIPE = '';
+
+const COLECOES = ['materiais', 'movs', 'modems', 'config', 'arquivo'];
+const SINCRONIZADAS = ['materiais', 'movs', 'modems', 'config'];
+
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile('Index')
+    .setTitle('Almox Central')
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1, viewport-fit=cover');
+}
+
+function checar_(token) {
+  if (SENHA_EQUIPE && String(token || '') !== String(SENHA_EQUIPE)) throw new Error('SENHA_INVALIDA');
+}
+
+function planilha_() {
+  const ativa = SpreadsheetApp.getActiveSpreadsheet();
+  if (ativa) return ativa;
+  const props = PropertiesService.getScriptProperties();
+  const id = props.getProperty('PLANILHA_ID');
+  if (id) return SpreadsheetApp.openById(id);
+  const nova = SpreadsheetApp.create('Almox Central — dados');
+  props.setProperty('PLANILHA_ID', nova.getId());
+  return nova;
+}
+
+function aba_(ss, nome) {
+  let sh = ss.getSheetByName(nome);
+  if (!sh) {
+    sh = ss.insertSheet(nome);
+    sh.getRange(1, 1, 1, 3).setValues([['id', 'atualizado_em', 'dados']]).setFontWeight('bold');
+    sh.setFrozenRows(1);
+    sh.setColumnWidth(3, 700);
+  }
+  return sh;
+}
+
+function linhas_(sh) {
+  const n = sh.getLastRow();
+  return n < 2 ? [] : sh.getRange(2, 1, n - 1, 3).getValues();
+}
+
+function lerColecao_(ss, nome) {
+  const out = [];
+  linhas_(aba_(ss, nome)).forEach(function (r) {
+    if (r[0] === '' || r[2] === '') return;
+    try {
+      const o = JSON.parse(r[2]);
+      o._id = String(r[0]);
+      out.push(o);
+    } catch (e) { /* linha editada à mão com JSON inválido: ignora */ }
+  });
+  return out;
+}
+
+function mesclar_(alvo, fonte) {
+  Object.keys(fonte).forEach(function (k) {
+    const v = fonte[k];
+    if (v && typeof v === 'object' && !Array.isArray(v) && alvo[k] && typeof alvo[k] === 'object' && !Array.isArray(alvo[k])) mesclar_(alvo[k], v);
+    else alvo[k] = v;
+  });
+}
+
+// Número de versão dos dados. Fica no cache para não gastar a cota diária de Propriedades.
+function versao_() {
+  const cache = CacheService.getScriptCache();
+  const v = cache.get('VER');
+  if (v !== null) return Number(v);
+  const p = Number(PropertiesService.getScriptProperties().getProperty('VER') || 0);
+  cache.put('VER', String(p), 21600);
+  return p;
+}
+
+function subirVersao_() {
+  const props = PropertiesService.getScriptProperties();
+  const v = Number(props.getProperty('VER') || 0) + 1;
+  props.setProperty('VER', String(v));
+  CacheService.getScriptCache().put('VER', String(v), 21600);
+  return v;
+}
+
+// Nome de cada aparelho (quem registrou cada lançamento).
+function nomes_() {
+  const cache = CacheService.getScriptCache();
+  const c = cache.get('NOMES');
+  if (c !== null) return JSON.parse(c);
+  const p = PropertiesService.getScriptProperties().getProperty('NOMES') || '{}';
+  cache.put('NOMES', p, 21600);
+  return JSON.parse(p);
+}
+
+// Quem está com o sistema aberto agora (últimos 45 segundos).
+function presenca_(req) {
+  const cache = CacheService.getScriptCache();
+  let mapa = {};
+  try { mapa = JSON.parse(cache.get('ONLINE') || '{}'); } catch (e) { mapa = {}; }
+  const agora = Date.now();
+  if (req.dev) mapa[String(req.dev).slice(0, 40)] = { n: String(req.nome || '').slice(0, 60), v: String(req.view || '').slice(0, 20), t: agora };
+  Object.keys(mapa).forEach(function (k) { if (agora - mapa[k].t > 45000) delete mapa[k]; });
+  cache.put('ONLINE', JSON.stringify(mapa), 120);
+  return Object.keys(mapa).map(function (k) { return { dev: k, n: mapa[k].n, v: mapa[k].v }; });
+}
+
+// Chamado pelo sistema a cada poucos segundos. Só devolve os dados quando algo mudou.
+function almoxSync(req) {
+  req = req || {};
+  checar_(req.token);
+  const ver = versao_();
+  const out = { ver: ver, online: presenca_(req), nomes: nomes_() };
+  const nome = String(req.nome || '').slice(0, 60);
+  if (req.dev && nome && out.nomes[req.dev] !== nome) {
+    out.nomes[req.dev] = nome;
+    const s = JSON.stringify(out.nomes);
+    if (s.length < 8500) {
+      PropertiesService.getScriptProperties().setProperty('NOMES', s);
+      CacheService.getScriptCache().put('NOMES', s, 21600);
+    }
+  }
+  if (req.ver !== ver) {
+    const ss = planilha_();
+    out.data = {};
+    SINCRONIZADAS.forEach(function (c) { out.data[c] = lerColecao_(ss, c); });
+    out.planilha = ss.getUrl();
+    out.url = ScriptApp.getService().getUrl();
+  }
+  return out;
+}
+
+// Grava um lote de alterações: [{op: 'set'|'update'|'del', path: 'colecao/id', data: {...}}]
+function almoxCommit(ops, token) {
+  checar_(token);
+  if (!Array.isArray(ops) || !ops.length) return { ver: versao_() };
+  ops.forEach(function (op) {
+    const p = String((op && op.path) || '').split('/');
+    if (p.length !== 2 || COLECOES.indexOf(p[0]) < 0 || !p[1]) throw new Error('Caminho inválido: ' + (op && op.path));
+    if (['set', 'update', 'del'].indexOf(op.op) < 0) throw new Error('Operação inválida: ' + op.op);
+  });
+  const lock = LockService.getScriptLock();
+  lock.waitLock(28000);
+  let mudou = false;
+  try {
+    const ss = planilha_();
+    const agora = Date.now();
+    const abas = {};
+    const aba = function (c) {
+      if (!abas[c]) {
+        const sh = aba_(ss, c);
+        const mapa = {};
+        linhas_(sh).forEach(function (r, i) { if (r[0] !== '') mapa[String(r[0])] = { row: i + 2, json: String(r[2] || '') }; });
+        abas[c] = { sh: sh, mapa: mapa, novas: [], apagar: [] };
+      }
+      return abas[c];
+    };
+    ops.forEach(function (op) {
+      const p = String(op.path).split('/');
+      const t = aba(p[0]);
+      const id = p[1];
+      const atual = t.mapa[id];
+      if (op.op === 'del') {
+        if (atual && !atual.apagado) {
+          atual.apagado = true;
+          if (atual.nova != null) t.novas[atual.nova] = null; else t.apagar.push(atual.row);
+          mudou = true;
+        }
+        return;
+      }
+      let obj;
+      if (op.op === 'set') obj = op.data || {};
+      else {
+        if (!atual || atual.apagado) return;
+        obj = JSON.parse(atual.json || '{}');
+        mesclar_(obj, op.data || {});
+      }
+      const json = JSON.stringify(obj);
+      if (json.length > 49000) throw new Error('Registro grande demais para uma célula da planilha');
+      if (atual && !atual.apagado) {
+        atual.json = json;
+        if (atual.nova != null) t.novas[atual.nova][2] = json;
+        else t.sh.getRange(atual.row, 2, 1, 2).setValues([[agora, json]]);
+      } else {
+        t.novas.push(["'" + id, agora, json]);
+        t.mapa[id] = { nova: t.novas.length - 1, json: json };
+      }
+      mudou = true;
+    });
+    Object.keys(abas).forEach(function (c) {
+      const t = abas[c];
+      const novas = t.novas.filter(function (r) { return r; });
+      if (t.apagar.length > 5) {
+        // Muitas exclusões: reescreve a aba de uma vez (bem mais rápido que apagar linha a linha).
+        const del = {};
+        t.apagar.forEach(function (r) { del[r] = true; });
+        const manter = linhas_(t.sh)
+          .filter(function (r, i) { return !del[i + 2] && r[0] !== ''; })
+          .map(function (r) { return ["'" + String(r[0]), r[1], r[2]]; });
+        const todas = manter.concat(novas);
+        const ultima = t.sh.getLastRow();
+        if (ultima > 1) t.sh.getRange(2, 1, ultima - 1, 3).clearContent();
+        if (todas.length) t.sh.getRange(2, 1, todas.length, 3).setValues(todas);
+      } else {
+        if (novas.length) t.sh.getRange(t.sh.getLastRow() + 1, 1, novas.length, 3).setValues(novas);
+        t.apagar.sort(function (a, b) { return b - a; }).forEach(function (row) { t.sh.deleteRow(row); });
+      }
+    });
+  } finally {
+    if (mudou) {
+      SpreadsheetApp.flush();
+      subirVersao_();
+    }
+    lock.releaseLock();
+  }
+  return { ver: versao_() };
+}
+
+// Lê uma coleção inteira sob demanda (usado para o histórico arquivado).
+function almoxGet(nome, token) {
+  checar_(token);
+  if (COLECOES.indexOf(nome) < 0) throw new Error('Coleção inválida');
+  return lerColecao_(planilha_(), nome);
+}
+
+// Evita que duas pessoas arquivem o histórico ao mesmo tempo.
+function almoxLease(chave, dono, token) {
+  checar_(token);
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const cache = CacheService.getScriptCache();
+    const k = 'LEASE_' + String(chave).replace(/[^A-Za-z0-9_]/g, '_');
+    const atual = cache.get(k);
+    if (atual && atual !== String(dono)) return false;
+    cache.put(k, String(dono), 180);
+    return true;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+// Escreve um relatório legível numa aba da planilha ("Relatório Estoque", etc.).
+function almoxRelatorio(nome, linhas, token) {
+  checar_(token);
+  const ss = planilha_();
+  const titulo = 'Relatório ' + String(nome).slice(0, 40);
+  let sh = ss.getSheetByName(titulo);
+  if (!sh) sh = ss.insertSheet(titulo); else sh.clear();
+  if (Array.isArray(linhas) && linhas.length) {
+    const largura = linhas[0].length;
+    const valores = linhas.map(function (r) {
+      const linha = [];
+      for (let i = 0; i < largura; i++) {
+        const v = r[i];
+        if (v === null || v === undefined) linha.push('');
+        else if (typeof v === 'string' && /^[=+\-@0-9]/.test(v)) linha.push("'" + v);
+        else linha.push(v);
+      }
+      return linha;
+    });
+    sh.getRange(1, 1, valores.length, largura).setValues(valores);
+    sh.getRange(1, 1, 1, largura).setFontWeight('bold').setBackground('#FFC21A');
+    sh.setFrozenRows(1);
+    sh.autoResizeColumns(1, largura);
+  }
+  return { url: ss.getUrl() + '#gid=' + sh.getSheetId() };
+}
+</script>
 <script>
 (() => {
 'use strict';
@@ -815,6 +1101,87 @@ function cloudAdapter(db) {
   };
 }
 
+/* Google Apps Script: a página roda dentro da conta Google e grava numa Planilha. */
+const isGas = () => !!(window.google && google.script && google.script.run);
+const senha = () => lsGet('almox-senha') || '';
+const gas = (fn, ...args) => new Promise((res, rej) => {
+  google.script.run.withSuccessHandler(res).withFailureHandler(e => {
+    const msg = String((e && e.message) || e || '');
+    rej({ code: /SENHA_INVALIDA/.test(msg) ? 'unauthorized' : 'unavailable', message: msg });
+  })[fn](...args);
+});
+function deviceId() { let d = lsGet('almox-dev'); if (!d) { d = 'd' + uid(); lsSet('almox-dev', d); } return d; }
+const CHUNK = () => Store.mode === 'sheets' ? 150 : 8;
+
+function sheetsAdapter() {
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const merge = (t, s) => { for (const k of Object.keys(s)) { const v = s[k]; if (v && typeof v === 'object' && !Array.isArray(v) && t[k] && typeof t[k] === 'object' && !Array.isArray(t[k])) merge(t[k], v); else t[k] = clone(v); } };
+  let data = {}, ver = -1, loaded = false, inflight = 0, queue = [], flushT = 0, syncing = false, again = false, timer = 0, fails = 0, commitSeq = 0, nomesK = '', emitT = 0;
+  const subs = new Set();
+  const emit = () => { if (!emitT) emitT = setTimeout(() => { emitT = 0; subs.forEach(f => f()); }, 0); };
+  const list = name => Object.keys(data).filter(k => k.split('/')[0] === name).map(k => ({ id: k.slice(name.length + 1), ...clone(data[k]) }));
+  function applyServer(d) {
+    const nd = {};
+    for (const c of Object.keys(d)) for (const o of d[c] || []) { const { _id, ...b } = o; nd[c + '/' + _id] = b; }
+    data = nd; loaded = true; emit();
+  }
+  function schedule(ms) { clearTimeout(timer); timer = setTimeout(sync, ms != null ? ms : (document.hidden ? 30000 : 5000)); }
+  async function sync() {
+    if (syncing) { again = true; return; }
+    syncing = true; again = false; clearTimeout(timer);
+    const seq = commitSeq; let pin = false;
+    try {
+      const r = await gas('almoxSync', { ver, token: senha(), dev: S.me.id, nome: S.me.name || '', view: S.view });
+      fails = 0;
+      if (r.data) { if (!inflight && !queue.length && seq === commitSeq) { applyServer(r.data); ver = r.ver; } else again = true; }
+      if (r.url) S.appUrl = r.url;
+      if (r.planilha) S.sheetUrl = r.planilha;
+      const nk = JSON.stringify(r.nomes || {});
+      if (nk !== nomesK) { nomesK = nk; const pr = {}; for (const [k, n] of Object.entries(r.nomes || {})) pr[k] = { id: k, name: String(n || ''), avatarUrl: '' }; S.prof = pr; changed(); }
+      S.peers = (r.online || []).map(o => ({ kind: 'viewer', by: o.dev, peer: o.dev, isMe: o.dev === S.me.id, presence: { view: o.v } }));
+      renderOnline();
+      if (S.sync !== 'ok') { S.sync = 'ok'; changed(); }
+    } catch (e) {
+      fails++;
+      if (e && e.code === 'unauthorized') pin = true;
+      else if (fails >= 2 && S.sync !== 'error') { S.sync = 'error'; changed(); }
+    } finally {
+      syncing = false;
+      if (pin) askSenha().then(() => schedule(100));
+      else schedule(again ? 300 : fails ? Math.min(30000, 3000 * fails) : undefined);
+    }
+  }
+  async function flush() {
+    flushT = 0; const batch = queue; queue = []; if (!batch.length) return;
+    inflight++;
+    try { await gas('almoxCommit', batch.map(b => b.op), senha()); batch.forEach(b => b.res()); }
+    catch (e) { ver = -1; batch.forEach(b => b.rej(e)); if (e && e.code === 'unauthorized') askSenha(); }
+    finally { inflight--; commitSeq++; schedule(150); }
+  }
+  function enqueue(op) {
+    return new Promise((res, rej) => {
+      if (!loaded) { rej({ code: 'unavailable', message: 'Ainda carregando os dados da planilha' }); return; }
+      if (op.op === 'update' && !data[op.path]) { rej({ code: 'not_found', message: 'Registro não existe mais' }); return; }
+      if (op.op === 'set') data[op.path] = clone(op.data); else if (op.op === 'update') merge(data[op.path], op.data); else delete data[op.path];
+      emit();
+      queue.push({ op, res, rej });
+      if (!flushT) flushT = setTimeout(flush, 0);
+    });
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) schedule(200); });
+  sync();
+  return {
+    watchColl(name, cb) { const f = () => { if (loaded) cb(list(name), { fromCache: false }, null); }; subs.add(f); f(); return () => subs.delete(f); },
+    watchDoc(path, cb) { const f = () => { if (loaded) cb(data[path] ? clone(data[path]) : null, { fromCache: false }); }; subs.add(f); f(); return () => subs.delete(f); },
+    async getColl(name) { const l = await gas('almoxGet', name, senha()); return l.map(({ _id, ...b }) => ({ id: _id, ...b })); },
+    set: (p, b) => enqueue({ op: 'set', path: p, data: b }),
+    update: (p, b) => enqueue({ op: 'update', path: p, data: b }),
+    del: p => enqueue({ op: 'del', path: p }),
+    lease: (p, holder) => gas('almoxLease', p, holder || S.me.id || 'x', senha()).catch(() => true),
+    kick: () => schedule(50)
+  };
+}
+
 async function write(fn, okMsg) {
   if (S.readOnly) { toast('Seu acesso é somente leitura. Peça ao responsável permissão de edição.', 'warn'); return false; }
   try { await fn(); if (okMsg) toast(okMsg, 'ok'); return true; }
@@ -968,8 +1335,9 @@ function updateChrome() {
   setNb('nb-auditoria', ready() ? pend : 0, false); setNb('tb-auditoria', ready() ? pend : 0, false);
   const [cls, txt] = S.readOnly ? ['ro', 'Somente leitura'] :
     Store.mode === 'local' ? ['local', 'Modo local · só neste navegador'] :
-    S.sync === 'error' ? ['err', 'Sem conexão com o banco'] :
-    Store.mode === 'cloud' && ready() ? ['live', 'Ao vivo · banco compartilhado'] : ['', 'Conectando ao banco…'];
+    S.sync === 'error' ? ['err', Store.mode === 'sheets' ? 'Sem conexão com a planilha' : 'Sem conexão com o banco'] :
+    Store.mode === 'sheets' && ready() ? ['live', 'Ao vivo · Planilha Google'] :
+    Store.mode === 'cloud' && ready() ? ['live', 'Ao vivo · banco compartilhado'] : ['', 'Conectando…'];
   for (const id of ['sync', 'syncM']) { const el = document.getElementById(id); el.className = 'sync ' + cls; el.title = txt; el.querySelector('.sync-t').textContent = id === 'sync' ? txt : ''; }
   fillDatalist('dl-pessoas', D.people); fillDatalist('dl-cats', D.cats); fillDatalist('dl-modelos', D.modelos);
 }
@@ -981,13 +1349,13 @@ function renderOnline() {
   const map = new Map();
   for (const p of S.peers || []) { if (p.kind !== 'viewer') continue; const k = p.by || p.peer; if (!map.has(k) || p.isMe) map.set(k, p); }
   const list = [...map.values()];
-  if (!S.room || !list.length) { el.hidden = true; el.innerHTML = ''; return; }
+  if ((!S.room && Store.mode !== 'sheets') || !list.length) { el.hidden = true; el.innerHTML = ''; return; }
   el.hidden = false;
   el.innerHTML = `<div class="eyebrow">Online agora · ${list.length}</div><div class="av-stack">${list.slice(0, 7).map(p => {
     const nm = p.isMe ? 'Você' : who(p.by);
     const vw = VIEW_LABEL[p.presence && p.presence.view] || '';
     const pr = p.by && S.prof[p.by];
-    return `<span class="av lg" title="${esc(nm)}${vw ? ' · ' + esc(vw) : ''}">${pr && pr.avatarUrl ? `<img src="${esc(pr.avatarUrl)}" alt="">` : esc(initials(nm))}</span>`;
+    return `<span class="av lg" title="${esc(nm)}${vw ? ' · ' + esc(vw) : ''}">${pr && pr.avatarUrl ? `<img src="${esc(pr.avatarUrl)}" alt="">` : esc(initials(p.isMe ? (S.me.name || nm) : nm))}</span>`;
   }).join('')}${list.length > 7 ? `<span class="av lg more">+${list.length - 7}</span>` : ''}</div>`;
 }
 
@@ -1121,6 +1489,8 @@ function posseItem(p) {
 function bannersHTML() {
   const out = [];
   if (S.readOnly) out.push(`<div class="banner warn">${ic('alert')}<div class="grow"><b>Acesso somente leitura.</b> Você vê tudo em tempo real, mas para registrar entradas, saídas e auditorias peça ao responsável permissão de edição.</div></div>`);
+  if (Store.mode === 'local' && !window.claude) out.push(`<div class="banner warn">${ic('alert')}<div class="grow"><b>Modo local:</b> os dados ficam só neste navegador. Para qualquer pessoa da equipe abrir um link e ver os mesmos dados, instale a versão na sua conta Google. Leva uns 5 minutos.</div><button class="btn btn-sm" data-act="go" data-to="sistema" type="button">Ver como</button></div>`);
+  if (Store.mode === 'sheets' && S.sync === 'error') out.push(`<div class="banner warn">${ic('alert')}<div class="grow"><b>Sem conexão com a planilha.</b> Confira a internet. O sistema tenta de novo sozinho.</div></div>`);
   if (Store.mode === 'local' && window.claude) out.push(`<div class="banner warn">${ic('alert')}<div class="grow"><b>Modo local.</b> O banco compartilhado não está disponível nesta visualização, então os dados ficam só neste navegador. Abra pelo link do sistema, conectado à sua conta, para trabalhar junto com a equipe.</div></div>`);
   if (ready() && S.movs.length > 2500) out.push(`<div class="banner warn">${ic('archive')}<div class="grow"><b>O histórico está grande (${fmtN(S.movs.length)} lançamentos).</b> Arquive os lançamentos antigos para manter o sistema rápido. Os saldos não mudam.</div><button class="btn btn-sm" data-act="go" data-to="sistema" type="button">Arquivar</button></div>`);
   if (ready() && !S.materiais.length && !S.modems.length && !S.movs.length) out.push(`<section class="card welcome">
@@ -1620,7 +1990,7 @@ V.sistema = {
       <section class="card"><div class="card-h"><div class="card-t">${ic('share', 16)}Trabalho em equipe</div></div><div class="card-b prose" id="s-share"></div></section>
       <section class="card"><div class="card-h"><div class="card-t">${ic('edit', 16)}Nome do almoxarifado</div></div><div class="card-b">
         <form class="inline-form" id="s-nome"><div class="field"><label for="s-nome-in">Aparece no topo do sistema para todos</label><input class="in" id="s-nome-in" maxlength="60" placeholder="Ex.: Almoxarifado Central" autocomplete="off"></div><button class="btn btn-primary" type="submit" data-w>Salvar</button></form></div></section>
-      <section class="card"><div class="card-h"><div><div class="card-t">${ic('archive', 16)}Capacidade e histórico</div><div class="card-sub">O banco guarda até 5.000 registros entre materiais, modems e lançamentos</div></div></div><div class="card-b" id="s-cap" style="display:flex;flex-direction:column;gap:14px"></div></section>
+      <section class="card"><div class="card-h"><div><div class="card-t">${ic('archive', 16)}Capacidade e histórico</div><div class="card-sub">Limite de 5.000 registros entre materiais, modems e lançamentos</div></div></div><div class="card-b" id="s-cap" style="display:flex;flex-direction:column;gap:14px"></div></section>
       <section class="card"><div class="card-h"><div class="card-t">${ic('dl', 16)}Exportar planilhas</div></div><div class="card-b" style="display:flex;flex-direction:column;gap:10px">
         <p class="muted" style="margin:0;font-size:13px">Arquivos CSV que abrem direto no Excel ou no Google Planilhas.</p>
         <div class="w-actions" style="margin:0"><button class="btn" data-act="export" data-kind="estoque" type="button">${ic('box')}Estoque</button><button class="btn" data-act="export" data-kind="movs" type="button">${ic('swap')}Movimentações</button><button class="btn" data-act="export" data-kind="modems" type="button">${ic('router')}Modems e auditoria</button></div></div></section>
@@ -1640,13 +2010,32 @@ V.sistema = {
   update() {
     const sh = $('#s-share'); if (!sh) return;
     const inp = $('#s-nome-in'); if (inp && document.activeElement !== inp && !inp.dataset.touched) inp.value = S.config.nome || '';
-    sh.innerHTML = Store.mode === 'cloud'
+    const shHtml = Store.mode === 'sheets'
+      ? `<div class="banner"><span class="dot" style="background:var(--ok);margin-top:6px"></span><div class="grow"><b>Conectado à sua Planilha Google.</b> Qualquer pessoa que abrir o link do sistema vê e registra tudo em tempo real.</div></div>
+         ${S.appUrl ? `<div class="field"><span class="lbl">Link do sistema para enviar à equipe</span><div class="inline-form"><input class="in mono" id="s-url" readonly value="${esc(S.appUrl)}" style="font-size:12px;flex:1 1 220px" aria-label="Link do sistema"><button class="btn" data-act="copyurl" type="button">${ic('copy')}Copiar link</button></div></div>` : ''}
+         <form class="inline-form" id="s-me-f"><div class="field"><label for="s-me">Seu nome neste aparelho</label><input class="in" id="s-me" maxlength="60" value="${esc(S.me.name || '')}" autocomplete="off"></div><button class="btn" type="submit">Salvar nome</button></form>
+         ${S.sheetUrl ? `<p><a href="${esc(S.sheetUrl)}" target="_blank" rel="noopener" style="color:var(--accent-text);font-weight:600">Abrir a planilha com os dados</a>. Só o dono da planilha consegue abrir.</p>` : ''}`
+      : Store.mode === 'cloud'
       ? `<div class="banner"><span class="dot" style="background:var(--ok);margin-top:6px"></span><div class="grow"><b>Banco compartilhado ativo.</b> Tudo o que alguém registra aparece na hora para os outros, com o nome de quem registrou.</div></div>
-         <p>Para a equipe usar o mesmo estoque, abra este sistema no Claude, use <b>Compartilhar</b> e convide cada pessoa pelo e-mail.</p>
+         <p>Para a equipe usar o mesmo estoque, abra este sistema no Claude, use <b>Compartilhar</b> e convide cada pessoa pelo e-mail. Cada pessoa precisa de uma conta Claude.</p>
          <p>Quem vai registrar entradas, saídas e auditorias precisa de <b>permissão de edição</b>. Quem só consulta pode ficar como leitor.</p>
          <p>${S.me.id ? `Você está conectado${S.me.name ? ' como <b>' + esc(S.me.name) + '</b>' : ''}${S.readOnly ? ', com acesso somente leitura' : ''}.` : ''}</p>`
       : `<div class="banner warn">${ic('alert')}<div class="grow"><b>Modo local.</b> Os dados estão salvos só neste navegador, sem compartilhamento.</div></div>
-         <p>Para usar com a equipe, abra o sistema pelo link do Claude conectado à sua conta. Lá o banco compartilhado liga sozinho.</p>`;
+         <p><b>Para qualquer pessoa abrir um link e ver os mesmos dados</b>, instale o sistema na sua conta Google. É grátis e os dados ficam numa Planilha Google sua.</p>
+         <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">
+           <li>Crie uma planilha nova em <b class="mono">sheets.new</b> e dê o nome <b>Almox Central</b>.</li>
+           <li>No menu da planilha, abra <b>Extensões → Apps Script</b>.</li>
+           <li>Apague o código que aparece e cole o <b>código do servidor</b> (botão abaixo).</li>
+           <li>Clique no <b>+</b> ao lado de Arquivos → <b>HTML</b>, dê o nome <b>Index</b> e cole todo o conteúdo deste arquivo .html. Para copiar, abra o arquivo no Bloco de Notas e use Ctrl+A e Ctrl+C.</li>
+           <li>Salve e clique em <b>Implantar → Nova implantação</b>. Na engrenagem, escolha <b>App da Web</b>. Executar como: <b>Eu</b>. Quem pode acessar: <b>Qualquer pessoa</b>.</li>
+           <li>Clique em <b>Implantar</b>, autorize o acesso e copie o <b>URL do app da Web</b>. Esse é o link do sistema para toda a equipe.</li>
+         </ol>
+         <div><button class="btn btn-primary" data-act="gscode" type="button">${ic('copy')}Ver código do servidor</button></div>`;
+    if (sh._h !== shHtml) {
+      sh._h = shHtml; sh.innerHTML = shHtml;
+      const f = $('#s-me-f', sh);
+      if (f) f.addEventListener('submit', e => { e.preventDefault(); const v = $('#s-me', f).value.trim().slice(0, 60); if (!v) return; S.me = { ...S.me, name: v }; lsSet('almox-nome', v); toast('Nome salvo neste aparelho', 'ok'); Store.api && Store.api.kick && Store.api.kick(); changed(); });
+    }
     const docs = S.materiais.length + S.movs.length + S.modems.length + 2 + num(S.config.arquivoDocs);
     const pct = Math.min(1, docs / 5000);
     const old = [30, 60, 90, 180].map(d => [d, S.movs.filter(m => m.ts < startOfDay(Date.now()) - d * DAY).length]);
@@ -1908,9 +2297,9 @@ function openBulk() {
     const list = novos.slice();
     let done = 0;
     const ok = await write(async () => {
-      for (let i = 0; i < list.length; i += 8) {
-        await Promise.all(list.slice(i, i + 8).map(hex => Store.api.set('modems/' + hex, { mac: macFmt(hex), modelo, serial: '', status, comQuem: '', cliente: '', obs: '', criadoEm: now, atualizadoEm: now, criadoPor: S.me.id || null, auditCiclo: aud ? ciclo() : null, auditTs: aud ? now : null, auditPor: aud ? (S.me.id || null) : null, auditResultado: aud ? 'ok' : null, auditObs: '' })));
-        done = Math.min(list.length, i + 8); btn.innerHTML = `Gravando ${done} de ${list.length}…`;
+      for (let i = 0; i < list.length; i += CHUNK()) {
+        await Promise.all(list.slice(i, i + CHUNK()).map(hex => Store.api.set('modems/' + hex, { mac: macFmt(hex), modelo, serial: '', status, comQuem: '', cliente: '', obs: '', criadoEm: now, atualizadoEm: now, criadoPor: S.me.id || null, auditCiclo: aud ? ciclo() : null, auditTs: aud ? now : null, auditPor: aud ? (S.me.id || null) : null, auditResultado: aud ? 'ok' : null, auditObs: '' })));
+        done = Math.min(list.length, i + CHUNK()); btn.innerHTML = `Gravando ${done} de ${list.length}…`;
       }
       await Store.api.set('movs/' + movId(now), { tipo: 'cadastro', alvo: 'modem', modem: '', mac: '', qtdModems: list.length, modelo, pessoa: '', obs: '', ts: now, por: S.me.id || null, criadoEm: now, para: status });
     }, `${list.length} ${list.length === 1 ? 'modem cadastrado' : 'modems cadastrados'}${aud ? ' e auditados' : ''}`);
@@ -1978,7 +2367,7 @@ async function loadExamples() {
   });
   const ok = await write(async () => {
     await Promise.all(mats.map(m => Store.api.set('materiais/' + m.id, { nome: m.nome, codigo: m.codigo, categoria: m.categoria, unidade: m.unidade, minimo: m.minimo, local: m.local, retornavel: m.retornavel, saldoBase: 0, criadoEm: now, atualizadoEm: now, criadoPor: null, exemplo: true })));
-    for (let i = 0; i < mv.length; i += 8) await Promise.all(mv.slice(i, i + 8).map(x => Store.api.set('movs/' + x.id, x.body)));
+    for (let i = 0; i < mv.length; i += CHUNK()) await Promise.all(mv.slice(i, i + CHUNK()).map(x => Store.api.set('movs/' + x.id, x.body)));
     await Promise.all(modems.map(x => Store.api.set('modems/' + x.hex, x.body)));
   }, 'Dados de exemplo carregados. Remova em Sistema quando terminar de testar.');
   return ok;
@@ -1988,7 +2377,7 @@ async function removeExamples() {
   if (!docs.length) return;
   const ok = await ask('Remover dados de exemplo?', `${fmtN(docs.length)} registros marcados como exemplo serão apagados. O que você cadastrou de verdade não é afetado.`, 'Remover exemplos', true);
   if (!ok) return;
-  await write(async () => { for (let i = 0; i < docs.length; i += 8) await Promise.all(docs.slice(i, i + 8).map(p => Store.api.del(p))); }, 'Dados de exemplo removidos');
+  await write(async () => { for (let i = 0; i < docs.length; i += CHUNK()) await Promise.all(docs.slice(i, i + CHUNK()).map(p => Store.api.del(p))); }, 'Dados de exemplo removidos');
 }
 
 async function archiveOld(days) {
@@ -2003,8 +2392,9 @@ async function archiveOld(days) {
   const api = Store.api, now = Date.now();
   const done = await write(async () => {
     let chunks = 0;
-    for (let i = 0; i < old.length; i += 400) {
-      const part = old.slice(i, i + 400);
+    const AC = Store.mode === 'sheets' ? 80 : 400;
+    for (let i = 0; i < old.length; i += AC) {
+      const part = old.slice(i, i + AC);
       await api.set('arquivo/' + uid(), { criadoEm: now, de: part[0].ts, ate: part[part.length - 1].ts, n: part.length, itens: part });
       chunks++;
     }
@@ -2017,15 +2407,17 @@ async function archiveOld(days) {
       if (m.retornavel && mv.pessoa && (mv.tipo === 'saida' || mv.tipo === 'devolucao')) { const k = norm(mv.pessoa).replace(/[^a-z0-9]+/g, '_').slice(0, 60) || 'x'; const cur = a.p[k] || { n: String(mv.pessoa).trim(), q: 0 }; cur.q += mv.tipo === 'saida' ? num(mv.qtd) : -num(mv.qtd); a.p[k] = cur; }
       agg.set(m.id, a);
     }
+    const ups = [];
     for (const m of S.materiais) {
       if (num(m.arquivadoAte) >= cutoff) continue;
       const a = agg.get(m.id) || { d: 0, p: {} };
       const pb = {}; const base = m.posseBase || {};
       for (const [k, v] of Object.entries(a.p)) pb[k] = { n: v.n, q: round3(num(base[k] && base[k].q) + v.q) };
-      await api.update('materiais/' + m.id, { saldoBase: round3(num(m.saldoBase) + a.d), arquivadoAte: cutoff, posseBase: pb });
+      ups.push(['materiais/' + m.id, { saldoBase: round3(num(m.saldoBase) + a.d), arquivadoAte: cutoff, posseBase: pb }]);
     }
+    for (let i = 0; i < ups.length; i += CHUNK()) await Promise.all(ups.slice(i, i + CHUNK()).map(([p, b]) => api.update(p, b)));
     await saveConfig({ arquivadoAte: Math.max(num(S.config.arquivadoAte), cutoff), arquivoDocs: num(S.config.arquivoDocs) + chunks, arquivoMovs: num(S.config.arquivoMovs) + old.length });
-    for (let i = 0; i < old.length; i += 10) await Promise.all(old.slice(i, i + 10).map(m => api.del('movs/' + m.id)));
+    for (let i = 0; i < old.length; i += CHUNK()) await Promise.all(old.slice(i, i + CHUNK()).map(m => api.del('movs/' + m.id)));
   }, `${fmtN(old.length)} lançamentos arquivados`);
   if (done) S.arquivo = null;
 }
@@ -2060,6 +2452,21 @@ async function exportCSV(kind) {
   if (!ready()) return;
   const rows = buildRows(kind);
   const name = `${{ estoque: 'estoque', movs: 'movimentacoes', modems: 'modems-auditoria' }[kind]}-${new Date().toISOString().slice(0, 10)}.csv`;
+  const csv = '\uFEFF' + rows.map(r => r.map(v => csvCell(v, ';')).join(';')).join('\r\n');
+  if (!window.claude) {
+    let ok = false;
+    try {
+      const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+      const a = document.createElement('a'); a.href = url; a.download = name; a.rel = 'noopener';
+      document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000); ok = true;
+    } catch {}
+    if (Store.mode === 'sheets') {
+      const aba = { estoque: 'Estoque', movs: 'Movimentações', modems: 'Modems' }[kind];
+      gas('almoxRelatorio', aba, rows, senha()).then(r => toast(`Download iniciado. Uma cópia também foi para a aba “Relatório ${esc(aba)}” da <a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:inherit;font-weight:700;text-decoration:underline">planilha</a>.`, 'ok', { html: true, ms: 8000 })).catch(() => { if (ok) toast('Download iniciado', 'ok'); });
+      return;
+    }
+    if (ok) { toast('Download iniciado', 'ok'); return; }
+  }
   if (S.downloads) {
     try { await S.downloads.save({ filename: name, data: '\uFEFF' + rows.map(r => r.map(v => csvCell(v, ';')).join(';')).join('\r\n') }); toast('Planilha exportada', 'ok'); return; }
     catch (e) { const code = e && e.code; if (code === 'declined') return; if (code === 'rate_limited') { toast('Já existe um download aguardando confirmação.', 'warn'); return; } }
@@ -2093,6 +2500,29 @@ function ask(title, text, okLabel = 'Confirmar', danger = false) {
     m.onclick = e => { const b = e.target.closest('[data-m]'); if (b) modalRes(b.dataset.m === '1'); else if (e.target === m) modalRes(false); };
     setTimeout(() => $('[data-m="1"]', m).focus(), 20);
   });
+}
+function askText({ title, text, label, placeholder = '', value = '', ok = 'Salvar', required = false }) {
+  return new Promise(res => {
+    const m = $('#modal');
+    m.innerHTML = `<form class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mt" novalidate><h3 id="mt"></h3><p id="mp"></p><div class="field" style="margin-top:14px"><label for="mi"></label><input class="in" id="mi" maxlength="60" autocomplete="off"></div><div class="modal-foot">${required ? '' : '<button class="btn" data-m="0" type="button">Agora não</button>'}<button class="btn btn-primary" type="submit"></button></div></form>`;
+    $('#mt', m).textContent = title; $('#mp', m).textContent = text; $('label', m).textContent = label; $('[type="submit"]', m).textContent = ok;
+    const inp = $('#mi', m); inp.placeholder = placeholder; inp.value = value;
+    m.hidden = false;
+    modalRes = v => { if (v === false && required) return; m.hidden = true; m.onclick = null; modalRes = null; res(v === false ? null : v); };
+    m.onclick = e => { if (e.target.closest('[data-m="0"]') || e.target === m) modalRes(false); };
+    $('form', m).addEventListener('submit', e => { e.preventDefault(); const v = inp.value.trim(); if (!v) { inp.focus(); return; } modalRes(v); });
+    setTimeout(() => inp.focus(), 30);
+  });
+}
+async function askName() {
+  const v = await askText({ title: 'Como você se chama?', text: 'Seu nome aparece nas movimentações e auditorias que você registrar neste aparelho.', label: 'Seu nome', placeholder: 'Ex.: Maria Souza', value: S.me.name || '', ok: 'Salvar' });
+  if (v) { S.me = { ...S.me, name: v.slice(0, 60) }; lsSet('almox-nome', S.me.name); Store.api && Store.api.kick && Store.api.kick(); changed(); }
+}
+let pinAsk = null;
+function askSenha() {
+  if (!pinAsk) pinAsk = askText({ title: 'Código da equipe', text: 'Este sistema pede um código de acesso. Digite o código que o responsável passou.', label: 'Código', ok: 'Entrar', required: true })
+    .then(v => { if (v) lsSet('almox-senha', v); pinAsk = null; });
+  return pinAsk;
 }
 function arm(btn, fn, label = 'Confirmar exclusão') {
   if (btn.classList.contains('armed')) { btn.classList.remove('armed'); clearTimeout(btn._t); fn(); return; }
@@ -2176,6 +2606,11 @@ const ACT = {
   mdo: el => modemMove(el.dataset.id, el.dataset.op),
   copymac: el => copyText(macFmt(el.dataset.id), $('#mac-sel')),
   copycsv: () => copyText($('#csv-t').value, $('#csv-t')),
+  copyurl: () => copyText(S.appUrl, $('#s-url')),
+  gscode: () => {
+    openDrawer({ eyebrow: 'Versão Google', title: 'Código do servidor', body: `<p class="muted" style="margin:0">Cole este código no arquivo <b>Código.gs</b> do Apps Script, no lugar do que já estiver lá.</p><textarea class="in mono" id="csv-t" rows="18" readonly style="font-size:11.5px;white-space:pre"></textarea><div><button class="btn btn-primary" data-act="copycsv" type="button">${ic('copy')}Copiar código</button></div>` });
+    $('#csv-t').value = ($('#gs-src') || {}).textContent ? $('#gs-src').textContent.trim() + '\n' : '';
+  },
   delmov: el => arm(el, async () => { await write(() => Store.api.del('movs/' + el.dataset.id), 'Lançamento excluído'); }),
   filt: el => { const sc = el.dataset.scope; S.f[sc][el.dataset.key] = el.dataset.val; if (sc === 'mod' && S.view !== 'modems') { go('modems'); return; } V[S.view].update(); },
   lowfilter: () => { S.f.est.f = 'baixo'; S.f.est.q = ''; S.f.est.cat = ''; go('estoque'); },
@@ -2238,20 +2673,20 @@ function tick() {
 function subscribe() {
   const api = Store.api;
   const onErr = e => { S.sync = 'error'; updateChrome(); console.warn('db', e); };
-  const seen = new Set(); let primed = false;
-  setTimeout(() => { primed = true; }, 4000);
+  let prevIds = null; const bootT = Date.now();
   api.watchColl('materiais', l => { S.materiais = l; S.loaded.materiais = true; changed(); }, onErr);
-  api.watchColl('movs', (l, meta, snap) => {
-    if (primed && snap && typeof snap.docChanges === 'function') {
-      for (const ch of snap.docChanges()) {
-        if (ch.type !== 'added') continue;
-        const d = ch.doc.data(); if (!d || seen.has(ch.doc.id)) continue; seen.add(ch.doc.id);
-        if (d.por && d.por !== S.me.id && Date.now() - (d.criadoEm || d.ts || 0) < 180000) {
-          markNew(ch.doc.id);
+  api.watchColl('movs', l => {
+    if (prevIds && Date.now() - bootT > 3000) {
+      let n = 0;
+      for (const d of l) {
+        if (prevIds.has(d.id)) continue;
+        if (d.por && d.por !== S.me.id && Date.now() - (d.criadoEm || d.ts || 0) < 180000 && n++ < 3) {
+          markNew(d.id);
           toast(`<b>${esc(who(d.por))}</b> · ${movSentence(d)}`, 'info', { html: true, ms: 5200 });
         }
       }
     }
+    prevIds = new Set(l.map(d => d.id));
     S.movs = l; S.loaded.movs = true; if (S.sync === 'error') S.sync = 'ok'; changed();
   }, onErr);
   api.watchColl('modems', l => { S.modems = l; S.loaded.modems = true; changed(); }, onErr);
@@ -2260,10 +2695,18 @@ function subscribe() {
 
 async function boot() {
   renderShell();
+  const gasMode = isGas();
+  if (gasMode) { Store.mode = 'sheets'; S.me = { id: deviceId(), name: lsGet('almox-nome') || '' }; }
   const h = (location.hash || '').slice(1), saved = lsGet('almox-view');
   go(V[h] ? h : (V[saved] ? saved : 'painel'), { keepScroll: true });
   updateChrome();
   setInterval(tick, 1000);
+  if (gasMode) {
+    Store.api = sheetsAdapter();
+    subscribe(); changed();
+    if (!S.me.name) setTimeout(askName, 700);
+    return;
+  }
   const C = window.claude;
   const use = n => (C && typeof C.use === 'function') ? Promise.resolve(C.use(n)).catch(() => null) : Promise.resolve(null);
   use('user').then(async u => {

@@ -8,10 +8,15 @@ Sistema de controle de almoxarifado em um único arquivo (`index.html`).
 - **Auditoria**: conferência por leitor de código de barras, ciclos de auditoria, divergências e histórico dos ciclos.
 - **Exportação** para planilha (CSV) e busca rápida com `Ctrl K`.
 
-## Uso compartilhado
+## Três jeitos de usar
 
-A versão publicada no Claude usa um banco de dados compartilhado: tudo o que alguém registra aparece na hora para a equipe, com o nome de quem registrou. Para dar acesso, use **Compartilhar** na página e convide cada pessoa por e-mail com permissão de edição.
+| Onde | Quem vê os mesmos dados | Como |
+|---|---|---|
+| **Conta Google** (recomendado para a equipe) | Qualquer pessoa com o link, sem login | Siga [`INSTALAR-GOOGLE.md`](INSTALAR-GOOGLE.md). Os dados ficam numa Planilha Google sua. |
+| **Link do Claude** | Pessoas convidadas que tenham conta Claude | Página publicada no Claude, com banco próprio. |
+| **Arquivo aberto no navegador** | Só aquele navegador | Abra `index.html` com dois cliques. |
 
-## Uso local
+O mesmo `index.html` funciona nos três. Ele detecta onde está rodando e escolhe onde salvar.
 
-Abrir `index.html` direto no navegador funciona em **modo local**: os dados ficam salvos só naquele navegador, sem compartilhamento.
+- `index.html`: o sistema
+- `apps-script/Codigo.gs`: o servidor para a versão Google
