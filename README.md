@@ -63,6 +63,7 @@ portfólio.** Em dois dias você sai do zero e passa a ter 15 páginas para most
 | 6 | [`docs/06-whatsapp-operacao.md`](docs/06-whatsapp-operacao.md) | **Operação só por mensagem** — volume, ban, follow-up |
 | 7 | [`docs/07-varredura.md`](docs/07-varredura.md) | As 40 buscas prontas e como achar 40 alvos em 45 min |
 | — | [`gerador/index.html`](gerador/index.html) | A ferramenta que monta a página em 10 min |
+| — | [`demos/pousada-do-sol/`](demos/pousada-do-sol/) | Demo premium com abertura cinematográfica (pousada em Alto Paraíso) |
 | — | [`crm/pipeline.csv`](crm/pipeline.csv) | Onde você controla quem falou o quê |
 
 ### Se você for trabalhar só por WhatsApp
