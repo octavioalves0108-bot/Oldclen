@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="SkyTikTok — entre na sua conta.">
+<title>SkyTikTok · Entrar</title>
+<style>
+/* SkyTikTok — versão de arquivo único (offline). Design original, sem copiar
+   nenhuma plataforma específica. Funciona só abrindo este arquivo: não há
+   servidor nem chamadas de rede, então não ocorre "falha de conexão". */
+
+:root {
+  --bg: #0f1420;
+  --surface: #161d2e;
+  --surface-2: #1e2740;
+  --line: #2a3350;
+  --text: #eef1f8;
+  --text-dim: #9aa4c0;
+  --brand: #5b8cff;
+  --brand-2: #8f6bff;
+  --accent: #34d6c0;
+  --danger: #ff6b81;
+  --success: #46d38a;
+  --radius: 16px;
+  --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7);
+  --focus: 0 0 0 3px rgba(91, 140, 255, 0.45);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eef1f8; --surface: #fff; --surface-2: #f3f5fb; --line: #e0e4f0;
+    --text: #141a2b; --text-dim: #5a6480; --shadow: 0 24px 60px -30px rgba(20, 26, 43, 0.35);
+  }
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0; min-height: 100svh; display: flex; flex-direction: column;
+  background:
+    radial-gradient(1100px 600px at 12% -10%, rgba(91,140,255,.18), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, rgba(143,107,255,.16), transparent 55%),
+    var(--bg);
+  color: var(--text); -webkit-font-smoothing: antialiased;
+}
+.shell {
+  flex: 1; width: min(1040px, 100%); margin: 0 auto; padding: clamp(16px, 4vw, 48px);
+  display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(20px, 4vw, 56px); align-items: center;
+}
+@media (max-width: 860px) { .shell { grid-template-columns: 1fr; } .pitch { display: none; } }
+.pitch { position: relative; padding: clamp(20px, 3vw, 36px); }
+.pitch-inner { position: relative; z-index: 1; }
+.pitch-glow {
+  position: absolute; inset: auto auto -20% -10%; width: 60%; aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(52,214,192,.22), transparent 65%); filter: blur(10px); z-index: 0;
+}
+.mark { display: inline-flex; align-items: center; gap: 10px; margin-bottom: clamp(24px, 5vw, 44px); }
+.mark-dot {
+  width: 22px; height: 22px; border-radius: 8px 8px 8px 2px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2)); box-shadow: 0 0 0 4px rgba(91,140,255,.15);
+}
+.mark-name { font-weight: 700; font-size: 1.2rem; letter-spacing: -0.01em; }
+.pitch-title { font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 16px; }
+.pitch-text { color: var(--text-dim); font-size: 1.05rem; line-height: 1.6; max-width: 34ch; margin: 0 0 26px; }
+.pitch-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.pitch-list li { position: relative; padding-left: 26px; color: var(--text-dim); }
+.pitch-list li::before {
+  content: ""; position: absolute; left: 0; top: 0.45em; width: 12px; height: 12px; border-radius: 4px;
+  background: linear-gradient(135deg, var(--accent), var(--brand));
+}
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(22px, 4vw, 38px); }
+.card-brand { display: none; align-items: center; gap: 10px; margin-bottom: 18px; }
+@media (max-width: 860px) { .card-brand { display: inline-flex; } }
+.card-title { font-size: 1.6rem; margin: 0 0 4px; letter-spacing: -0.01em; }
+.card-sub { color: var(--text-dim); margin: 0 0 22px; }
+.banner { border-radius: 12px; padding: 12px 14px; font-size: 0.92rem; margin-bottom: 18px; border: 1px solid transparent; }
+.banner.is-error { background: rgba(255,107,129,.12); border-color: rgba(255,107,129,.4); color: var(--danger); }
+.banner.is-success { background: rgba(70,211,138,.12); border-color: rgba(70,211,138,.4); color: var(--success); }
+.form { display: grid; gap: 18px; }
+.field { display: grid; gap: 7px; }
+.field-head { display: flex; justify-content: space-between; align-items: baseline; }
+label { font-size: 0.9rem; font-weight: 600; }
+.link-mini { font-size: 0.82rem; color: var(--brand); text-decoration: none; background: none; border: 0; cursor: pointer; padding: 0; font-weight: 600; }
+.link-mini:hover { text-decoration: underline; }
+input[type="email"], input[type="password"], input[type="text"] {
+  width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--line);
+  background: var(--surface-2); color: var(--text); font-size: 1rem; transition: border-color .15s, box-shadow .15s;
+}
+input::placeholder { color: var(--text-dim); opacity: 0.7; }
+input:focus-visible { outline: none; border-color: var(--brand); box-shadow: var(--focus); }
+.field.invalid input { border-color: var(--danger); }
+.field-error { margin: 0; min-height: 1em; font-size: 0.82rem; color: var(--danger); }
+.password-wrap { position: relative; }
+.password-wrap input { padding-right: 84px; }
+.toggle {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: 0; background: transparent;
+  color: var(--brand); font-size: 0.82rem; font-weight: 600; padding: 8px 10px; border-radius: 8px; cursor: pointer;
+}
+.toggle:hover { background: rgba(91,140,255,.12); }
+.toggle:focus-visible { outline: none; box-shadow: var(--focus); }
+.remember { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--text-dim); cursor: pointer; }
+.remember input { width: 18px; height: 18px; accent-color: var(--brand); }
+.btn-primary {
+  position: relative; border: 0; border-radius: 12px; padding: 14px 18px; font-size: 1rem; font-weight: 700;
+  color: #fff; cursor: pointer; background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  box-shadow: 0 12px 30px -12px rgba(91,140,255,.7); transition: transform .08s, filter .15s, opacity .15s;
+}
+.btn-primary:hover { filter: brightness(1.06); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary:focus-visible { outline: none; box-shadow: var(--focus), 0 12px 30px -12px rgba(91,140,255,.7); }
+.btn-primary[disabled] { opacity: 0.7; cursor: progress; }
+.spinner {
+  display: none; width: 16px; height: 16px; margin-left: 10px; border: 2px solid rgba(255,255,255,.5);
+  border-top-color: #fff; border-radius: 50%; vertical-align: -3px; animation: spin .7s linear infinite;
+}
+.btn-primary.loading .spinner { display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn-ghost { border: 1px solid var(--line); background: var(--surface-2); color: var(--text); border-radius: 12px; padding: 12px 16px; font-weight: 600; cursor: pointer; }
+.btn-ghost:hover { border-color: var(--brand); }
+.btn-ghost:focus-visible { outline: none; box-shadow: var(--focus); }
+.switch { margin: 22px 0 0; text-align: center; color: var(--text-dim); font-size: 0.92rem; }
+.switch button { color: var(--brand); text-decoration: none; font-weight: 600; background: none; border: 0; cursor: pointer; font-size: inherit; }
+.switch button:hover { text-decoration: underline; }
+.logged { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
+.logged-hi { margin: 0; color: var(--text-dim); }
+.logged-hi strong { color: var(--text); }
+.foot { padding: 18px; text-align: center; }
+.foot p { margin: 0; color: var(--text-dim); font-size: 0.8rem; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<main class="shell">
+  <section class="pitch" aria-hidden="true">
+    <div class="pitch-inner">
+      <div class="mark"><span class="mark-dot"></span><span class="mark-name">SkyTikTok</span></div>
+      <h1 class="pitch-title">App de vídeos curtos.</h1>
+      <p class="pitch-text">Grave, publique e descubra vídeos curtos — um feed feito pra você, do seu jeito.</p>
+      <ul class="pitch-list">
+        <li>Feed que aprende com você.</li>
+        <li>Ferramentas de edição rápidas.</li>
+        <li>Você no controle dos seus dados.</li>
+      </ul>
+    </div>
+    <div class="pitch-glow" aria-hidden="true"></div>
+  </section>
+
+  <section class="card" aria-labelledby="card-title">
+    <div class="card-brand"><span class="mark-dot"></span><span class="mark-name">SkyTikTok</span></div>
+    <h2 id="card-title" class="card-title">Entrar</h2>
+    <p class="card-sub" id="card-sub">Bom te ver de novo.</p>
+
+    <div id="banner" class="banner" role="status" aria-live="polite" hidden></div>
+
+    <form id="login-form" class="form" novalidate>
+      <div class="field" id="name-field" hidden>
+        <label for="name">Nome</label>
+        <input type="text" id="name" name="name" autocomplete="name" placeholder="Como quer ser chamado(a)">
+        <p class="field-error" id="name-error" aria-live="polite"></p>
+      </div>
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" autocomplete="username" inputmode="email" placeholder="voce@exemplo.com" required aria-describedby="email-error">
+        <p class="field-error" id="email-error" aria-live="polite"></p>
+      </div>
+      <div class="field">
+        <div class="field-head">
+          <label for="password">Senha</label>
+          <button type="button" class="link-mini" id="forgot" tabindex="-1">Esqueci a senha</button>
+        </div>
+        <div class="password-wrap">
+          <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Sua senha" minlength="8" required aria-describedby="password-error">
+          <button type="button" id="toggle-password" class="toggle" aria-pressed="false" aria-label="Mostrar senha"><span aria-hidden="true">Mostrar</span></button>
+        </div>
+        <p class="field-error" id="password-error" aria-live="polite"></p>
+      </div>
+      <label class="remember"><input type="checkbox" id="remember" name="remember"><span>Manter conectado neste dispositivo</span></label>
+      <button type="submit" id="submit" class="btn-primary"><span class="btn-label" id="submit-label">Entrar</span><span class="spinner" aria-hidden="true"></span></button>
+    </form>
+
+    <p class="switch" id="switch">
+      <span id="switch-text">Ainda não tem conta?</span>
+      <button type="button" id="switch-btn">Criar conta</button>
+    </p>
+
+    <div id="logged-view" class="logged" hidden>
+      <p class="logged-hi">Você está conectado como <strong id="logged-name"></strong>.</p>
+      <button type="button" id="logout" class="btn-ghost">Sair</button>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Versão offline: os dados ficam só neste navegador, com a senha protegida por hash. Nada é enviado, registrado ou encaminhado a terceiros.</p>
+</footer>
+
+<script>
+/* ------------------------------------------------------------------ *
+ * SkyTikTok — autenticação local (sem servidor).
+ *
+ * Como funciona:
+ *  - As contas ficam no localStorage do próprio navegador.
+ *  - A senha NUNCA é guardada em texto: só um hash PBKDF2-SHA256 com sal
+ *    aleatório por usuário (via Web Crypto). Nada trafega pela rede.
+ *  - Existe um usuário de teste pré-criado (demo@skytiktok.app).
+ *
+ * Limite honesto: por ser 100% no navegador, isto serve para protótipo/uso
+ * local. Para um serviço real com vários usuários, use a versão com servidor
+ * Node + banco de dados (pasta apps/convivio no repositório).
+ * ------------------------------------------------------------------ */
+
+const STORE_KEY = 'skytiktok.users';
+const SESSION_KEY = 'skytiktok.session';
+const ITERATIONS = 150000;
+const DEMO = { email: 'demo@skytiktok.app', name: 'Usuário Demo', password: 'SkyTikTokDemo123' };
+
+const $ = (id) => document.getElementById(id);
+const form = $('login-form'), emailInput = $('email'), passwordInput = $('password'),
+      nameInput = $('name'), nameField = $('name-field'),
+      submitBtn = $('submit'), submitLabel = $('submit-label'), banner = $('banner'),
+      toggleBtn = $('toggle-password'), loggedView = $('logged-view'), loggedName = $('logged-name'),
+      logoutBtn = $('logout'), switchBtn = $('switch-btn'), switchText = $('switch-text'),
+      cardTitle = $('card-title'), cardSub = $('card-sub'), forgotBtn = $('forgot');
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+let mode = 'login'; // 'login' | 'register'
+
+/* ---- utilidades de bytes/hex ---- */
+const enc = new TextEncoder();
+const toHex = (buf) => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+const fromHex = (hex) => new Uint8Array(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
+
+/* ---- hash de senha com PBKDF2 (Web Crypto) ---- */
+async function hashPassword(password, saltBytes, iterations = ITERATIONS) {
+  const key = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', salt: saltBytes, iterations, hash: 'SHA-256' }, key, 256);
+  return toHex(bits);
+}
+/* comparação em tempo constante (não vaza tamanho/posição da diferença) */
+function safeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+/* ---- armazenamento (tolerante a modo privado) ---- */
+function loadUsers() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+  catch { return []; }
+}
+function saveUsers(users) {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(users)); return true; }
+  catch { return false; }
+}
+function normalizeEmail(e) { return String(e || '').trim().toLowerCase(); }
+function findUser(email) {
+  const e = normalizeEmail(email);
+  return loadUsers().find(u => u.email === e) || null;
+}
+
+async function ensureDemoUser() {
+  if (findUser(DEMO.email)) return;
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const hash = await hashPassword(DEMO.password, salt);
+  const users = loadUsers();
+  users.push({ email: DEMO.email, name: DEMO.name, salt: toHex(salt), hash, iterations: ITERATIONS });
+  saveUsers(users);
+}
+
+/* ---- sessão local ---- */
+function setSession(email, remember) {
+  const store = remember ? localStorage : sessionStorage;
+  try { store.setItem(SESSION_KEY, email); } catch { /* ignora */ }
+}
+function getSession() {
+  try { return localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY); }
+  catch { return null; }
+}
+function clearSession() {
+  try { localStorage.removeItem(SESSION_KEY); sessionStorage.removeItem(SESSION_KEY); } catch { /* ignora */ }
+}
+
+/* ---- UI helpers ---- */
+function showBanner(msg, type) {
+  banner.textContent = msg;
+  banner.classList.remove('is-error', 'is-success');
+  banner.classList.add(type === 'error' ? 'is-error' : 'is-success');
+  banner.hidden = false;
+}
+function clearBanner() { banner.hidden = true; banner.textContent = ''; }
+function setFieldError(input, msg) {
+  const field = input.closest('.field');
+  const el = $(input.id + '-error');
+  if (msg) { field.classList.add('invalid'); input.setAttribute('aria-invalid', 'true'); if (el) el.textContent = msg; }
+  else { field.classList.remove('invalid'); input.removeAttribute('aria-invalid'); if (el) el.textContent = ''; }
+}
+function validateEmail() {
+  const v = emailInput.value.trim();
+  if (!v) return setFieldError(emailInput, 'Informe seu e-mail.'), false;
+  if (!EMAIL_RE.test(v)) return setFieldError(emailInput, 'E-mail inválido.'), false;
+  setFieldError(emailInput, ''); return true;
+}
+function validatePassword() {
+  const v = passwordInput.value;
+  if (!v) return setFieldError(passwordInput, 'Informe sua senha.'), false;
+  if (v.length < 8) return setFieldError(passwordInput, 'A senha tem no mínimo 8 caracteres.'), false;
+  setFieldError(passwordInput, ''); return true;
+}
+function validateName() {
+  if (mode !== 'register') return true;
+  const v = nameInput.value.trim();
+  if (v.length < 2) return setFieldError(nameInput, 'Informe seu nome.'), false;
+  setFieldError(nameInput, ''); return true;
+}
+function setLoading(on) { submitBtn.disabled = on; submitBtn.classList.toggle('loading', on); }
+
+function renderLoggedIn(user) {
+  form.hidden = true; $('switch').hidden = true;
+  loggedName.textContent = user.name || user.email;
+  loggedView.hidden = false;
+}
+function renderLoggedOut() {
+  form.hidden = false; $('switch').hidden = false; loggedView.hidden = true;
+  form.reset();
+}
+function setMode(next) {
+  mode = next;
+  const reg = mode === 'register';
+  nameField.hidden = !reg;
+  cardTitle.textContent = reg ? 'Criar conta' : 'Entrar';
+  cardSub.textContent = reg ? 'Leva menos de um minuto.' : 'Bom te ver de novo.';
+  submitLabel.textContent = reg ? 'Criar conta' : 'Entrar';
+  switchText.textContent = reg ? 'Já tem conta?' : 'Ainda não tem conta?';
+  switchBtn.textContent = reg ? 'Entrar' : 'Criar conta';
+  passwordInput.setAttribute('autocomplete', reg ? 'new-password' : 'current-password');
+  clearBanner();
+  setFieldError(emailInput, ''); setFieldError(passwordInput, ''); setFieldError(nameInput, '');
+}
+
+/* ---- eventos ---- */
+emailInput.addEventListener('blur', validateEmail);
+passwordInput.addEventListener('blur', validatePassword);
+nameInput.addEventListener('blur', validateName);
+emailInput.addEventListener('input', () => { if (emailInput.closest('.field').classList.contains('invalid')) validateEmail(); });
+passwordInput.addEventListener('input', () => { if (passwordInput.closest('.field').classList.contains('invalid')) validatePassword(); });
+
+toggleBtn.addEventListener('click', () => {
+  const showing = passwordInput.type === 'text';
+  passwordInput.type = showing ? 'password' : 'text';
+  toggleBtn.setAttribute('aria-pressed', String(!showing));
+  toggleBtn.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Ocultar senha');
+  toggleBtn.querySelector('span').textContent = showing ? 'Mostrar' : 'Ocultar';
+});
+
+switchBtn.addEventListener('click', () => setMode(mode === 'login' ? 'register' : 'login'));
+forgotBtn.addEventListener('click', () => showBanner('Versão offline: recadastre a conta em "Criar conta" para redefinir a senha.', 'error'));
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  clearBanner();
+  const ok = [validateName(), validateEmail(), validatePassword()].every(Boolean);
+  if (!ok) return;
+
+  if (!crypto.subtle) {
+    showBanner('Este navegador não permite hash seguro aqui. Abra via http://localhost ou use outro navegador.', 'error');
+    return;
+  }
+
+  setLoading(true);
+  try {
+    const email = normalizeEmail(emailInput.value);
+    const password = passwordInput.value;
+    const remember = $('remember').checked;
+
+    if (mode === 'register') {
+      if (findUser(email)) { showBanner('Já existe uma conta com esse e-mail.', 'error'); return; }
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const hash = await hashPassword(password, salt);
+      const users = loadUsers();
+      users.push({ email, name: nameInput.value.trim(), salt: toHex(salt), hash, iterations: ITERATIONS });
+      if (!saveUsers(users)) { showBanner('Não foi possível salvar neste navegador (armazenamento bloqueado).', 'error'); return; }
+      setSession(email, remember);
+      passwordInput.value = '';
+      showBanner('Conta criada com sucesso!', 'success');
+      renderLoggedIn({ name: nameInput.value.trim(), email });
+      return;
+    }
+
+    // login
+    const user = findUser(email);
+    // calcula sempre um hash (mesmo sem usuário) para não vazar se o e-mail existe
+    const salt = user ? fromHex(user.salt) : crypto.getRandomValues(new Uint8Array(16));
+    const iterations = user ? (user.iterations || ITERATIONS) : ITERATIONS;
+    const attempt = await hashPassword(password, salt, iterations);
+    const valid = user && safeEqual(attempt, user.hash);
+
+    if (!valid) { showBanner('E-mail ou senha inválidos.', 'error'); return; }
+
+    setSession(email, remember);
+    passwordInput.value = '';
+    showBanner('Bem-vindo(a) de volta, ' + user.name + '!', 'success');
+    renderLoggedIn(user);
+  } catch (err) {
+    showBanner('Não foi possível concluir. Tente novamente.', 'error');
+  } finally {
+    setLoading(false);
+  }
+});
+
+logoutBtn.addEventListener('click', () => { clearSession(); clearBanner(); setMode('login'); renderLoggedOut(); });
+
+/* ---- inicialização ---- */
+(async function init() {
+  try { await ensureDemoUser(); } catch { /* segue mesmo sem demo */ }
+  const sessionEmail = getSession();
+  if (sessionEmail) {
+    const u = findUser(sessionEmail);
+    if (u) renderLoggedIn(u);
+  }
+})();
+</script>
+</body>
+</html>
