@@ -1,0 +1,2291 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<!--APP-START-->
+<title>Almox Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#EDEFF3;--bg-dot:#D3D8E2;
+  --surface:#FFFFFF;--surface-2:#F6F7F9;--surface-3:#ECEEF2;
+  --line:#E0E3EA;--line-2:#CDD2DC;
+  --ink:#10141D;--ink-2:#4A5163;--ink-3:#7D8598;
+  --accent:#FFC21A;--accent-hover:#FFCB3F;--accent-edge:#E2A500;--accent-ink:#171309;
+  --accent-text:#8A5E00;--accent-soft:#FFF4D1;--accent-strong:#C99200;
+  --focus:#8A5E00;--focus-ring:rgba(201,146,0,.25);
+  --ok:#0E7A51;--ok-soft:#E0F3EA;
+  --warn:#B64E0B;--warn-soft:#FCEBDD;
+  --crit:#C22536;--crit-soft:#FBE4E7;
+  --info:#1F4FC8;--info-soft:#E4ECFC;
+  --c-in:#2563EB;--c-out:#B07800;
+  --inv-ok:#3DD68C;--inv-crit:#FF7079;--inv-warn:#FF9B5C;--inv-accent:#FFC21A;
+  --scrim:rgba(16,20,29,.42);
+  --shadow:0 1px 2px rgba(16,20,29,.05),0 6px 20px -10px rgba(16,20,29,.16);
+  --shadow-lg:0 30px 70px -20px rgba(16,20,29,.38);
+  --hazard:repeating-linear-gradient(-45deg,#FFC21A 0 5px,#171309 5px 10px);
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0A0C11;--bg-dot:#181C26;
+    --surface:#11141B;--surface-2:#161A23;--surface-3:#1E232E;
+    --line:#232835;--line-2:#303747;
+    --ink:#E8EBF2;--ink-2:#A0A7B8;--ink-3:#687085;
+    --accent:#FFC21A;--accent-hover:#FFCD45;--accent-edge:#FFC21A;--accent-ink:#171309;
+    --accent-text:#FFCB3D;--accent-soft:rgba(255,194,26,.12);--accent-strong:#FFC21A;
+    --focus:#FFC21A;--focus-ring:rgba(255,194,26,.22);
+    --ok:#40D291;--ok-soft:rgba(64,210,145,.12);
+    --warn:#FF9452;--warn-soft:rgba(255,148,82,.13);
+    --crit:#FF6770;--crit-soft:rgba(255,103,112,.13);
+    --info:#7EA9FF;--info-soft:rgba(126,169,255,.13);
+    --c-in:#4C86EE;--c-out:#BC8900;
+    --inv-ok:#0E7A51;--inv-crit:#C22536;--inv-warn:#B64E0B;--inv-accent:#8A5E00;
+    --scrim:rgba(0,0,0,.6);
+    --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 8px 24px -12px rgba(0,0,0,.6);
+    --shadow-lg:0 30px 80px -20px rgba(0,0,0,.75);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A0C11;--bg-dot:#181C26;
+  --surface:#11141B;--surface-2:#161A23;--surface-3:#1E232E;
+  --line:#232835;--line-2:#303747;
+  --ink:#E8EBF2;--ink-2:#A0A7B8;--ink-3:#687085;
+  --accent:#FFC21A;--accent-hover:#FFCD45;--accent-edge:#FFC21A;--accent-ink:#171309;
+  --accent-text:#FFCB3D;--accent-soft:rgba(255,194,26,.12);--accent-strong:#FFC21A;
+  --focus:#FFC21A;--focus-ring:rgba(255,194,26,.22);
+  --ok:#40D291;--ok-soft:rgba(64,210,145,.12);
+  --warn:#FF9452;--warn-soft:rgba(255,148,82,.13);
+  --crit:#FF6770;--crit-soft:rgba(255,103,112,.13);
+  --info:#7EA9FF;--info-soft:rgba(126,169,255,.13);
+  --c-in:#4C86EE;--c-out:#BC8900;
+  --inv-ok:#0E7A51;--inv-crit:#C22536;--inv-warn:#B64E0B;--inv-accent:#8A5E00;
+  --scrim:rgba(0,0,0,.6);
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 8px 24px -12px rgba(0,0,0,.6);
+  --shadow-lg:0 30px 80px -20px rgba(0,0,0,.75);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{height:100%;-webkit-text-size-adjust:100%}
+body{min-height:100%;margin:0;background-color:var(--bg);background-image:radial-gradient(var(--bg-dot) 1px,transparent 1.3px);background-size:24px 24px;color:var(--ink);font:400 14px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+body.lock{overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+h1,h2,h3{text-wrap:balance}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-3)}
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ic{flex:none;display:block}
+.eyebrow{font:500 11px/1.25 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.opt{font-weight:400;color:var(--ink-3)}
+
+/* ---------- Shell ---------- */
+.app{display:grid;grid-template-columns:256px minmax(0,1fr);min-height:100%}
+.side{position:sticky;top:0;align-self:start;height:100vh;height:100dvh;display:flex;flex-direction:column;gap:18px;padding:20px 14px 16px;border-right:1px solid var(--line);background:var(--surface);overflow:auto}
+.brand{display:flex;align-items:center;gap:12px;padding:2px 6px}
+.logo{width:36px;height:36px;flex:none}
+.brand-name{font:760 16px/1.1 var(--f-display);font-stretch:118%;letter-spacing:-.005em;overflow-wrap:anywhere}
+.brand-sub{font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.search-trigger{display:flex;align-items:center;gap:10px;height:38px;padding:0 10px;border:1px solid var(--line-2);border-radius:9px;background:var(--surface-2);color:var(--ink-3);font-size:13px;text-align:left}
+.search-trigger span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-trigger:hover{border-color:var(--ink-3);color:var(--ink-2)}
+kbd{font:500 10.5px/1 var(--f-mono);padding:4px 6px;border-radius:5px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink-3)}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:9px;color:var(--ink-2);text-decoration:none;font-weight:500;font-size:14px;transition:background .15s,color .15s}
+.nav a:hover{background:var(--surface-3);color:var(--ink)}
+.nav a[aria-current="page"]{background:var(--ink);color:var(--surface)}
+.nav a .nb{margin-left:auto}
+.nb{min-width:20px;height:20px;padding:0 6px;border-radius:10px;display:inline-grid;place-items:center;font:600 11px/1 var(--f-mono);background:var(--surface-3);color:var(--ink-2)}
+.nb.crit{background:var(--crit);color:#fff}
+.nav a[aria-current="page"] .nb{background:var(--accent);color:var(--accent-ink)}
+.side-foot{margin-top:auto;display:flex;flex-direction:column;gap:14px;padding:0 6px}
+.online{display:flex;flex-direction:column;gap:8px}
+.av-stack{display:flex;padding-left:4px}
+.av-stack .av{margin-left:-6px}
+.sync{display:flex;align-items:center;gap:8px;font:500 11.5px/1.3 var(--f-mono);color:var(--ink-3)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none;position:relative}
+.sync.live .dot{background:var(--ok)}
+.sync.live .dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--ok);opacity:0;animation:pulse 2.2s ease-out infinite}
+.sync.local .dot,.sync.ro .dot{background:var(--warn)}
+.sync.err .dot{background:var(--crit)}
+@keyframes pulse{0%{transform:scale(.5);opacity:.7}100%{transform:scale(1.5);opacity:0}}
+
+.topbar{display:none}
+.tabbar{display:none}
+.main{min-width:0;padding-inline:clamp(16px,3.2vw,40px);padding-block:28px 72px;outline:none}
+.page{max-width:1320px;margin-inline:auto;display:flex;flex-direction:column;gap:20px;animation:pageIn .38s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pageIn{from{opacity:.001;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.ph{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 20px}
+.ph h1{margin:6px 0 0;font-family:var(--f-display);font-weight:780;font-stretch:120%;font-size:clamp(26px,3.1vw,36px);line-height:1.04;letter-spacing:-.012em}
+.ph-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.clock{font:600 22px/1 var(--f-mono);letter-spacing:.02em;color:var(--ink-2);padding-inline:6px}
+
+/* ---------- Buttons & inputs ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding-inline:14px;border-radius:9px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-weight:600;font-size:13.5px;white-space:nowrap;text-decoration:none;transition:background .15s,border-color .15s,transform .1s,box-shadow .15s}
+.btn:hover{background:var(--surface-3)}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);border-color:var(--accent-edge);color:var(--accent-ink);box-shadow:inset 0 -2px 0 rgba(0,0,0,.14)}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--ink-2)}
+.btn-ghost:hover{background:var(--surface-3);color:var(--ink)}
+.btn-danger{color:var(--crit);border-color:var(--line-2)}
+.btn-danger:hover{background:var(--crit-soft)}
+.btn-danger.armed,.btn-danger.armed:hover{background:var(--crit);border-color:var(--crit);color:#fff}
+.btn-sm{height:30px;padding-inline:10px;font-size:12.5px;border-radius:7px;gap:6px}
+.btn-lg{height:48px;font-size:15px;border-radius:11px}
+.btn-icon{width:38px;padding:0}
+.btn-sm.btn-icon{width:30px}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+body.ro [data-w]{opacity:.4;pointer-events:none}
+.linkbtn{border:0;background:none;padding:0;color:var(--accent-text);font-weight:600;font-size:12.5px;text-decoration:underline;text-underline-offset:3px}
+
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.lbl,.field>label{font-size:12px;font-weight:600;color:var(--ink-2)}
+.in{height:40px;width:100%;min-width:0;padding-inline:12px;border-radius:9px;border:1px solid var(--line-2);background:var(--surface-2);transition:border-color .15s,box-shadow .15s;font-size:14px}
+.in::placeholder{color:var(--ink-3)}
+.in:focus{outline:none;border-color:var(--focus);box-shadow:0 0 0 3px var(--focus-ring);background:var(--surface)}
+textarea.in{height:auto;padding-block:10px;resize:vertical;min-height:90px;line-height:1.5}
+select.in{appearance:none;-webkit-appearance:none;padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238189A0' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.hint{font-size:12px;color:var(--ink-3)}
+.hint.crit{color:var(--crit)}.hint.ok{color:var(--ok)}.hint.warn{color:var(--warn)}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.form{display:flex;flex-direction:column;gap:14px}
+.form-foot{display:flex;justify-content:flex-end;gap:8px;padding-top:6px;flex-wrap:wrap}
+.err{min-height:0;font-size:13px;color:var(--crit);font-weight:500}
+.err:empty{display:none}
+.switch{display:flex;gap:12px;align-items:flex-start;cursor:pointer;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.switch input{position:absolute;opacity:0;pointer-events:none}
+.sw-track{flex:none;width:36px;height:22px;border-radius:11px;background:var(--line-2);position:relative;transition:background .2s;margin-top:1px}
+.sw-track::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.3);transition:transform .2s}
+.switch input:checked+.sw-track{background:var(--accent-strong)}
+.switch input:checked+.sw-track::after{transform:translateX(14px)}
+.switch input:focus-visible+.sw-track{outline:2px solid var(--focus);outline-offset:2px}
+.switch b{display:block;font-size:13.5px}
+.switch small{display:block;color:var(--ink-3);font-size:12px;margin-top:2px}
+
+.search{position:relative;display:flex;align-items:center;flex:1 1 260px;min-width:0}
+.search .ic{position:absolute;left:12px;color:var(--ink-3);pointer-events:none}
+.search .in{padding-left:38px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.toolbar .sel{width:auto;flex:0 1 200px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{height:32px;padding-inline:12px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);font-size:12.5px;font-weight:500;color:var(--ink-2);display:inline-flex;align-items:center;gap:7px;transition:background .15s,color .15s,border-color .15s}
+.chip:hover{border-color:var(--ink-3);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.chip .n{font:500 11px/1 var(--f-mono);opacity:.7}
+
+/* ---------- Cards ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);min-width:0}
+.card-h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 18px 0;flex-wrap:wrap}
+.card-t{font:700 14px/1.3 var(--f-body);display:flex;align-items:center;gap:8px}
+.card-sub{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.card-b{padding:14px 18px 18px}
+.grid-2{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:16px}
+.grid-2.even{grid-template-columns:repeat(2,minmax(0,1fr))}
+.split{display:grid;grid-template-columns:minmax(320px,420px) minmax(0,1fr);gap:16px;align-items:start}
+.split>.card:first-child{position:sticky;top:20px}
+
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.kpi{padding:16px 18px;display:flex;align-items:center;gap:14px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:14px;box-shadow:var(--shadow);transition:border-color .15s,transform .15s}
+.kpi:hover{border-color:var(--ink-3)}
+.kpi-body{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+.kpi-v{font:760 34px/1 var(--f-display);font-stretch:112%;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.kpi-s{color:var(--ink-2);font-size:12.5px}
+.kpi.crit .kpi-v{color:var(--crit)}
+.kpi.crit{border-color:color-mix(in oklab,var(--crit) 40%,var(--line))}
+.ring-bg{fill:none;stroke:var(--surface-3)}
+.ring-fg{fill:none;stroke:var(--accent-strong);stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1)}
+
+.pill{display:inline-flex;align-items:center;gap:6px;height:22px;padding-inline:8px;border-radius:6px;font:600 10.5px/1 var(--f-mono);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;background:var(--surface-3);color:var(--ink-2)}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.crit{background:var(--crit-soft);color:var(--crit)}
+.pill.info{background:var(--info-soft);color:var(--info)}
+.pill.acc{background:var(--accent-soft);color:var(--accent-text)}
+.tag{display:inline-flex;align-items:center;height:18px;padding-inline:6px;border-radius:4px;font:600 10px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;background:var(--surface-3);color:var(--ink-2)}
+.tag.ex{background:var(--accent-soft);color:var(--accent-text)}
+
+.code{display:inline-flex;align-items:center;height:24px;padding-inline:8px;border:1px solid var(--line-2);border-radius:5px;font:600 11.5px/1 var(--f-mono);letter-spacing:.04em;background:var(--surface-2);color:var(--ink);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.mac{font:500 13.5px/1.2 var(--f-mono);letter-spacing:.02em;white-space:nowrap}
+.mac .oui{color:var(--ink-3)}
+.mac b{font-weight:600}
+
+/* ---------- Table-like lists ---------- */
+.tbl{overflow:hidden}
+.tr{display:grid;align-items:center;gap:14px;padding:12px 18px;border-top:1px solid var(--line);position:relative;transition:background .12s}
+.tr[role="button"]{cursor:pointer}
+.tr[role="button"]:hover{background:var(--surface-2)}
+.tr.th{border-top:0;padding-block:10px;background:var(--surface-2);font:500 10.5px/1.2 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.tr.low::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:4px;border-radius:0 2px 2px 0;background:var(--hazard)}
+.cell-main{display:flex;flex-direction:column;gap:2px;min-width:0}
+.t1{font-weight:600;overflow-wrap:anywhere}
+.t2{font-size:12.5px;color:var(--ink-3);overflow-wrap:anywhere}
+.qty{text-align:right;white-space:nowrap}
+.qty b{font:600 16px/1 var(--f-mono)}
+.qty small{color:var(--ink-3);font-size:12px}
+.chev{color:var(--ink-3)}
+.mat-row{grid-template-columns:104px minmax(0,1.6fr) 84px minmax(80px,1fr) 118px 96px 16px}
+.mod-row{grid-template-columns:minmax(170px,190px) minmax(0,1.2fr) 118px minmax(0,1fr) 150px 92px}
+.th .r{text-align:right}
+.lvl{height:6px;border-radius:3px;background:var(--surface-3);position:relative}
+.lvl>i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--ok);transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.lvl.low>i{background:var(--warn)}
+.lvl.zero>i{background:var(--crit)}
+.lvl>b{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;border-radius:1px;background:var(--ink-2)}
+.empty{padding:36px 20px;text-align:center;color:var(--ink-3);display:flex;flex-direction:column;align-items:center;gap:10px}
+.empty b{color:var(--ink);font-size:15px}
+.more{display:flex;justify-content:center;padding:14px;border-top:1px solid var(--line)}
+.skel{height:14px;border-radius:6px;background:linear-gradient(90deg,var(--surface-3),var(--surface-2),var(--surface-3));background-size:200% 100%;animation:sh 1.4s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+
+/* ---------- Feed / movements ---------- */
+.ti{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:var(--surface-3);color:var(--ink-2);flex:none}
+.ti.t-in{color:var(--c-in);background:color-mix(in oklab,var(--c-in) 14%,transparent)}
+.ti.t-out{color:var(--c-out);background:color-mix(in oklab,var(--c-out) 16%,transparent)}
+.ti.t-ret{color:var(--ok);background:var(--ok-soft)}
+.ti.t-adj{color:var(--ink-2)}
+.ti.t-mod{color:var(--info);background:var(--info-soft)}
+.feed{display:flex;flex-direction:column;padding:6px 18px 12px}
+.fi{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:12px;padding:10px 0;border-top:1px solid var(--line);align-items:start}
+.fi:first-child{border-top:0}
+.fi-t{font-size:13.5px;line-height:1.45;overflow-wrap:anywhere}
+.fi-m{font-size:12px;color:var(--ink-3);margin-top:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fi-time{font:500 11.5px/1.2 var(--f-mono);color:var(--ink-3);white-space:nowrap;padding-top:2px}
+.new{animation:flash 1.8s ease-out}
+@keyframes flash{0%{background:var(--accent-soft)}100%{background:transparent}}
+.day-h{position:sticky;top:0;z-index:1;padding:8px 18px;background:var(--surface-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);font:500 11px/1.2 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);display:flex;justify-content:space-between}
+.mv{display:grid;grid-template-columns:44px 32px minmax(0,1fr) auto 30px;gap:12px;align-items:center;padding:10px 18px;border-top:1px solid var(--line)}
+.day-h+.mv{border-top:0}
+.mv-time{font:500 12px/1 var(--f-mono);color:var(--ink-2)}
+.mv-q{font:600 13.5px/1 var(--f-mono);white-space:nowrap;text-align:right}
+.mv-q.neg{color:var(--c-out)}.mv-q.pos{color:var(--c-in)}
+.mv .del{opacity:0;transition:opacity .15s}
+.mv:hover .del,.mv .del:focus-visible,.mv .del.armed{opacity:1}
+@media (hover:none){.mv .del{opacity:.55}}
+.av{width:22px;height:22px;border-radius:50%;display:inline-grid;place-items:center;font:700 9.5px/1 var(--f-body);background:var(--surface-3);color:var(--ink-2);flex:none;overflow:hidden;border:2px solid var(--surface);vertical-align:middle}
+.av img{width:100%;height:100%;object-fit:cover}
+.av.lg{width:30px;height:30px;font-size:11px}
+.av.more{background:var(--ink);color:var(--surface)}
+
+/* ---------- Painel ---------- */
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:10px;height:10px;border-radius:3px;display:inline-block;flex:none}
+.sw.in{background:var(--c-in)}.sw.out{background:var(--c-out)}
+.chart{position:relative;padding:8px 10px 12px;min-height:220px}
+.chart svg{display:block;max-width:100%}
+.chart .gl{stroke:var(--line);stroke-width:1;stroke-dasharray:2 4}
+.chart .base{stroke:var(--ink-3);stroke-width:1}
+.chart .ax{fill:var(--ink-3);font:500 10.5px var(--f-mono)}
+.chart .ax.today{fill:var(--ink);font-weight:600}
+.chart .dl{fill:var(--ink-2);font:600 10.5px var(--f-mono)}
+.chart .b-in{fill:var(--c-in)}.chart .b-out{fill:var(--c-out)}
+.chart .hit{fill:transparent;cursor:crosshair}
+.chart .hit:hover,.chart .hit.on{fill:var(--ink);fill-opacity:.05}
+.chart.anim .b-in{transform-box:fill-box;transform-origin:bottom;animation:growY .6s cubic-bezier(.2,.8,.2,1) both}
+.chart.anim .b-out{transform-box:fill-box;transform-origin:top;animation:growY .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes growY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.tip{position:fixed;z-index:80;pointer-events:none;padding:10px 12px;border-radius:10px;background:var(--ink);color:var(--surface);font-size:12.5px;line-height:1.5;box-shadow:var(--shadow-lg);min-width:160px}
+.tip b{font-weight:600}
+.tip .r{display:flex;align-items:center;gap:8px}
+.tip .r span{flex:1}
+.lowlist,.posse{display:flex;flex-direction:column;padding:4px 18px 12px}
+.li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.li:first-child{border-top:0}
+.li-n{font-weight:600;font-size:13.5px;overflow-wrap:anywhere}
+.li-s{font-size:12px;color:var(--ink-3);display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:2px}
+.pp{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.pp:first-child{border-top:0}
+.pp-items{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.hold{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 4px 0 9px;border-radius:7px;background:var(--surface-2);border:1px solid var(--line);font-size:12px}
+.hold b{font-family:var(--f-mono);font-weight:600}
+.hold button{height:20px;border:0;border-radius:5px;padding:0 6px;background:var(--surface-3);font-size:11px;font-weight:600;color:var(--ink-2)}
+.hold button:hover{background:var(--accent);color:var(--accent-ink)}
+.welcome{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;padding:26px;overflow:hidden;position:relative}
+.welcome::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:var(--hazard)}
+.welcome h2{margin:6px 0 8px;font:780 26px/1.1 var(--f-display);font-stretch:118%}
+.welcome p{margin:0;color:var(--ink-2);max-width:60ch}
+.w-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.w-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.w-steps li{display:grid;grid-template-columns:32px minmax(0,1fr);gap:12px;align-items:start;font-size:13px;color:var(--ink-2)}
+.w-steps b{display:block;color:var(--ink);font-size:13.5px}
+.banner{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface);font-size:13.5px}
+.banner.warn{background:var(--warn-soft);border-color:color-mix(in oklab,var(--warn) 30%,var(--line));}
+.banner.warn .ic{color:var(--warn)}
+.banner .grow{flex:1;min-width:0}
+
+/* ---------- Movement form ---------- */
+.seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:4px;background:var(--surface-3);border-radius:11px}
+.seg button{height:42px;border:0;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600;color:var(--ink-2);font-size:13px;padding:0 4px;min-width:0;transition:background .15s,color .15s,box-shadow .15s}
+.seg button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.seg button[data-t="entrada"][aria-pressed="true"] .ic{color:var(--c-in)}
+.seg button[data-t="saida"][aria-pressed="true"] .ic{color:var(--c-out)}
+.seg button[data-t="devolucao"][aria-pressed="true"] .ic{color:var(--ok)}
+.mf{display:flex;flex-direction:column;gap:14px}
+.mf-hint{margin:-4px 0 0;font-size:12.5px;color:var(--ink-3)}
+.lines{display:flex;flex-direction:column;gap:12px}
+.line{display:grid;grid-template-columns:minmax(0,1fr) 138px auto;gap:10px;align-items:end;padding:12px;border:1px dashed var(--line-2);border-radius:12px;background:var(--surface-2)}
+.line .ln-info{grid-column:1/-1;font-size:12px;color:var(--ink-3);margin-top:-2px}
+.line .ln-info:empty{display:none}
+.ln-info b{color:var(--ink);font-family:var(--f-mono);font-weight:600}
+.ln-info.crit,.ln-info.crit b{color:var(--crit)}
+.ln-info.warn,.ln-info.warn b{color:var(--warn)}
+.cb{position:relative;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cb-list{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:30;margin:0;padding:4px;list-style:none;background:var(--surface);border:1px solid var(--line-2);border-radius:10px;box-shadow:var(--shadow-lg);max-height:280px;overflow:auto;min-width:240px}
+.cb-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n s" "m s";column-gap:10px;padding:8px 10px;border-radius:7px;cursor:pointer}
+.cb-list li[aria-selected="true"]{background:var(--surface-3)}
+.cb-n{grid-area:n;font-weight:600;font-size:13px;overflow-wrap:anywhere}
+.cb-m{grid-area:m;font-size:11px;color:var(--ink-3)}
+.cb-s{grid-area:s;align-self:center;font-size:12px;color:var(--ink-2)}
+.cb-list li.cb-empty{display:block;cursor:default;color:var(--ink-3);font-size:12.5px}
+.stepper{display:grid;grid-template-columns:36px minmax(0,1fr) 36px;border:1px solid var(--line-2);border-radius:9px;overflow:hidden;background:var(--surface)}
+.stepper button{border:0;background:var(--surface-3);font-size:18px;font-weight:600;color:var(--ink-2)}
+.stepper button:hover{background:var(--accent);color:var(--accent-ink)}
+.stepper .in{border:0;border-radius:0;text-align:center;background:var(--surface);box-shadow:none;padding-inline:4px}
+.stepper:focus-within{border-color:var(--focus);box-shadow:0 0 0 3px var(--focus-ring)}
+.when{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:12.5px;color:var(--ink-2)}
+.when>span{display:inline-flex;align-items:center;gap:6px}
+.when b{font-family:var(--f-mono);font-weight:600;color:var(--ink)}
+.when .in{flex:1 1 200px}
+
+/* ---------- Modems & audit ---------- */
+.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;overflow:hidden}
+.st{padding:14px 16px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:4px;text-align:left;border-top:0;border-right:0;border-bottom:0;background:transparent}
+.st:first-child{border-left:0}
+button.st:hover{background:var(--surface-2)}
+.st b{font:760 24px/1 var(--f-display);font-stretch:112%;font-variant-numeric:tabular-nums}
+.aud-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);white-space:nowrap}
+.aud-chip .ic{color:var(--ok)}
+.aud-chip.pend .ic{color:var(--ink-3)}
+.aud-chip.div .ic{color:var(--crit)}
+.aud-top{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);gap:16px;align-items:stretch}
+.aud-ring{padding:20px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.ar-wrap{position:relative;width:148px;height:148px}
+.ar-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ar-pct{font:780 40px/1 var(--f-display);font-stretch:112%;font-variant-numeric:tabular-nums}
+.ar-pct small{font-size:18px;margin-left:1px}
+.ar-c span{font-size:12px;color:var(--ink-3)}
+.ar-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;width:100%}
+.ar-stats>div{background:var(--surface);padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.ar-stats b{font:600 18px/1 var(--f-mono)}
+.ar-stats b.crit{color:var(--crit)}
+.ar-cycle{font-size:12px;color:var(--ink-3);text-align:center}
+.scan{position:relative;display:flex;gap:10px;align-items:stretch}
+.scan-f{position:relative;flex:1;min-width:0;overflow:hidden;border-radius:12px}
+.scan-f .ic{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--ink-3);pointer-events:none}
+.scan-f input{height:64px;font:600 clamp(16px,2.2vw,22px)/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding-left:52px;border-radius:12px;border-width:2px}
+.scan-f input:focus{border-color:var(--accent-edge)}
+.beam{position:absolute;top:8px;bottom:8px;width:2px;left:0;background:var(--accent);box-shadow:0 0 12px 2px var(--accent);opacity:0;pointer-events:none}
+.scan-f:focus-within .beam{opacity:.85;animation:beam 2.4s ease-in-out infinite alternate}
+@keyframes beam{from{left:46px}to{left:calc(100% - 10px)}}
+.scan .btn{height:64px;border-radius:12px;padding-inline:20px}
+.scan-opts{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;font-size:12px;color:var(--ink-3);flex-wrap:wrap}
+.scan-opts label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.sres{margin-top:14px;display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);animation:pop .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{transform:scale(.98);opacity:.2}to{transform:none;opacity:1}}
+.sres .ti{width:40px;height:40px;border-radius:11px}
+.sres.ok{background:var(--ok-soft);border-color:color-mix(in oklab,var(--ok) 35%,var(--line))}
+.sres.ok .ti{background:var(--ok);color:var(--surface)}
+.sres.warn{background:var(--accent-soft);border-color:color-mix(in oklab,var(--accent-strong) 40%,var(--line))}
+.sres.warn .ti{background:var(--accent);color:var(--accent-ink)}
+.sres.crit{background:var(--crit-soft);border-color:color-mix(in oklab,var(--crit) 35%,var(--line))}
+.sres.crit .ti{background:var(--crit);color:#fff}
+.sres-t{font-weight:700;font-size:14.5px}
+.sres-m{font-size:13px;color:var(--ink-2);margin-top:2px;overflow-wrap:anywhere}
+.sres-a{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.slog{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.slog span{display:inline-flex;align-items:center;gap:5px;height:24px;padding-inline:8px;border-radius:6px;font:500 11.5px/1 var(--f-mono);background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2)}
+.slog span.ok{color:var(--ok)}.slog span.crit{color:var(--crit)}.slog span.warn{color:var(--accent-text)}
+.alist{display:flex;flex-direction:column;max-height:560px;overflow:auto;margin-top:12px;border-top:1px solid var(--line)}
+.ar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 18px;border-top:1px solid var(--line)}
+.ar:first-child{border-top:0}
+.ar .t2{margin-top:2px}
+.cyc{width:100%;border-collapse:collapse;font-size:13px}
+.cyc th{text-align:left;font:500 10.5px/1.2 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:8px 18px;background:var(--surface-2);border-top:1px solid var(--line)}
+.cyc td{padding:10px 18px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.tscroll{overflow-x:auto}
+
+/* ---------- Detail drawer ---------- */
+.scrim{position:fixed;inset:0;z-index:40;background:var(--scrim);opacity:0;transition:opacity .22s}
+.scrim.open{opacity:1}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:41;width:min(540px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;transform:translateX(28px);opacity:0;transition:transform .26s cubic-bezier(.2,.8,.2,1),opacity .2s;padding-top:env(safe-area-inset-top,0px)}
+.drawer.open{transform:none;opacity:1}
+.drawer-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 20px 14px;border-bottom:1px solid var(--line)}
+.drawer-head h2{margin:4px 0 0;font:760 21px/1.15 var(--f-display);font-stretch:112%;overflow-wrap:anywhere}
+.drawer-body{flex:1;overflow:auto;padding:18px 20px 28px;display:flex;flex-direction:column;gap:18px;overscroll-behavior:contain}
+.label-card{border:1.5px solid var(--ink);border-radius:12px;overflow:hidden;background:var(--surface)}
+.lc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;background:var(--ink);color:var(--surface)}
+.lc-top .code{background:transparent;color:var(--surface);border-color:color-mix(in oklab,var(--surface) 35%,transparent);height:26px;font-size:13px}
+.lc-top .mono{font-size:12px;letter-spacing:.08em}
+.lc-mid{padding:16px 14px 12px;display:flex;flex-direction:column;gap:12px}
+.lc-qty{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.lc-qty b{font:780 46px/1 var(--f-display);font-stretch:108%;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.lc-qty span{color:var(--ink-2);font-size:14px}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border-top:1px solid var(--line);margin:0}
+.kv>div{background:var(--surface);padding:10px 14px;min-width:0}
+.kv dt{font:500 10px/1.2 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.kv dd{margin:4px 0 0;font-weight:600;font-size:13.5px;overflow-wrap:anywhere}
+.mac-big{font:600 clamp(22px,5vw,30px)/1.1 var(--f-mono);letter-spacing:.04em;word-break:break-all}
+.mac-big .oui{color:var(--ink-3);font-weight:500}
+.qa{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.qa .btn{height:auto;min-height:56px;flex-direction:column;gap:4px;padding:10px 6px;font-size:12.5px;white-space:normal;text-align:center}
+.qa.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.sec-t{display:flex;justify-content:space-between;align-items:center;gap:10px;font:500 11px/1.2 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:-6px}
+.hist{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.hist .fi{padding:10px 14px}
+.box{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--surface-2);display:flex;flex-direction:column;gap:10px}
+.box.ok{background:var(--ok-soft);border-color:color-mix(in oklab,var(--ok) 30%,var(--line))}
+.box.crit{background:var(--crit-soft);border-color:color-mix(in oklab,var(--crit) 30%,var(--line))}
+.box-row{display:flex;gap:12px;align-items:flex-start}
+.box-row .grow{flex:1;min-width:0}
+.inline-form{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.inline-form .field{flex:1 1 220px}
+.spark svg{display:block;width:100%;height:auto}
+.spark .sp-a{fill:var(--accent-strong);fill-opacity:.14}
+.spark .sp-l{fill:none;stroke:var(--accent-strong);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.spark .sp-m{stroke:var(--ink-3);stroke-dasharray:3 4;stroke-width:1}
+.spark .sp-d{fill:var(--accent-strong);stroke:var(--surface);stroke-width:2}
+.spark .sp-t{fill:var(--ink-3);font:500 10px var(--f-mono)}
+.dd-foot{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;padding-top:4px;border-top:1px solid var(--line);padding-block:14px 0}
+.bk-prev{display:flex;flex-direction:column;gap:10px}
+.bk-sum{display:flex;gap:14px;flex-wrap:wrap;font-size:13px}
+.bk-sum b{font-family:var(--f-mono)}
+.bk-chips{display:flex;flex-wrap:wrap;gap:5px;max-height:160px;overflow:auto}
+.bk-chips span{font:500 11px/1 var(--f-mono);padding:5px 7px;border-radius:5px;background:var(--surface-2);border:1px solid var(--line)}
+.bk-chips span.dup{text-decoration:line-through;color:var(--ink-3)}
+.meter{height:10px;border-radius:5px;background:var(--surface-3);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--ink-2);border-radius:5px}
+.meter.warn i{background:var(--warn)}
+.meter.crit i{background:var(--crit)}
+.keys{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px;align-items:center;font-size:13px}
+.prose{font-size:13.5px;color:var(--ink-2);display:flex;flex-direction:column;gap:10px}
+.prose p{margin:0;max-width:65ch}
+.prose b{color:var(--ink)}
+
+/* ---------- Command palette, modal, toasts ---------- */
+.cmdk{position:fixed;inset:0;z-index:60;display:flex;justify-content:center;align-items:flex-start;padding:max(10vh,16px) 16px 16px;background:var(--scrim)}
+.cmdk-box{width:min(640px,100%);background:var(--surface);border:1px solid var(--line-2);border-radius:16px;box-shadow:var(--shadow-lg);overflow:hidden;animation:pop .22s cubic-bezier(.2,.8,.2,1)}
+.cmdk-in{display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--line);color:var(--ink-3)}
+.cmdk-in input{flex:1;min-width:0;height:56px;border:0;background:transparent;font-size:16px;outline:none;color:var(--ink)}
+.cmdk-list{max-height:min(440px,60vh);overflow:auto;padding:6px}
+.cmdk-g{padding:10px 10px 4px}
+.cmdk-it{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:9px;cursor:pointer}
+.cmdk-it[aria-selected="true"]{background:var(--surface-3)}
+.cmdk-it .ti{width:30px;height:30px;border-radius:8px}
+.cmdk-it .grow{flex:1;min-width:0}
+.cmdk-it .t1{font-size:13.5px}
+.cmdk-foot{display:flex;gap:14px;padding:10px 16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.modal{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:16px;background:var(--scrim)}
+.modal-box{width:min(440px,100%);background:var(--surface);border:1px solid var(--line-2);border-radius:16px;box-shadow:var(--shadow-lg);padding:22px;animation:pop .2s cubic-bezier(.2,.8,.2,1)}
+.modal-box h3{margin:0 0 8px;font:760 19px/1.2 var(--f-display);font-stretch:112%}
+.modal-box p{margin:0;color:var(--ink-2);font-size:13.5px}
+.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;flex-wrap:wrap}
+.toasts{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:90;display:flex;flex-direction:column;gap:8px;align-items:flex-end;pointer-events:none}
+.toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;max-width:420px;padding:12px 14px;border-radius:12px;background:var(--ink);color:var(--surface);box-shadow:var(--shadow-lg);font-size:13.5px;line-height:1.45;animation:tIn .32s cubic-bezier(.2,.8,.2,1)}
+.toast .ic{color:var(--inv-accent);margin-top:1px}
+.toast.ok .ic{color:var(--inv-ok)}.toast.crit .ic{color:var(--inv-crit)}.toast.warn .ic{color:var(--inv-warn)}
+.toast.out{opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
+.toast .mono{font-size:12.5px}
+@keyframes tIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1180px){
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .stats .st:nth-child(4){border-left:0}
+  .stats .st:nth-child(n+4){border-top:1px solid var(--line)}
+  .mod-row{grid-template-columns:minmax(160px,180px) minmax(0,1fr) 118px 140px 88px}
+  .mod-row .who{display:none}
+}
+@media (max-width:1020px){
+  .grid-2,.grid-2.even,.split,.aud-top{grid-template-columns:minmax(0,1fr)}
+  .split>.card:first-child{position:static}
+  .welcome{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{display:none}
+  .topbar{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;align-items:center;gap:10px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--line)}
+  .topbar .brand-name{font-size:15px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .topbar .logo{width:30px;height:30px}
+  .topbar .sync{font-size:0;gap:0}
+  .main{padding-block:20px calc(104px + env(safe-area-inset-bottom,0px))}
+  .tabbar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;border-radius:10px;color:var(--ink-3);text-decoration:none;font-size:10.5px;font-weight:600;position:relative}
+  .tabbar a[aria-current="page"]{color:var(--ink)}
+  .tabbar a[aria-current="page"]::after{content:"";position:absolute;top:2px;width:18px;height:3px;border-radius:2px;background:var(--accent-strong)}
+  .tabbar a.fab .fab-in{width:46px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);box-shadow:inset 0 -2px 0 rgba(0,0,0,.14)}
+  .tabbar a.fab[aria-current="page"]::after{display:none}
+  .tabbar .nb{position:absolute;top:4px;right:calc(50% - 22px);min-width:16px;height:16px;font-size:9.5px;padding:0 4px}
+  .toasts{left:16px;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));align-items:stretch}
+  .toast{max-width:none}
+  .clock{display:none}
+}
+@media (max-width:760px){
+  .tr.th{display:none}
+  .tr{padding:12px 16px}
+  .mat-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"code st" "main qty" "lvl lvl";row-gap:8px}
+  .mat-row .code{grid-area:code;justify-self:start}
+  .mat-row .cell-main{grid-area:main}
+  .mat-row .qty{grid-area:qty}
+  .mat-row .lvl{grid-area:lvl}
+  .mat-row .st{grid-area:st;justify-self:end}
+  .mat-row .loc,.mat-row .chev{display:none}
+  .mod-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"mac st" "main act" "aud act";row-gap:6px}
+  .mod-row .mac{grid-area:mac}
+  .mod-row .cell-main{grid-area:main}
+  .mod-row .st{grid-area:st;justify-self:end}
+  .mod-row .aud{grid-area:aud}
+  .mod-row .act{grid-area:act;align-self:end;justify-self:end}
+  .mod-row .who{display:none}
+  .mv{grid-template-columns:32px minmax(0,1fr) auto;grid-template-areas:"ic main q" "ic main del";padding:10px 16px;row-gap:2px}
+  .mv .ti{grid-area:ic}
+  .mv-main{grid-area:main}
+  .mv-q{grid-area:q}
+  .mv .del{grid-area:del;justify-self:end}
+  .mv-time{display:none}
+  .mv-main .t-time{display:inline}
+  .qa{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .row3{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .line{grid-template-columns:minmax(0,1fr) auto}
+  .line .cb{grid-column:1/-1}
+  .drawer{top:auto;left:0;width:100%;max-height:92dvh;border-radius:18px 18px 0 0;border-left:0;border-top:1px solid var(--line);transform:translateY(40px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .scan .btn{padding-inline:14px}
+  .feed,.lowlist,.posse{padding-inline:16px}
+  .card-h{padding:14px 16px 0}
+  .card-b{padding:12px 16px 16px}
+}
+@media (max-width:520px){
+  .kpi{padding:14px}
+  .kpi-v{font-size:28px}
+  .kpi .ring{display:none}
+  .row2,.row3{grid-template-columns:minmax(0,1fr)}
+  .seg button{flex-direction:column;gap:2px;height:52px;font-size:11.5px}
+  .ph-actions{width:100%}
+  .ph-actions .btn{flex:1}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats .st:nth-child(odd){border-left:0}
+  .stats .st:nth-child(4){border-left:1px solid var(--line)}
+  .stats .st:nth-child(n+3){border-top:1px solid var(--line)}
+  .scan{flex-direction:column}
+  .scan .btn{height:48px}
+}
+.t-time{display:none;font-family:var(--f-mono);color:var(--ink-3);font-size:11.5px;margin-right:6px}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .scan-f:focus-within .beam{animation:none;left:46px}
+}
+</style>
+
+<div class="app" id="app">
+  <aside class="side" aria-label="Navegação principal">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#FFC21A"/><path d="M9 8v20M27 8v20M9 14.5h18M9 21.5h18" stroke="#171309" stroke-width="2.2" stroke-linecap="round"/><rect x="12" y="9.5" width="6" height="4" rx=".8" fill="#171309"/><rect x="19.5" y="16.5" width="5" height="4" rx=".8" fill="#171309"/><rect x="12.5" y="16.5" width="5" height="4" rx=".8" fill="#171309" opacity=".55"/><rect x="14" y="23.5" width="9" height="3.5" rx=".8" fill="#171309"/></svg>
+      <div style="min-width:0"><div class="brand-name" id="brandName">Almox Central</div><div class="brand-sub">Controle de almoxarifado</div></div>
+    </div>
+    <button class="search-trigger" data-act="cmd" type="button"><span class="js-ic" data-i="search"></span><span>Buscar ou agir…</span><kbd>Ctrl K</kbd></button>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot">
+      <div class="online" id="online" hidden></div>
+      <div class="sync" id="sync"><span class="dot"></span><span class="sync-t">Conectando ao banco…</span></div>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <svg class="logo" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#FFC21A"/><path d="M9 8v20M27 8v20M9 14.5h18M9 21.5h18" stroke="#171309" stroke-width="2.2" stroke-linecap="round"/><rect x="12" y="9.5" width="6" height="4" rx=".8" fill="#171309"/><rect x="19.5" y="16.5" width="5" height="4" rx=".8" fill="#171309"/><rect x="14" y="23.5" width="9" height="3.5" rx=".8" fill="#171309"/></svg>
+    <div class="brand-name" id="brandNameM">Almox Central</div>
+    <div class="sync" id="syncM" title="Conectando"><span class="dot"></span><span class="sync-t"></span></div>
+    <button class="btn btn-ghost btn-icon" data-act="cmd" type="button" aria-label="Buscar"><span class="js-ic" data-i="search"></span></button>
+    <button class="btn btn-ghost btn-icon" data-act="go" data-to="sistema" type="button" aria-label="Sistema"><span class="js-ic" data-i="sliders"></span></button>
+  </header>
+
+  <main class="main" id="main" tabindex="-1"></main>
+
+  <nav class="tabbar" id="tabbar" aria-label="Navegação"></nav>
+</div>
+
+<datalist id="dl-pessoas"></datalist>
+<datalist id="dl-cats"></datalist>
+<datalist id="dl-modelos"></datalist>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+  <header class="drawer-head">
+    <div style="min-width:0"><div class="eyebrow" id="drawerEyebrow"></div><h2 id="drawerTitle"></h2></div>
+    <button class="btn btn-ghost btn-icon" id="drawerClose" data-act="close" type="button" aria-label="Fechar"><span class="js-ic" data-i="x"></span></button>
+  </header>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<div class="cmdk" id="cmdk" hidden>
+  <div class="cmdk-box" role="dialog" aria-modal="true" aria-label="Buscar ou executar">
+    <div class="cmdk-in"><span class="js-ic" data-i="search"></span><input id="cmdkIn" placeholder="Material, MAC, pessoa ou ação…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="cmdkList"></div>
+    <div class="cmdk-list" id="cmdkList" role="listbox"></div>
+    <div class="cmdk-foot"><span><kbd>↑</kbd> <kbd>↓</kbd> navegar</span><span><kbd>Enter</kbd> abrir</span><span><kbd>Esc</kbd> fechar</span></div>
+  </div>
+</div>
+<div class="modal" id="modal" hidden></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="tip" id="tip" hidden></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ================= Utilities ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 });
+const fmtN = n => nf.format(Math.round((+n || 0) * 1000) / 1000);
+const num = v => { const n = typeof v === 'number' ? v : parseFloat(String(v ?? '').replace(/\./g, (m, i, s) => s.includes(',') ? '' : '.').replace(',', '.')); return isFinite(n) ? n : 0; };
+const round3 = x => Math.round(x * 1000) / 1000;
+const pad = n => String(n).padStart(2, '0');
+const DAY = 864e5;
+const startOfDay = ts => { const d = new Date(ts); d.setHours(0, 0, 0, 0); return d.getTime(); };
+const fmtDate = ts => { const d = new Date(ts); return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`; };
+const fmtTime = ts => { const d = new Date(ts); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const fmtDT = ts => `${fmtDate(ts)} às ${fmtTime(ts)}`;
+const WD = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+const WDL = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+const MES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+const MESL = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+const dayLabel = ts => { const t = startOfDay(Date.now()), d = startOfDay(ts); if (d === t) return 'Hoje'; if (d === t - DAY) return 'Ontem'; const x = new Date(ts); return `${WD[x.getDay()]}, ${pad(x.getDate())} ${MES[x.getMonth()]} ${x.getFullYear()}`; };
+const rel = ts => { const s = (Date.now() - ts) / 1000; if (s < 50) return 'agora'; if (s < 3600) return `há ${Math.max(1, Math.round(s / 60))} min`; if (s < 86400) return `há ${Math.round(s / 3600)} h`; const d = Math.round(s / 86400); return d === 1 ? 'ontem' : `há ${d} dias`; };
+const toLocalInput = ts => { const d = new Date(ts); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const movId = ts => `${Math.floor(ts).toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
+const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+const initials = s => String(s || '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+const macHex = s => String(s || '').toUpperCase().replace(/[^0-9A-F]/g, '');
+const macFmt = hex => (String(hex).match(/.{1,2}/g) || []).join(':');
+const MAC_RE = /(^|[^0-9A-F])((?:[0-9A-F]{2}[:\-. ]?){5}[0-9A-F]{2})(?![0-9A-F])/gi;
+const extractMacs = text => { const out = []; for (const m of String(text || '').matchAll(MAC_RE)) { const h = macHex(m[2]); if (h.length === 12) out.push(h); } return out; };
+const parseMac = s => { const f = extractMacs(s); if (f.length) return f[0]; const h = macHex(s); return h.length === 12 ? h : null; };
+const macHTML = hex => { const f = macFmt(hex); return `<span class="oui">${f.slice(0, 8)}</span>:<b>${f.slice(9)}</b>`; };
+const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
+const reduced = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { return false; } };
+const finePointer = () => { try { return matchMedia('(pointer: fine)').matches; } catch { return true; } };
+
+const PATHS = {
+  grid: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+  box: '<path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
+  swap: '<path d="M7 20V4M3 8l4-4 4 4M17 4v16M13 16l4 4 4-4"/>',
+  router: '<rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 17h.01M11 17h.01"/><path d="M8.5 10a5 5 0 0 1 7 0M5.8 7.3a9 9 0 0 1 12.4 0"/>',
+  shield: '<path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+  sliders: '<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  in: '<path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>',
+  out: '<path d="M12 21V9M7 14l5-5 5 5M5 4h14"/>',
+  ret: '<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-4"/>',
+  adj: '<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  chev: '<path d="M9 6l6 6-6 6"/>',
+  back: '<path d="M15 6l-6 6 6 6"/>',
+  dl: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
+  trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  scan: '<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M7 12h10"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  alert: '<path d="M12 3.5L2.5 20h19z"/><path d="M12 10v4.5M12 17.5h.01"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7"/>',
+  archive: '<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10h14V9M10 13h4"/>',
+  share: '<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/>',
+  bolt: '<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>',
+  flask: '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/>',
+  pin: '<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  tool: '<path d="M14.5 6.5a4 4 0 0 0 5 5l-9 9a2.1 2.1 0 0 1-3-3l9-9a4 4 0 0 1-2-2z"/><path d="M14.5 6.5L17 4l3 3-2.5 2.5"/>',
+  sound: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
+  keyboard: '<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>'
+};
+const ic = (n, s = 18) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[n] || ''}</svg>`;
+
+const TIPOS = {
+  entrada:   { label: 'Entrada',   icon: 'in',     cls: 't-in',  sign: 1 },
+  saida:     { label: 'Saída',     icon: 'out',    cls: 't-out', sign: -1 },
+  devolucao: { label: 'Devolução', icon: 'ret',    cls: 't-ret', sign: 1 },
+  ajuste:    { label: 'Ajuste',    icon: 'adj',    cls: 't-adj', sign: 0 },
+  status:    { label: 'Status',    icon: 'router', cls: 't-mod', sign: 0 },
+  cadastro:  { label: 'Cadastro',  icon: 'plus',   cls: 't-mod', sign: 0 }
+};
+const HINT = {
+  saida: 'Material retirado do estoque por alguém da equipe.',
+  entrada: 'Material que chegou ao almoxarifado: compra, transferência ou reposição.',
+  devolucao: 'Material que voltou ao estoque: sobra de serviço ou ferramenta devolvida.',
+  ajuste: 'Informe a quantidade contada na prateleira. O sistema calcula a diferença.'
+};
+const MST = {
+  estoque:   { l: 'Em estoque',  c: 'ok' },
+  tecnico:   { l: 'Com técnico', c: 'info' },
+  instalado: { l: 'Instalado',   c: '' },
+  defeito:   { l: 'Defeito',     c: 'crit' }
+};
+const UNIDADES = ['un', 'm', 'cx', 'pç', 'par', 'rolo', 'pct', 'kg', 'L'];
+const NAV = [
+  { v: 'painel', l: 'Painel', i: 'grid' },
+  { v: 'estoque', l: 'Estoque', i: 'box' },
+  { v: 'movs', l: 'Movimentações', i: 'swap' },
+  { v: 'modems', l: 'Modems Wi-Fi', i: 'router' },
+  { v: 'auditoria', l: 'Auditoria', i: 'shield' },
+  { v: 'sistema', l: 'Sistema', i: 'sliders' }
+];
+const VIEW_LABEL = Object.fromEntries(NAV.map(n => [n.v, n.l]));
+
+/* ================= State ================= */
+const S = {
+  view: 'painel',
+  materiais: [], movs: [], modems: [], config: {}, configExists: false,
+  loaded: { materiais: false, movs: false, modems: false, config: false },
+  me: { id: null }, user: null, room: null, downloads: null, peers: [], prof: {},
+  readOnly: false, sync: 'loading',
+  arquivo: null, newIds: new Set(),
+  f: {
+    est: { q: '', f: 'todos', cat: '' },
+    mov: { q: '', t: 'todos', p: '30' },
+    mod: { q: '', f: 'todos' },
+    aud: { q: '' }
+  },
+  movLimit: 150, modLimit: 200, estLimit: 300,
+  detail: null, pageForm: null, drawerForm: null, ro: null,
+  scanLog: [], sound: lsGet('almox-sound') !== '0'
+};
+let D = {};
+const markNew = id => { S.newIds.add(id); setTimeout(() => S.newIds.delete(id), 2600); };
+const ready = () => S.loaded.materiais && S.loaded.movs && S.loaded.modems;
+const ciclo = () => S.config.ciclo || 'c0';
+const matById = id => D.mats && D.mats.get(id);
+const modemById = hex => D.modemMap && D.modemMap.get(hex);
+
+/* ================= Storage adapters ================= */
+const Store = { mode: 'loading', api: null };
+
+function localAdapter() {
+  const KEY = 'almox-central-local-v1';
+  let data = {};
+  try { data = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch { data = {}; }
+  const subs = new Set(); let pending = false;
+  const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {} };
+  const notify = () => { if (!pending) { pending = true; setTimeout(() => { pending = false; subs.forEach(f => f()); }, 0); } };
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const merge = (t, s) => { for (const k of Object.keys(s)) { const v = s[k]; if (v && typeof v === 'object' && !Array.isArray(v) && t[k] && typeof t[k] === 'object' && !Array.isArray(t[k])) merge(t[k], v); else t[k] = clone(v); } };
+  const list = name => Object.keys(data).filter(p => { const a = p.split('/'); return a.length === 2 && a[0] === name; }).map(p => ({ id: p.split('/')[1], ...clone(data[p]) }));
+  return {
+    watchColl(name, cb) { const f = () => cb(list(name), { fromCache: false }, null); subs.add(f); setTimeout(f, 0); return () => subs.delete(f); },
+    watchDoc(path, cb) { const f = () => cb(data[path] ? clone(data[path]) : null, { fromCache: false }); subs.add(f); setTimeout(f, 0); return () => subs.delete(f); },
+    async getColl(name) { return list(name); },
+    async set(p, b) { data[p] = clone(b); persist(); notify(); },
+    async update(p, b) { if (!data[p]) throw { code: 'invalid_argument', message: 'Documento inexistente' }; merge(data[p], b); persist(); notify(); },
+    async del(p) { delete data[p]; persist(); notify(); },
+    async lease() { return true; }
+  };
+}
+
+function cloudAdapter(db) {
+  const retry = async fn => { try { return await fn(); } catch (e) { if (e && e.code === 'unavailable') { await new Promise(r => setTimeout(r, 400 + Math.random() * 700)); return fn(); } throw e; } };
+  return {
+    watchColl(name, cb, onErr) { return db.collection(name).onSnapshot(s => cb(s.docs.map(d => ({ id: d.id, ...d.data() })), s.metadata, s), onErr); },
+    watchDoc(path, cb, onErr) { return db.doc(path).onSnapshot(s => cb(s.exists ? { ...s.data() } : null, s.metadata), onErr); },
+    async getColl(name) { const s = await retry(() => db.collection(name).get()); return s.docs.map(d => ({ id: d.id, ...d.data() })); },
+    set: (p, b) => retry(() => db.doc(p).set(b)),
+    update: (p, b) => retry(() => db.doc(p).update(b)),
+    del: p => retry(() => db.doc(p).delete()),
+    async lease(p, holder) { try { const r = await db.doc(p).acquire({ holder: holder || 'almox', ttlMs: 180000 }); return !!r.acquired; } catch { return true; } }
+  };
+}
+
+async function write(fn, okMsg) {
+  if (S.readOnly) { toast('Seu acesso é somente leitura. Peça ao responsável permissão de edição.', 'warn'); return false; }
+  try { await fn(); if (okMsg) toast(okMsg, 'ok'); return true; }
+  catch (e) { writeError(e); return false; }
+}
+function writeError(e) {
+  const code = e && e.code;
+  console.error(e);
+  if (code === 'invalid_argument' && Store.mode === 'cloud') { S.readOnly = true; updateChrome(); toast('Não foi possível gravar: seu acesso parece ser somente leitura. Peça ao responsável permissão de edição.', 'crit', { ms: 7000 }); }
+  else if (code === 'quota_exceeded') toast('O banco atingiu o limite de registros. Vá em Sistema e arquive o histórico antigo.', 'crit', { ms: 8000 });
+  else if (code === 'resource_exhausted') toast('Muitas operações seguidas. Aguarde alguns segundos e tente de novo.', 'warn');
+  else toast('Não foi possível salvar agora. Verifique a conexão e tente de novo.', 'crit');
+}
+
+/* ================= Derived data ================= */
+function derive() {
+  const mats = new Map(S.materiais.map(m => [m.id, m]));
+  const saldo = new Map();
+  const posse = new Map();
+  const addP = (nome, mid, q) => {
+    const key = norm(nome); if (!key) return;
+    let p = posse.get(key); if (!p) { p = { nome: String(nome).trim(), itens: new Map(), modems: [] }; posse.set(key, p); }
+    p.itens.set(mid, (p.itens.get(mid) || 0) + q);
+  };
+  for (const m of S.materiais) {
+    saldo.set(m.id, num(m.saldoBase));
+    if (m.retornavel && m.posseBase && typeof m.posseBase === 'object') for (const v of Object.values(m.posseBase)) if (v && v.n) addP(v.n, m.id, num(v.q));
+  }
+  const movs = [...S.movs].sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  const people = new Map();
+  for (const mv of [...movs].reverse()) {
+    if (mv.pessoa && (mv.tipo === 'saida' || mv.tipo === 'devolucao')) people.set(norm(mv.pessoa), String(mv.pessoa).trim());
+    if (!mv.materialId) continue;
+    const m = mats.get(mv.materialId); if (!m) continue;
+    if (m.arquivadoAte && mv.ts < m.arquivadoAte) continue;
+    saldo.set(m.id, round3(saldo.get(m.id) + num(mv.delta)));
+    if (m.retornavel && mv.pessoa) {
+      if (mv.tipo === 'saida') addP(mv.pessoa, m.id, num(mv.qtd));
+      else if (mv.tipo === 'devolucao') addP(mv.pessoa, m.id, -num(mv.qtd));
+    }
+  }
+  const modemMap = new Map(S.modems.map(m => [m.id, m]));
+  for (const md of S.modems) {
+    if (md.status === 'tecnico' && md.comQuem) {
+      const key = norm(md.comQuem);
+      let p = posse.get(key); if (!p) { p = { nome: String(md.comQuem).trim(), itens: new Map(), modems: [] }; posse.set(key, p); }
+      p.modems.push(md);
+      people.set(key, String(md.comQuem).trim());
+    }
+  }
+  const posseList = [...posse.values()].map(p => ({
+    nome: p.nome,
+    itens: [...p.itens].filter(([mid, q]) => q > 1e-9 && mats.get(mid)).map(([mid, q]) => ({ m: mats.get(mid), q: round3(q) })),
+    modems: p.modems
+  })).filter(p => p.itens.length || p.modems.length).sort((a, b) => (b.itens.length + b.modems.length) - (a.itens.length + a.modems.length) || a.nome.localeCompare(b.nome));
+  const state = m => { const s = saldo.get(m.id) || 0, min = num(m.minimo); if (s <= 0) return 'zero'; if (min > 0 && s <= min) return 'low'; return 'ok'; };
+  const low = S.materiais.filter(m => state(m) !== 'ok').sort((a, b) => (state(a) === 'zero' ? 0 : 1) - (state(b) === 'zero' ? 0 : 1) || a.nome.localeCompare(b.nome));
+  const cats = [...new Set(S.materiais.map(m => (m.categoria || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  const modelos = [...new Set(S.modems.map(m => (m.modelo || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  const c = ciclo();
+  const aud = S.modems.filter(m => m.auditCiclo === c);
+  const div = aud.filter(m => m.auditResultado === 'divergente').length;
+  D = {
+    mats, saldo, state, movs, posse: posseList, low, zero: low.filter(m => state(m) === 'zero').length,
+    cats, modelos, people: [...people.values()].sort((a, b) => a.localeCompare(b)),
+    modemMap, aud: aud.length, div, totModems: S.modems.length,
+    pct: S.modems.length ? aud.length / S.modems.length : 0
+  };
+}
+derive();
+
+/* ================= Small renderers ================= */
+function who(id, mv) {
+  if (mv && mv.exemplo) return 'Dado de exemplo';
+  if (!id) return Store.mode === 'local' ? 'Este dispositivo' : 'Sem identificação';
+  if (id === S.me.id) return 'Você';
+  return (S.prof[id] && S.prof[id].name) || 'Alguém da equipe';
+}
+function avatar(id, cls = '', mv) {
+  const p = id && S.prof[id];
+  const name = who(id, mv);
+  if (p && p.avatarUrl) return `<span class="av ${cls}" title="${esc(name)}"><img src="${esc(p.avatarUrl)}" alt=""></span>`;
+  return `<span class="av ${cls}" title="${esc(name)}">${esc(initials(name === 'Você' ? (S.me.name || 'Você') : name))}</span>`;
+}
+function personAv(nome, cls = 'lg') { return `<span class="av ${cls}" aria-hidden="true">${esc(initials(nome))}</span>`; }
+function matPill(st) { return st === 'zero' ? '<span class="pill crit">Zerado</span>' : st === 'low' ? '<span class="pill warn">Baixo</span>' : '<span class="pill ok">Normal</span>'; }
+function modPill(s) { const x = MST[s] || { l: s || '—', c: '' }; return `<span class="pill ${x.c}">${esc(x.l)}</span>`; }
+function audChip(m) {
+  if (m.auditCiclo === ciclo()) {
+    if (m.auditResultado === 'divergente') return `<span class="aud-chip div">${ic('alert', 15)}Divergência · ${fmtDate(m.auditTs)}</span>`;
+    return `<span class="aud-chip">${ic('check', 15)}Auditado · ${fmtDate(m.auditTs)}</span>`;
+  }
+  return `<span class="aud-chip pend">${ic('clock', 15)}Pendente</span>`;
+}
+function ring(p, size = 64, sw = 7) {
+  const r = (size - sw) / 2, c = 2 * Math.PI * r, h = size / 2;
+  return `<svg class="ring" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true"><circle cx="${h}" cy="${h}" r="${r}" class="ring-bg" stroke-width="${sw}"/><circle cx="${h}" cy="${h}" r="${r}" class="ring-fg" stroke-width="${sw}" stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${(c * (1 - Math.max(0, Math.min(1, p)))).toFixed(2)}" transform="rotate(-90 ${h} ${h})"/></svg>`;
+}
+function lvlBar(m) {
+  const s = D.saldo.get(m.id) || 0, min = num(m.minimo), st = D.state(m);
+  const cap = Math.max(min * 2.5, s, 1);
+  const w = Math.max(s > 0 ? 3 : 0, Math.min(100, s / cap * 100));
+  return `<span class="lvl ${st}" title="Saldo ${fmtN(s)} · mínimo ${fmtN(min)}"><i style="width:${w.toFixed(1)}%"></i>${min > 0 ? `<b style="left:${(min / cap * 100).toFixed(1)}%"></b>` : ''}</span>`;
+}
+function movIcon(mv) { const t = mv.alvo === 'modem' && mv.tipo !== 'saida' && mv.tipo !== 'devolucao' ? TIPOS.status : (TIPOS[mv.tipo] || TIPOS.status); return `<span class="ti ${mv.alvo === 'modem' ? 't-mod' : t.cls}">${ic(mv.alvo === 'modem' && mv.tipo !== 'saida' && mv.tipo !== 'devolucao' ? 'router' : t.icon, 16)}</span>`; }
+function movSentence(mv) {
+  const P = mv.pessoa ? `<b>${esc(mv.pessoa)}</b>` : '';
+  if (mv.alvo === 'modem') {
+    const mac = `<span class="mono">${esc(mv.mac || macFmt(mv.modem || ''))}</span>`;
+    if (mv.tipo === 'cadastro') return mv.qtdModems > 1 ? `<b class="mono">${fmtN(mv.qtdModems)}</b> modems cadastrados em lote${mv.modelo ? ` · ${esc(mv.modelo)}` : ''}` : `Modem ${mac} cadastrado${mv.modelo ? ` · ${esc(mv.modelo)}` : ''}`;
+    if (mv.tipo === 'saida') return `${P || 'Alguém'} pegou o modem ${mac}`;
+    if (mv.tipo === 'devolucao') return P ? `${P} devolveu o modem ${mac}` : `Modem ${mac} voltou ao estoque`;
+    return `Modem ${mac}: ${esc((MST[mv.de] || {}).l || mv.de || '—')} → <b>${esc((MST[mv.para] || {}).l || mv.para || '—')}</b>`;
+  }
+  const Q = `<b class="mono">${fmtN(mv.qtd)} ${esc(mv.unidade || 'un')}</b>`;
+  const M = esc(mv.materialNome || 'material removido');
+  switch (mv.tipo) {
+    case 'saida': return P ? `${P} pegou ${Q} de ${M}` : `Saída de ${Q} de ${M}`;
+    case 'devolucao': return P ? `${P} devolveu ${Q} de ${M}` : `Devolução de ${Q} de ${M}`;
+    case 'entrada': return `Entrada de ${Q} de ${M}${P ? ` · origem: ${P}` : ''}`;
+    case 'ajuste': return `Ajuste de inventário em ${M}: <b class="mono">${num(mv.delta) > 0 ? '+' : ''}${fmtN(mv.delta)} ${esc(mv.unidade || 'un')}</b>${P ? ` · contagem de ${P}` : ''}`;
+    default: return M;
+  }
+}
+function movQty(mv) {
+  if (mv.alvo === 'modem') return '<span class="mv-q muted">—</span>';
+  const d = num(mv.delta);
+  return `<span class="mv-q ${d < 0 ? 'neg' : d > 0 ? 'pos' : ''}">${d > 0 ? '+' : d < 0 ? '−' : ''}${fmtN(Math.abs(d))} <small>${esc(mv.unidade || 'un')}</small></span>`;
+}
+function feedItem(mv, showRel = true) {
+  const isNew = S.newIds.has(mv.id);
+  return `<div class="fi${isNew ? ' new' : ''}">${movIcon(mv)}<div style="min-width:0"><div class="fi-t">${movSentence(mv)}</div><div class="fi-m">${avatar(mv.por, '', mv)}<span>${esc(who(mv.por, mv))}</span>${mv.obs ? `<span>· ${esc(mv.obs)}</span>` : ''}${mv.exemplo ? '<span class="tag ex">Exemplo</span>' : ''}</div></div><span class="fi-time" title="${esc(fmtDT(mv.ts))}">${showRel ? esc(rel(mv.ts)) : fmtTime(mv.ts)}</span></div>`;
+}
+const skelRows = (n, h = 44) => Array.from({ length: n }, () => `<div class="tr" style="grid-template-columns:1fr"><div class="skel" style="height:${h / 3}px;width:${40 + Math.random() * 50}%"></div></div>`).join('');
+
+/* ================= Shell ================= */
+function renderShell() {
+  $('#nav').innerHTML = NAV.map(n => `<a href="#${n.v}" data-act="go" data-to="${n.v}">${ic(n.i, 19)}<span>${n.l}</span><span class="nb" id="nb-${n.v}" hidden></span></a>`).join('');
+  const tabs = [NAV[0], NAV[1], { v: 'movs', l: 'Movimentar', i: 'swap', fab: true }, NAV[3], NAV[4]];
+  $('#tabbar').innerHTML = tabs.map(n => `<a href="#${n.v}" data-act="go" data-to="${n.v}" class="${n.fab ? 'fab' : ''}">${n.fab ? `<span class="fab-in">${ic(n.i, 20)}</span>` : ic(n.i, 21)}<span>${n.l === 'Modems Wi-Fi' ? 'Modems' : n.l}</span>${n.v === 'auditoria' || n.v === 'estoque' ? `<span class="nb" id="tb-${n.v}" hidden></span>` : ''}</a>`).join('');
+  $$('.js-ic').forEach(el => { el.outerHTML = ic(el.dataset.i, 18); });
+}
+
+function updateChrome() {
+  const nome = (S.config.nome || '').trim() || 'Almox Central';
+  $('#brandName').textContent = nome; $('#brandNameM').textContent = nome;
+  document.body.classList.toggle('ro', !!S.readOnly);
+  const pend = D.totModems - D.aud;
+  const setNb = (id, n, crit) => { const el = document.getElementById(id); if (!el) return; el.hidden = !(n > 0); el.textContent = n > 99 ? '99+' : String(n); el.classList.toggle('crit', !!crit); };
+  setNb('nb-estoque', ready() ? D.low.length : 0, true); setNb('tb-estoque', ready() ? D.low.length : 0, true);
+  setNb('nb-auditoria', ready() ? pend : 0, false); setNb('tb-auditoria', ready() ? pend : 0, false);
+  const [cls, txt] = S.readOnly ? ['ro', 'Somente leitura'] :
+    Store.mode === 'local' ? ['local', 'Modo local · só neste navegador'] :
+    S.sync === 'error' ? ['err', 'Sem conexão com o banco'] :
+    Store.mode === 'cloud' && ready() ? ['live', 'Ao vivo · banco compartilhado'] : ['', 'Conectando ao banco…'];
+  for (const id of ['sync', 'syncM']) { const el = document.getElementById(id); el.className = 'sync ' + cls; el.title = txt; el.querySelector('.sync-t').textContent = id === 'sync' ? txt : ''; }
+  fillDatalist('dl-pessoas', D.people); fillDatalist('dl-cats', D.cats); fillDatalist('dl-modelos', D.modelos);
+}
+const dlCache = {};
+function fillDatalist(id, arr) { const k = arr.join('\u0001'); if (dlCache[id] === k) return; dlCache[id] = k; document.getElementById(id).innerHTML = arr.map(v => `<option value="${esc(v)}"></option>`).join(''); }
+
+function renderOnline() {
+  const el = $('#online'); if (!el) return;
+  const map = new Map();
+  for (const p of S.peers || []) { if (p.kind !== 'viewer') continue; const k = p.by || p.peer; if (!map.has(k) || p.isMe) map.set(k, p); }
+  const list = [...map.values()];
+  if (!S.room || !list.length) { el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+  el.innerHTML = `<div class="eyebrow">Online agora · ${list.length}</div><div class="av-stack">${list.slice(0, 7).map(p => {
+    const nm = p.isMe ? 'Você' : who(p.by);
+    const vw = VIEW_LABEL[p.presence && p.presence.view] || '';
+    const pr = p.by && S.prof[p.by];
+    return `<span class="av lg" title="${esc(nm)}${vw ? ' · ' + esc(vw) : ''}">${pr && pr.avatarUrl ? `<img src="${esc(pr.avatarUrl)}" alt="">` : esc(initials(nm))}</span>`;
+  }).join('')}${list.length > 7 ? `<span class="av lg more">+${list.length - 7}</span>` : ''}</div>`;
+}
+
+let profBusy = false, profAgain = false;
+async function refreshProfiles() {
+  if (!S.user) return;
+  if (profBusy) { profAgain = true; return; }
+  profBusy = true;
+  try {
+    const ids = new Set();
+    for (const m of S.movs) if (m.por) ids.add(m.por);
+    for (const m of S.modems) { if (m.auditPor) ids.add(m.auditPor); }
+    for (const p of S.peers || []) if (p.by) ids.add(p.by);
+    if (S.config.cicloPor) ids.add(S.config.cicloPor);
+    const arr = [...ids];
+    if (arr.length) {
+      const ps = await S.user.profiles(arr);
+      let diff = false;
+      for (const id of arr) { const a = S.prof[id], b = ps[id]; if (b && (!a || a.name !== b.name || a.avatarUrl !== b.avatarUrl)) diff = true; }
+      if (diff) { S.prof = { ...S.prof, ...ps }; V[S.view].update(); updateDetail(); renderOnline(); }
+    }
+  } catch {}
+  finally { profBusy = false; if (profAgain) { profAgain = false; refreshProfiles(); } }
+}
+
+let pendingRender = false;
+function changed() {
+  if (pendingRender) return;
+  pendingRender = true;
+  setTimeout(() => {
+    pendingRender = false;
+    derive(); updateChrome();
+    V[S.view].update();
+    updateDetail();
+    S.pageForm && S.pageForm.refresh();
+    S.drawerForm && S.drawerForm.refresh();
+    refreshProfiles();
+  }, 0);
+}
+
+function go(view, opts = {}) {
+  if (!V[view]) view = 'painel';
+  S.view = view;
+  lsSet('almox-view', view);
+  try { history.replaceState(null, '', '#' + view); } catch {}
+  $$('[data-act="go"]').forEach(a => { if (a.dataset.to === view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  if (S.ro) { S.ro.disconnect(); S.ro = null; }
+  S.pageForm = null;
+  const main = $('#main');
+  main.innerHTML = V[view].mount();
+  V[view].bind && V[view].bind(main);
+  V[view].update();
+  if (!opts.keepScroll) window.scrollTo(0, 0);
+  if (S.room) S.room.presence({ view }).catch(() => {});
+  if (opts.focus) setTimeout(() => { const el = $(opts.focus); el && el.focus(); }, 60);
+}
+
+/* ================= Views ================= */
+const V = {};
+
+/* ---------- Painel ---------- */
+V.painel = {
+  mount: () => `<div class="page">
+    <div class="ph">
+      <div><div class="eyebrow" id="p-date">&nbsp;</div><h1 id="p-title">Almoxarifado</h1></div>
+      <div class="ph-actions"><span class="clock" id="p-clock" aria-hidden="true"></span><button class="btn btn-primary" data-act="mov" data-w type="button">${ic('plus')}Registrar movimentação</button></div>
+    </div>
+    <div id="p-banner" style="display:contents"></div>
+    <div class="kpis" id="p-kpis"></div>
+    <div class="grid-2">
+      <section class="card">
+        <div class="card-h"><div><div class="card-t">Fluxo de lançamentos</div><div class="card-sub">Últimos 14 dias · número de lançamentos por dia</div></div>
+        <div class="legend"><span><i class="sw in"></i>Entradas e devoluções</span><span><i class="sw out"></i>Saídas</span></div></div>
+        <div class="chart anim" id="p-chart"></div>
+      </section>
+      <section class="card">
+        <div class="card-h"><div><div class="card-t">${ic('alert', 16)}Repor agora</div><div class="card-sub">Materiais zerados ou no estoque mínimo</div></div></div>
+        <div class="lowlist" id="p-low"></div>
+      </section>
+    </div>
+    <div class="grid-2 even">
+      <section class="card">
+        <div class="card-h"><div><div class="card-t">${ic('bolt', 16)}Atividade ao vivo</div><div class="card-sub">Cada lançamento aparece aqui na hora, para toda a equipe</div></div><button class="btn btn-sm" data-act="go" data-to="movs" type="button">Ver histórico</button></div>
+        <div class="feed" id="p-feed"></div>
+      </section>
+      <section class="card">
+        <div class="card-h"><div><div class="card-t">${ic('users', 16)}Com a equipe</div><div class="card-sub">Ferramentas, itens retornáveis e modems que ainda não voltaram</div></div></div>
+        <div class="posse" id="p-posse"></div>
+      </section>
+    </div>
+  </div>`,
+  bind(root) {
+    const ch = $('#p-chart', root);
+    if ('ResizeObserver' in window) { let w = 0; S.ro = new ResizeObserver(() => { if (Math.abs(ch.clientWidth - w) > 4) { w = ch.clientWidth; drawChart(); } }); S.ro.observe(ch); }
+    tick();
+    setTimeout(() => ch.classList.remove('anim'), 900);
+  },
+  update() {
+    if (!$('#p-kpis')) return;
+    $('#p-title').textContent = (S.config.nome || '').trim() || 'Almoxarifado';
+    $('#p-banner').innerHTML = bannersHTML();
+    if (!ready()) {
+      $('#p-kpis').innerHTML = Array.from({ length: 4 }, () => `<div class="kpi"><div class="kpi-body"><div class="skel" style="width:50%"></div><div class="skel" style="height:30px;width:40%"></div></div></div>`).join('');
+      $('#p-low').innerHTML = `<div style="padding:10px 0">${skelRows(3)}</div>`; $('#p-feed').innerHTML = skelRows(4); $('#p-posse').innerHTML = skelRows(3);
+      $('#p-chart').innerHTML = '<div class="skel" style="height:190px;margin:10px"></div>';
+      return;
+    }
+    const k = [];
+    k.push(`<button class="kpi" data-act="go" data-to="estoque" type="button"><div class="kpi-body"><span class="eyebrow">Materiais cadastrados</span><span class="kpi-v">${fmtN(S.materiais.length)}</span><span class="kpi-s">${D.cats.length ? `${D.cats.length} ${D.cats.length === 1 ? 'categoria' : 'categorias'}` : 'Nenhuma categoria ainda'}</span></div></button>`);
+    k.push(`<button class="kpi ${D.low.length ? 'crit' : ''}" data-act="lowfilter" type="button"><div class="kpi-body"><span class="eyebrow">Abaixo do mínimo</span><span class="kpi-v">${fmtN(D.low.length)}</span><span class="kpi-s">${D.zero ? `${D.zero} ${D.zero === 1 ? 'zerado' : 'zerados'}` : D.low.length ? 'Nenhum zerado' : 'Tudo acima do mínimo'}</span></div></button>`);
+    const itensFora = D.posse.reduce((a, p) => a + p.itens.length, 0), modFora = D.posse.reduce((a, p) => a + p.modems.length, 0);
+    k.push(`<button class="kpi" data-act="go" data-to="movs" type="button"><div class="kpi-body"><span class="eyebrow">Com a equipe</span><span class="kpi-v">${fmtN(D.posse.length)}</span><span class="kpi-s">${D.posse.length ? `${itensFora} ${itensFora === 1 ? 'item' : 'itens'} e ${modFora} ${modFora === 1 ? 'modem' : 'modems'} fora` : 'Nada pendente de devolução'}</span></div></button>`);
+    k.push(`<button class="kpi" data-act="go" data-to="auditoria" type="button"><div class="kpi-body"><span class="eyebrow">Auditoria de modems</span><span class="kpi-v">${Math.round(D.pct * 100)}%</span><span class="kpi-s">${fmtN(D.aud)} de ${fmtN(D.totModems)} auditados</span></div>${ring(D.pct, 58, 7)}</button>`);
+    $('#p-kpis').innerHTML = k.join('');
+    drawChart();
+    $('#p-low').innerHTML = D.low.length ? D.low.slice(0, 7).map(m => {
+      const s = D.saldo.get(m.id) || 0, min = num(m.minimo), u = esc(m.unidade || 'un');
+      const falta = Math.max(0, min - s);
+      return `<div class="li"><div style="min-width:0"><div class="li-n"><a href="#estoque" data-act="mat" data-id="${esc(m.id)}" style="color:inherit;text-decoration:none">${esc(m.nome)}</a></div><div class="li-s"><span class="code">${esc(m.codigo || '—')}</span>${matPill(D.state(m))}<span class="mono">${fmtN(s)} / mín. ${fmtN(min)} ${u}</span>${falta > 0 ? `<span>faltam ${fmtN(falta)} ${u}</span>` : ''}</div></div><button class="btn btn-sm" data-act="mov" data-tipo="entrada" data-id="${esc(m.id)}" data-w type="button">${ic('in', 15)}Entrada</button></div>`;
+    }).join('') + (D.low.length > 7 ? `<div class="li"><button class="btn btn-sm btn-ghost" data-act="lowfilter" type="button">Ver todos os ${D.low.length}</button></div>` : '')
+      : `<div class="empty">${ic('check', 26)}<b>Estoque em dia</b><span>${S.materiais.length ? 'Nenhum material abaixo do mínimo.' : 'Cadastre materiais e defina o estoque mínimo de cada um.'}</span></div>`;
+    $('#p-feed').innerHTML = D.movs.length ? D.movs.slice(0, 9).map(mv => feedItem(mv)).join('') : `<div class="empty">${ic('swap', 26)}<b>Nenhuma movimentação ainda</b><span>Registre a primeira entrada ou saída.</span></div>`;
+    $('#p-posse').innerHTML = D.posse.length ? D.posse.slice(0, 8).map(posseItem).join('') : `<div class="empty">${ic('users', 26)}<b>Nada com a equipe</b><span>Itens marcados como retornáveis e modems entregues a técnicos aparecem aqui até serem devolvidos.</span></div>`;
+  }
+};
+function posseItem(p) {
+  const holds = p.itens.map(it => `<span class="hold">${esc(it.m.nome)} <b>×${fmtN(it.q)}</b><button type="button" data-act="mov" data-tipo="devolucao" data-id="${esc(it.m.id)}" data-pessoa="${esc(p.nome)}" data-qtd="${it.q}" data-w>Devolver</button></span>`)
+    .concat(p.modems.map(md => `<span class="hold">Modem <b class="mono">${esc(macFmt(md.id).slice(9))}</b><button type="button" data-act="modem" data-id="${esc(md.id)}">Abrir</button></span>`));
+  return `<div class="pp">${personAv(p.nome)}<div style="min-width:0"><div class="li-n"><a href="#movs" data-act="pessoa" data-nome="${esc(p.nome)}" style="color:inherit;text-decoration:none">${esc(p.nome)}</a></div><div class="pp-items">${holds.join('')}</div></div></div>`;
+}
+function bannersHTML() {
+  const out = [];
+  if (S.readOnly) out.push(`<div class="banner warn">${ic('alert')}<div class="grow"><b>Acesso somente leitura.</b> Você vê tudo em tempo real, mas para registrar entradas, saídas e auditorias peça ao responsável permissão de edição.</div></div>`);
+  if (Store.mode === 'local' && window.claude) out.push(`<div class="banner warn">${ic('alert')}<div class="grow"><b>Modo local.</b> O banco compartilhado não está disponível nesta visualização, então os dados ficam só neste navegador. Abra pelo link do sistema, conectado à sua conta, para trabalhar junto com a equipe.</div></div>`);
+  if (ready() && S.movs.length > 2500) out.push(`<div class="banner warn">${ic('archive')}<div class="grow"><b>O histórico está grande (${fmtN(S.movs.length)} lançamentos).</b> Arquive os lançamentos antigos para manter o sistema rápido. Os saldos não mudam.</div><button class="btn btn-sm" data-act="go" data-to="sistema" type="button">Arquivar</button></div>`);
+  if (ready() && !S.materiais.length && !S.modems.length && !S.movs.length) out.push(`<section class="card welcome">
+      <div><div class="eyebrow">Primeiros passos</div><h2>Seu almoxarifado começa aqui</h2>
+      <p>Cadastre os materiais com a quantidade atual, registre cada entrada e saída com o nome de quem pegou e anote o MAC dos modems para controlar a auditoria. Tudo fica salvo e aparece na hora para toda a equipe.</p>
+      <div class="w-actions"><button class="btn btn-primary" data-act="newmat" data-w type="button">${ic('plus')}Cadastrar primeiro material</button><button class="btn" data-act="newmodem" data-w type="button">${ic('router')}Cadastrar modem</button><button class="btn btn-ghost" data-act="examples" data-w type="button">${ic('flask')}Carregar dados de exemplo</button></div></div>
+      <ul class="w-steps">
+        <li><span class="ti">${ic('box', 16)}</span><div><b>Estoque</b>Saldo de cada material, estoque mínimo e posição na prateleira.</div></li>
+        <li><span class="ti t-out">${ic('swap', 16)}</span><div><b>Movimentações</b>Quem pegou, quem devolveu, data e horário de cada lançamento.</div></li>
+        <li><span class="ti t-mod">${ic('router', 16)}</span><div><b>Modems Wi-Fi</b>MAC, modelo, número de série e com quem está cada aparelho.</div></li>
+        <li><span class="ti t-ret">${ic('shield', 16)}</span><div><b>Auditoria</b>Conferência com leitor de código de barras e progresso do ciclo.</div></li>
+      </ul></section>`);
+  return out.join('');
+}
+
+function niceMax(m) { if (m <= 2) return 2; if (m <= 4) return 4; if (m <= 6) return 6; if (m <= 8) return 8; if (m <= 10) return 10; const p = Math.pow(10, Math.floor(Math.log10(m))); for (const f of [1, 2, 2.5, 5, 10]) if (f * p >= m) return f * p; return m; }
+function drawChart() {
+  const el = $('#p-chart'); if (!el || !ready()) return;
+  const W = Math.max(280, el.clientWidth - 20), H = W < 520 ? 210 : 236;
+  const days = 14, t0 = startOfDay(Date.now()) - (days - 1) * DAY;
+  const inC = new Array(days).fill(0), outC = new Array(days).fill(0);
+  for (const mv of S.movs) {
+    if (!mv.ts || mv.ts < t0) continue;
+    const i = Math.round((startOfDay(mv.ts) - t0) / DAY); if (i < 0 || i >= days) continue;
+    if (mv.tipo === 'saida') outC[i]++; else if (mv.tipo === 'entrada' || mv.tipo === 'devolucao') inC[i]++;
+  }
+  const mx = niceMax(Math.max(1, ...inC, ...outC));
+  const L = 34, R = 8, T = 16, B = 26, ih = H - T - B, mid = T + ih / 2, half = ih / 2 - 6;
+  const slot = (W - L - R) / days, bw = Math.max(6, Math.min(20, slot * .46));
+  const y = v => v / mx * half;
+  const bar = (x, y0, w, h, up) => { const r = Math.min(4, h, w / 2); return up ? `M${x},${y0}V${y0 - h + r}Q${x},${y0 - h} ${x + r},${y0 - h}H${x + w - r}Q${x + w},${y0 - h} ${x + w},${y0 - h + r}V${y0}Z` : `M${x},${y0}V${y0 + h - r}Q${x},${y0 + h} ${x + r},${y0 + h}H${x + w - r}Q${x + w},${y0 + h} ${x + w},${y0 + h - r}V${y0}Z`; };
+  let g = '';
+  for (const v of [mx, mx / 2]) for (const s of [1, -1]) { const yy = (mid - s * y(v)).toFixed(1); g += `<line class="gl" x1="${L}" x2="${W - R}" y1="${yy}" y2="${yy}"/><text class="ax" x="${L - 8}" y="${(+yy + 3.5).toFixed(1)}" text-anchor="end">${fmtN(v)}</text>`; }
+  g += `<text class="ax" x="${L - 8}" y="${mid + 3.5}" text-anchor="end">0</text>`;
+  let bars = '', hits = '', labels = '';
+  for (let i = 0; i < days; i++) {
+    const cx = L + slot * i + slot / 2, x = +(cx - bw / 2).toFixed(1);
+    if (inC[i]) bars += `<path class="b-in" style="animation-delay:${i * 25}ms" d="${bar(x, mid - 1, bw, y(inC[i]), true)}"/>`;
+    if (outC[i]) bars += `<path class="b-out" style="animation-delay:${i * 25}ms" d="${bar(x, mid + 1, bw, y(outC[i]), false)}"/>`;
+    const d = new Date(t0 + i * DAY);
+    const isToday = i === days - 1;
+    if (W >= 520 || i % 2 === (days - 1) % 2) labels += `<text class="ax${isToday ? ' today' : ''}" x="${cx.toFixed(1)}" y="${H - 8}" text-anchor="middle">${isToday ? 'Hoje' : pad(d.getDate())}</text>`;
+    hits += `<rect class="hit" data-i="${i}" x="${(L + slot * i).toFixed(1)}" y="${T}" width="${slot.toFixed(1)}" height="${ih}" rx="4"/>`;
+  }
+  const li = days - 1;
+  if (inC[li]) labels += `<text class="dl" x="${(L + slot * li + slot / 2).toFixed(1)}" y="${(mid - 1 - y(inC[li]) - 5).toFixed(1)}" text-anchor="middle">${inC[li]}</text>`;
+  if (outC[li]) labels += `<text class="dl" x="${(L + slot * li + slot / 2).toFixed(1)}" y="${(mid + 1 + y(outC[li]) + 13).toFixed(1)}" text-anchor="middle">${outC[li]}</text>`;
+  const total = inC.reduce((a, b) => a + b, 0) + outC.reduce((a, b) => a + b, 0);
+  el.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Lançamentos por dia nos últimos 14 dias: ${total} no total">${g}${hits}${bars}<line class="base" x1="${L}" x2="${W - R}" y1="${mid}" y2="${mid}"/>${labels}</svg>
+    <table class="sr-only"><caption>Lançamentos por dia</caption><tr><th>Dia</th><th>Entradas e devoluções</th><th>Saídas</th></tr>${inC.map((v, i) => `<tr><td>${fmtDate(t0 + i * DAY)}</td><td>${v}</td><td>${outC[i]}</td></tr>`).join('')}</table>`;
+  const tip = $('#tip');
+  const show = (r, e) => {
+    const i = +r.dataset.i, d = new Date(t0 + i * DAY);
+    $$('.hit.on', el).forEach(h => h.classList.remove('on')); r.classList.add('on');
+    tip.innerHTML = `<b>${WD[d.getDay()]}, ${pad(d.getDate())}/${pad(d.getMonth() + 1)}</b><div class="r"><i class="sw in"></i><span>Entradas e devoluções</span><b class="mono">${inC[i]}</b></div><div class="r"><i class="sw out"></i><span>Saídas</span><b class="mono">${outC[i]}</b></div>`;
+    tip.hidden = false;
+    const bb = r.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
+    let lx = bb.left + bb.width / 2 - tw / 2; lx = Math.max(8, Math.min(innerWidth - tw - 8, lx));
+    let ty = bb.top - th - 8; if (ty < 8) ty = bb.bottom + 8;
+    tip.style.left = lx + 'px'; tip.style.top = ty + 'px';
+  };
+  $$('.hit', el).forEach(r => { r.addEventListener('pointerenter', e => show(r, e)); r.addEventListener('pointerdown', e => show(r, e)); r.addEventListener('pointerleave', () => { tip.hidden = true; r.classList.remove('on'); }); });
+}
+
+/* ---------- Estoque ---------- */
+V.estoque = {
+  mount: () => `<div class="page">
+    <div class="ph"><div><div class="eyebrow" id="e-eb">Estoque</div><h1>Estoque</h1></div>
+      <div class="ph-actions"><button class="btn" data-act="export" data-kind="estoque" type="button">${ic('dl')}Exportar planilha</button><button class="btn btn-primary" data-act="newmat" data-w type="button">${ic('plus')}Novo material</button></div></div>
+    <div class="toolbar">
+      <label class="search">${ic('search')}<input class="in" id="e-q" type="search" placeholder="Buscar por nome, código ou local" autocomplete="off" aria-label="Buscar material"></label>
+      <select class="in sel" id="e-cat" aria-label="Categoria"></select>
+    </div>
+    <div class="chips" id="e-chips"></div>
+    <section class="card tbl" id="e-list"></section>
+  </div>`,
+  bind(root) {
+    const q = $('#e-q', root); q.value = S.f.est.q;
+    q.addEventListener('input', () => { S.f.est.q = q.value; S.estLimit = 300; V.estoque.update(); });
+    $('#e-cat', root).addEventListener('change', e => { S.f.est.cat = e.target.value; V.estoque.update(); });
+  },
+  update() {
+    const list = $('#e-list'); if (!list) return;
+    if (!ready()) { list.innerHTML = skelRows(6); return; }
+    const f = S.f.est;
+    const catSel = $('#e-cat'); const ck = D.cats.join('\u0001');
+    if (catSel.dataset.k !== ck) { catSel.dataset.k = ck; catSel.innerHTML = `<option value="">Todas as categorias</option>` + D.cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join(''); }
+    catSel.value = D.cats.includes(f.cat) ? f.cat : '';
+    const cnt = { todos: S.materiais.length, baixo: D.low.length, zerado: D.zero, ret: S.materiais.filter(m => m.retornavel).length };
+    $('#e-chips').innerHTML = [['todos', 'Todos'], ['baixo', 'Abaixo do mínimo'], ['zerado', 'Zerados'], ['ret', 'Retornáveis']].map(([k, l]) => `<button type="button" class="chip" data-act="filt" data-scope="est" data-key="f" data-val="${k}" aria-pressed="${f.f === k}">${l}<span class="n">${cnt[k]}</span></button>`).join('');
+    const q = norm(f.q);
+    let items = S.materiais.filter(m => {
+      if (f.cat && (m.categoria || '').trim() !== f.cat) return false;
+      const st = D.state(m);
+      if (f.f === 'baixo' && st === 'ok') return false;
+      if (f.f === 'zerado' && st !== 'zero') return false;
+      if (f.f === 'ret' && !m.retornavel) return false;
+      if (q && !norm(`${m.nome} ${m.codigo || ''} ${m.local || ''} ${m.categoria || ''}`).includes(q)) return false;
+      return true;
+    }).sort((a, b) => (a.codigo || a.nome).localeCompare(b.codigo || b.nome, 'pt-BR', { numeric: true }));
+    $('#e-eb').textContent = `Estoque · ${S.materiais.length} ${S.materiais.length === 1 ? 'material' : 'materiais'}`;
+    if (!S.materiais.length) { list.innerHTML = `<div class="empty">${ic('box', 28)}<b>Nenhum material cadastrado</b><span>Comece pelo que mais sai: cabos, conectores, equipamentos.</span><button class="btn btn-primary" data-act="newmat" data-w type="button">${ic('plus')}Cadastrar material</button></div>`; return; }
+    if (!items.length) { list.innerHTML = `<div class="empty">${ic('search', 26)}<b>Nada encontrado</b><span>Ajuste a busca ou os filtros.</span></div>`; return; }
+    const shown = items.slice(0, S.estLimit);
+    list.innerHTML = `<div class="tr th mat-row"><span>Código</span><span>Material</span><span>Local</span><span>Nível</span><span class="r">Saldo</span><span>Situação</span><span></span></div>` +
+      shown.map(m => {
+        const s = D.saldo.get(m.id) || 0, st = D.state(m);
+        return `<div class="tr mat-row ${st !== 'ok' ? 'low' : ''}" role="button" tabindex="0" data-act="mat" data-id="${esc(m.id)}">
+          <span class="code">${esc(m.codigo || '—')}</span>
+          <span class="cell-main"><span class="t1">${esc(m.nome)}</span><span class="t2">${esc(m.categoria || 'Sem categoria')}${m.retornavel ? ' · <span class="tag">Retornável</span>' : ''}${m.exemplo ? ' <span class="tag ex">Exemplo</span>' : ''}</span></span>
+          <span class="loc mono t2">${esc(m.local || '—')}</span>
+          ${lvlBar(m)}
+          <span class="qty"><b>${fmtN(s)}</b> <small>${esc(m.unidade || 'un')}</small></span>
+          <span class="st">${matPill(st)}</span>
+          <span class="chev">${ic('chev', 16)}</span></div>`;
+      }).join('') + (items.length > shown.length ? `<div class="more"><button class="btn btn-sm" data-act="more" data-k="estLimit" type="button">Mostrar mais ${Math.min(300, items.length - shown.length)}</button></div>` : '');
+  }
+};
+
+/* ---------- Movimentações ---------- */
+V.movs = {
+  mount: () => `<div class="page">
+    <div class="ph"><div><div class="eyebrow" id="m-eb">Movimentações</div><h1>Entradas e saídas</h1></div>
+      <div class="ph-actions"><button class="btn" data-act="export" data-kind="movs" type="button">${ic('dl')}Exportar planilha</button></div></div>
+    <div class="split">
+      <section class="card">
+        <div class="card-h"><div><div class="card-t">${ic('plus', 16)}Registrar</div><div class="card-sub">Data e horário entram automaticamente</div></div></div>
+        <div class="card-b" id="m-form"></div>
+      </section>
+      <section class="card" style="overflow:hidden">
+        <div class="card-h"><div><div class="card-t">${ic('clock', 16)}Histórico</div><div class="card-sub" id="m-count"></div></div><button class="btn btn-sm btn-ghost" data-act="loadarch" type="button" id="m-arch" hidden>${ic('archive', 15)}Incluir arquivados</button></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:10px">
+          <div class="toolbar"><label class="search">${ic('search')}<input class="in" id="m-q" type="search" placeholder="Pessoa, material, MAC ou observação" autocomplete="off" aria-label="Buscar no histórico"></label>
+          <select class="in sel" id="m-p" aria-label="Período"><option value="hoje">Hoje</option><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option><option value="90">Últimos 90 dias</option><option value="all">Todo o período</option></select></div>
+          <div class="chips" id="m-chips"></div>
+        </div>
+        <div id="m-list"></div>
+      </section>
+    </div>
+  </div>`,
+  bind(root) {
+    S.pageForm = MovForm($('#m-form', root), {});
+    const q = $('#m-q', root); q.value = S.f.mov.q;
+    q.addEventListener('input', () => { S.f.mov.q = q.value; S.movLimit = 150; V.movs.update(); });
+    const p = $('#m-p', root); p.value = S.f.mov.p;
+    p.addEventListener('change', () => { S.f.mov.p = p.value; S.movLimit = 150; V.movs.update(); });
+  },
+  update() {
+    const list = $('#m-list'); if (!list) return;
+    $('#m-arch').hidden = !(num(S.config.arquivoMovs) > 0) || !!S.arquivo;
+    if (!ready()) { list.innerHTML = skelRows(6); return; }
+    const f = S.f.mov;
+    const all = S.arquivo ? D.movs.concat(S.arquivo) : D.movs;
+    const since = f.p === 'hoje' ? startOfDay(Date.now()) : f.p === 'all' ? 0 : startOfDay(Date.now()) - (num(f.p) - 1) * DAY;
+    const q = norm(f.q), qh = macHex(f.q);
+    const base = all.filter(mv => (mv.ts || 0) >= since && (!q || norm(`${mv.pessoa || ''} ${mv.materialNome || ''} ${mv.codigo || ''} ${mv.obs || ''} ${mv.mac || ''} ${mv.modelo || ''}`).includes(q) || (qh.length >= 4 && (mv.modem || '').includes(qh))));
+    const T = { todos: 'Todos', entrada: 'Entradas', saida: 'Saídas', devolucao: 'Devoluções', ajuste: 'Ajustes', modem: 'Modems' };
+    const match = (mv, t) => t === 'todos' || (t === 'modem' ? mv.alvo === 'modem' : mv.alvo !== 'modem' && mv.tipo === t);
+    $('#m-chips').innerHTML = Object.entries(T).map(([k, l]) => `<button type="button" class="chip" data-act="filt" data-scope="mov" data-key="t" data-val="${k}" aria-pressed="${f.t === k}">${l}<span class="n">${base.filter(mv => match(mv, k)).length}</span></button>`).join('');
+    const items = base.filter(mv => match(mv, f.t));
+    $('#m-count').textContent = `${fmtN(items.length)} ${items.length === 1 ? 'lançamento' : 'lançamentos'} no período`;
+    $('#m-eb').textContent = `Movimentações · ${fmtN(S.movs.length)} registradas`;
+    if (!items.length) { list.innerHTML = `<div class="empty">${ic('swap', 26)}<b>${S.movs.length ? 'Nada neste filtro' : 'Nenhuma movimentação ainda'}</b><span>${S.movs.length ? 'Tente outro período ou tipo.' : 'Use o formulário para registrar a primeira.'}</span></div>`; return; }
+    const shown = items.slice(0, S.movLimit);
+    let html = '', lastDay = null;
+    const perDay = new Map(); for (const mv of items) { const d = startOfDay(mv.ts); perDay.set(d, (perDay.get(d) || 0) + 1); }
+    for (const mv of shown) {
+      const d = startOfDay(mv.ts);
+      if (d !== lastDay) { lastDay = d; html += `<div class="day-h"><span>${esc(dayLabel(mv.ts))}</span><span>${perDay.get(d)}</span></div>`; }
+      html += `<div class="mv${S.newIds.has(mv.id) ? ' new' : ''}"><span class="mv-time">${fmtTime(mv.ts)}</span>${movIcon(mv)}
+        <div class="mv-main" style="min-width:0"><div class="fi-t"><span class="t-time">${fmtTime(mv.ts)}</span>${movSentence(mv)}</div><div class="fi-m">${avatar(mv.por, '', mv)}<span>${esc(who(mv.por, mv))}</span>${mv.obs ? `<span>· ${esc(mv.obs)}</span>` : ''}${mv.arquivado ? '<span class="tag">Arquivado</span>' : ''}${mv.exemplo ? '<span class="tag ex">Exemplo</span>' : ''}</div></div>
+        ${movQty(mv)}
+        ${mv.arquivado ? '<span class="del"></span>' : `<button class="btn btn-ghost btn-sm btn-icon del" data-act="delmov" data-id="${esc(mv.id)}" data-w type="button" aria-label="Excluir lançamento" title="Excluir lançamento">${ic('trash', 15)}</button>`}</div>`;
+    }
+    if (items.length > shown.length) html += `<div class="more"><button class="btn btn-sm" data-act="more" data-k="movLimit" type="button">Mostrar mais ${Math.min(150, items.length - shown.length)}</button></div>`;
+    list.innerHTML = html;
+  }
+};
+
+/* ---------- Movement form ---------- */
+function MovForm(el, preset = {}, onDone) {
+  const fid = 'f' + Math.random().toString(36).slice(2, 7);
+  const st = { tipo: preset.tipo || 'saida', lines: [], when: null, busy: false, hi: -1 };
+  const firstQ = preset.qtd ? num(preset.qtd) : 1;
+  st.lines.push({ mid: preset.materialId || '', q: st.tipo === 'ajuste' && preset.materialId ? (D.saldo.get(preset.materialId) || 0) : firstQ, text: '' });
+  el.innerHTML = `<form class="mf" novalidate>
+    <div class="seg" role="group" aria-label="Tipo de movimentação">${['saida', 'entrada', 'devolucao', 'ajuste'].map(t => `<button type="button" data-t="${t}" aria-pressed="${t === st.tipo}">${ic(TIPOS[t].icon, 16)}<span>${TIPOS[t].label}</span></button>`).join('')}</div>
+    <p class="mf-hint" data-r="hint"></p>
+    <div class="lines" data-r="lines"></div>
+    <button type="button" class="btn btn-sm btn-ghost" data-r="add" style="align-self:flex-start">${ic('plus', 15)}Adicionar outro item</button>
+    <div class="field"><label for="${fid}-p" data-r="pl">Quem pegou</label><input class="in" id="${fid}-p" data-r="pessoa" list="dl-pessoas" autocomplete="off" value="${esc(preset.pessoa || '')}"></div>
+    <div class="field"><label for="${fid}-o">Observação <span class="opt">opcional</span></label><input class="in" id="${fid}-o" data-r="obs" placeholder="Ordem de serviço, cliente, nota fiscal…" autocomplete="off"></div>
+    <div class="when"><span>${ic('clock', 15)}<b data-r="whenTxt">Agora</b></span><button type="button" class="linkbtn" data-r="whenBtn">Alterar data e horário</button><input type="datetime-local" class="in" data-r="whenIn" aria-label="Data e horário" hidden></div>
+    <div class="err" data-r="err" role="alert"></div>
+    <button class="btn btn-primary btn-lg" type="submit" data-r="submit" data-w></button>
+  </form>`;
+  const R = n => el.querySelector(`[data-r="${n}"]`);
+  const form = el.querySelector('form');
+
+  function setTipo(t) {
+    const was = st.tipo; st.tipo = t;
+    $$('.seg button', el).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.t === t)));
+    const req = t === 'saida' || t === 'devolucao';
+    const lab = { saida: 'Quem pegou', devolucao: 'Quem devolveu', entrada: 'Fornecedor ou origem', ajuste: 'Quem fez a contagem' }[t];
+    R('pl').innerHTML = esc(lab) + (req ? '' : ' <span class="opt">opcional</span>');
+    R('pessoa').placeholder = t === 'entrada' ? 'Fornecedor, nota fiscal ou transferência' : 'Nome do técnico ou colaborador';
+    if (req || t === 'ajuste') R('pessoa').setAttribute('list', 'dl-pessoas'); else R('pessoa').removeAttribute('list');
+    R('submit').innerHTML = `${ic(TIPOS[t].icon, 18)}Registrar ${TIPOS[t].label.toLowerCase()}`;
+    R('hint').textContent = HINT[t];
+    if (t === 'ajuste' && was !== 'ajuste') st.lines.forEach(l => { if (l.mid) l.q = D.saldo.get(l.mid) || 0; });
+    if (t !== 'ajuste' && was === 'ajuste') st.lines.forEach(l => { l.q = 1; });
+    renderLines();
+  }
+  function renderLines() {
+    const n = st.lines.length;
+    R('lines').innerHTML = st.lines.map((ln, i) => {
+      const m = matById(ln.mid);
+      return `<div class="line" data-i="${i}">
+        <div class="cb"><label class="lbl" for="${fid}-m${i}">${n > 1 ? `Item ${i + 1}` : 'Material'}</label>
+          <input class="in cb-in" id="${fid}-m${i}" data-i="${i}" value="${esc(m ? m.nome : ln.text)}" placeholder="Buscar por nome ou código" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="${fid}-l${i}">
+          <ul class="cb-list" id="${fid}-l${i}" role="listbox" hidden></ul></div>
+        <div class="field"><label class="lbl" for="${fid}-q${i}">${st.tipo === 'ajuste' ? 'Contagem' : 'Quantidade'}</label>
+          <div class="stepper"><button type="button" data-step="-1" data-i="${i}" aria-label="Diminuir">−</button><input class="in mono q-in" id="${fid}-q${i}" data-i="${i}" inputmode="decimal" autocomplete="off" value="${esc(String(ln.q).replace('.', ','))}"><button type="button" data-step="1" data-i="${i}" aria-label="Aumentar">+</button></div></div>
+        ${n > 1 ? `<button type="button" class="btn btn-ghost btn-icon" data-rm="${i}" aria-label="Remover item ${i + 1}">${ic('x', 16)}</button>` : '<span></span>'}
+        <div class="ln-info" data-info="${i}"></div></div>`;
+    }).join('');
+    refresh();
+  }
+  function refresh() {
+    st.lines.forEach((ln, i) => {
+      const info = el.querySelector(`[data-info="${i}"]`); if (!info) return;
+      const m = matById(ln.mid);
+      if (!m) { info.innerHTML = ''; info.className = 'ln-info'; return; }
+      const s = D.saldo.get(m.id) || 0, u = esc(m.unidade || 'un');
+      let html, cls = '';
+      if (st.tipo === 'ajuste') { const d = round3(num(ln.q) - s); html = `No sistema: <b>${fmtN(s)} ${u}</b> · diferença: <b>${d > 0 ? '+' : ''}${fmtN(d)} ${u}</b>`; if (d) cls = 'warn'; }
+      else {
+        const after = round3(s + (st.tipo === 'saida' ? -1 : 1) * num(ln.q));
+        html = `Saldo: <b>${fmtN(s)} ${u}</b> → depois: <b>${fmtN(after)} ${u}</b>`;
+        if (st.tipo === 'saida' && after < 0) { cls = 'crit'; html += ' · saldo insuficiente'; }
+        else if (st.tipo === 'saida' && num(m.minimo) > 0 && after <= num(m.minimo)) { cls = 'warn'; html += ' · fica no mínimo'; }
+      }
+      info.innerHTML = html; info.className = 'ln-info ' + cls;
+    });
+  }
+  function openList(i) {
+    const inp = el.querySelector(`#${fid}-m${i}`), ul = el.querySelector(`#${fid}-l${i}`); if (!inp || !ul) return;
+    const q = norm(inp.value);
+    let items = S.materiais;
+    if (q) items = items.filter(m => norm(`${m.nome} ${m.codigo || ''} ${m.local || ''} ${m.categoria || ''}`).includes(q));
+    items = [...items].sort((a, b) => { const sa = norm(a.nome).startsWith(q) || norm(a.codigo).startsWith(q) ? 0 : 1, sb = norm(b.nome).startsWith(q) || norm(b.codigo).startsWith(q) ? 0 : 1; return sa - sb || a.nome.localeCompare(b.nome); }).slice(0, 8);
+    st.hi = items.length ? 0 : -1;
+    ul.innerHTML = !S.materiais.length ? `<li class="cb-empty">Nenhum material cadastrado ainda. Cadastre em Estoque → Novo material.</li>`
+      : !items.length ? `<li class="cb-empty">Nada encontrado para “${esc(inp.value)}”.</li>`
+      : items.map((m, k) => `<li role="option" id="${fid}-o${i}-${k}" data-id="${esc(m.id)}" aria-selected="${k === 0}"><span class="cb-n">${esc(m.nome)}</span><span class="cb-m mono">${esc(m.codigo || '')}${m.local ? ' · ' + esc(m.local) : ''}</span><span class="cb-s mono">${fmtN(D.saldo.get(m.id) || 0)} ${esc(m.unidade || 'un')}</span></li>`).join('');
+    ul.hidden = false; inp.setAttribute('aria-expanded', 'true');
+    if (st.hi >= 0) inp.setAttribute('aria-activedescendant', `${fid}-o${i}-0`);
+  }
+  function closeList(i) { const inp = el.querySelector(`#${fid}-m${i}`), ul = el.querySelector(`#${fid}-l${i}`); if (ul) ul.hidden = true; if (inp) { inp.setAttribute('aria-expanded', 'false'); inp.removeAttribute('aria-activedescendant'); } }
+  function pick(i, id) {
+    const m = matById(id); if (!m) return;
+    const ln = st.lines[i]; ln.mid = id; ln.text = '';
+    if (st.tipo === 'ajuste') ln.q = D.saldo.get(id) || 0;
+    const inp = el.querySelector(`#${fid}-m${i}`); inp.value = m.nome; closeList(i);
+    const qi = el.querySelector(`#${fid}-q${i}`); qi.value = String(ln.q).replace('.', ',');
+    refresh(); qi.focus(); qi.select();
+  }
+
+  el.addEventListener('click', e => {
+    const seg = e.target.closest('.seg button'); if (seg) { setTipo(seg.dataset.t); return; }
+    const stp = e.target.closest('[data-step]');
+    if (stp) { const i = +stp.dataset.i, ln = st.lines[i]; ln.q = round3(Math.max(0, num(ln.q) + (+stp.dataset.step))); el.querySelector(`#${fid}-q${i}`).value = String(ln.q).replace('.', ','); refresh(); return; }
+    const rm = e.target.closest('[data-rm]'); if (rm) { st.lines.splice(+rm.dataset.rm, 1); renderLines(); return; }
+    if (e.target.closest('[data-r="add"]')) { st.lines.push({ mid: '', q: 1, text: '' }); renderLines(); el.querySelector(`#${fid}-m${st.lines.length - 1}`).focus(); return; }
+    if (e.target.closest('[data-r="whenBtn"]')) { const wi = R('whenIn'); wi.hidden = !wi.hidden; if (!wi.hidden) { wi.value = toLocalInput(st.when || Date.now()); wi.max = toLocalInput(Date.now()); wi.focus(); } else { st.when = null; R('whenTxt').textContent = 'Agora'; } return; }
+  });
+  el.addEventListener('mousedown', e => { const li = e.target.closest('.cb-list li[data-id]'); if (li) { e.preventDefault(); pick(+li.closest('.line').dataset.i, li.dataset.id); } });
+  el.addEventListener('input', e => {
+    const t = e.target;
+    if (t.classList.contains('cb-in')) { const i = +t.dataset.i; st.lines[i].mid = ''; st.lines[i].text = t.value; openList(i); refresh(); }
+    else if (t.classList.contains('q-in')) { st.lines[+t.dataset.i].q = num(t.value); refresh(); }
+    else if (t.dataset.r === 'whenIn') { const v = new Date(t.value).getTime(); st.when = isFinite(v) ? v : null; R('whenTxt').textContent = st.when ? fmtDT(st.when) : 'Agora'; }
+  });
+  el.addEventListener('focusin', e => { if (e.target.classList.contains('cb-in')) { openList(+e.target.dataset.i); e.target.select(); } });
+  el.addEventListener('focusout', e => {
+    const t = e.target; if (!t.classList.contains('cb-in')) return;
+    const i = +t.dataset.i;
+    setTimeout(() => {
+      closeList(i);
+      const ln = st.lines[i]; if (!ln || ln.mid || !t.value.trim()) return;
+      const q = norm(t.value);
+      const exact = S.materiais.filter(m => norm(m.codigo) === q || norm(m.nome) === q);
+      if (exact.length === 1) { ln.mid = exact[0].id; ln.text = ''; t.value = exact[0].nome; if (st.tipo === 'ajuste') { ln.q = D.saldo.get(ln.mid) || 0; el.querySelector(`#${fid}-q${i}`).value = String(ln.q).replace('.', ','); } refresh(); }
+    }, 140);
+  });
+  el.addEventListener('keydown', e => {
+    const t = e.target; if (!t.classList.contains('cb-in')) return;
+    const i = +t.dataset.i, ul = el.querySelector(`#${fid}-l${i}`);
+    const opts = $$('li[data-id]', ul);
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault(); if (ul.hidden) { openList(i); return; } if (!opts.length) return;
+      st.hi = (st.hi + (e.key === 'ArrowDown' ? 1 : -1) + opts.length) % opts.length;
+      opts.forEach((o, k) => o.setAttribute('aria-selected', String(k === st.hi)));
+      opts[st.hi].scrollIntoView({ block: 'nearest' }); t.setAttribute('aria-activedescendant', opts[st.hi].id);
+    } else if (e.key === 'Enter') {
+      if (!ul.hidden && opts.length && st.hi >= 0) { e.preventDefault(); pick(i, opts[st.hi].dataset.id); }
+    } else if (e.key === 'Escape') { if (!ul.hidden) { e.stopPropagation(); closeList(i); } }
+  });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault(); if (st.busy) return;
+    const err = R('err'); err.textContent = '';
+    if (S.readOnly) { err.textContent = 'Seu acesso é somente leitura.'; return; }
+    const pessoa = R('pessoa').value.trim(), obs = R('obs').value.trim();
+    const lines = st.lines.filter(l => l.mid || (l.text || '').trim());
+    const bad = lines.findIndex(l => !matById(l.mid));
+    if (!lines.length || bad >= 0) { err.textContent = 'Escolha o material na lista. Digite parte do nome ou do código e selecione.'; const inp = el.querySelector(`#${fid}-m${bad >= 0 ? st.lines.indexOf(lines[bad]) : 0}`); inp && inp.focus(); return; }
+    if ((st.tipo === 'saida' || st.tipo === 'devolucao') && !pessoa) { err.textContent = st.tipo === 'saida' ? 'Informe quem pegou o material.' : 'Informe quem devolveu o material.'; R('pessoa').focus(); return; }
+    for (const l of lines) { const q = num(l.q); if (st.tipo === 'ajuste' ? q < 0 : q <= 0) { err.textContent = st.tipo === 'ajuste' ? 'A contagem não pode ser negativa.' : 'Informe uma quantidade maior que zero.'; return; } }
+    if (st.tipo === 'saida') {
+      const need = new Map(); lines.forEach(l => need.set(l.mid, (need.get(l.mid) || 0) + num(l.q)));
+      for (const [mid, q] of need) { const s = D.saldo.get(mid) || 0; if (q > s + 1e-9) { const m = matById(mid); err.textContent = `Saldo insuficiente de ${m.nome}: há ${fmtN(s)} ${m.unidade || 'un'} no estoque. Registre uma entrada ou um ajuste antes.`; return; } }
+    }
+    const ts = st.when || Date.now();
+    if (ts > Date.now() + 5 * 60e3) { err.textContent = 'A data e o horário não podem estar no futuro.'; return; }
+    if (num(S.config.arquivadoAte) && ts < S.config.arquivadoAte) { err.textContent = `Essa data já foi arquivada. Use uma data a partir de ${fmtDate(S.config.arquivadoAte)}.`; return; }
+    const lote = lines.length > 1 ? uid() : null;
+    const docs = [];
+    for (const l of lines) {
+      const m = matById(l.mid), s = D.saldo.get(m.id) || 0;
+      let qtd = num(l.q), delta;
+      if (st.tipo === 'ajuste') { delta = round3(qtd - s); if (Math.abs(delta) < 1e-9) continue; qtd = Math.abs(delta); }
+      else delta = TIPOS[st.tipo].sign * qtd;
+      docs.push({ id: movId(ts), body: { tipo: st.tipo, materialId: m.id, materialNome: m.nome, codigo: m.codigo || '', unidade: m.unidade || 'un', qtd: round3(qtd), delta: round3(delta), contagem: st.tipo === 'ajuste' ? num(l.q) : null, pessoa, obs, ts, por: S.me.id || null, criadoEm: Date.now(), lote } });
+    }
+    if (!docs.length) { err.textContent = 'A contagem é igual ao saldo do sistema. Não há nada para ajustar.'; return; }
+    st.busy = true; R('submit').disabled = true;
+    const ok = await write(() => Promise.all(docs.map(d => Store.api.set('movs/' + d.id, d.body))));
+    st.busy = false; R('submit').disabled = false;
+    if (!ok) return;
+    const b = docs[0].body, lbl = TIPOS[st.tipo].label;
+    const what = docs.length > 1 ? `${docs.length} itens` : `${fmtN(b.qtd)} ${b.unidade} de ${b.materialNome}`;
+    toast(`${lbl} registrada: ${what}${pessoa && st.tipo !== 'entrada' && st.tipo !== 'ajuste' ? (st.tipo === 'saida' ? ' para ' : ' por ') + pessoa : ''} · ${fmtTime(ts)}`, 'ok');
+    docs.forEach(d => markNew(d.id));
+    st.lines = [{ mid: '', q: 1, text: '' }]; R('obs').value = ''; st.when = null; R('whenIn').hidden = true; R('whenTxt').textContent = 'Agora';
+    renderLines();
+    if (onDone) onDone(); else if (finePointer()) el.querySelector(`#${fid}-m0`).focus();
+  });
+  setTipo(st.tipo);
+  return { refresh };
+}
+
+/* ---------- Modems ---------- */
+V.modems = {
+  mount: () => `<div class="page">
+    <div class="ph"><div><div class="eyebrow" id="d-eb">Modems Wi-Fi</div><h1>Modems Wi-Fi</h1></div>
+      <div class="ph-actions"><button class="btn" data-act="export" data-kind="modems" type="button">${ic('dl')}Exportar</button><button class="btn" data-act="bulk" data-w type="button">${ic('scan')}Cadastrar em lote</button><button class="btn btn-primary" data-act="newmodem" data-w type="button">${ic('plus')}Novo modem</button></div></div>
+    <section class="card stats" id="d-stats"></section>
+    <div class="toolbar"><label class="search">${ic('search')}<input class="in" id="d-q" type="search" placeholder="MAC, número de série, modelo, técnico ou cliente" autocomplete="off" spellcheck="false" aria-label="Buscar modem"></label></div>
+    <div class="chips" id="d-chips"></div>
+    <section class="card tbl" id="d-list"></section>
+  </div>`,
+  bind(root) {
+    const q = $('#d-q', root); q.value = S.f.mod.q;
+    q.addEventListener('input', () => { S.f.mod.q = q.value; S.modLimit = 200; V.modems.update(); });
+  },
+  update() {
+    const list = $('#d-list'); if (!list) return;
+    if (!ready()) { list.innerHTML = skelRows(6); $('#d-stats').innerHTML = ''; return; }
+    const c = ciclo(), M = S.modems;
+    const cnt = { todos: M.length, pend: M.length - D.aud, aud: D.aud, estoque: 0, tecnico: 0, instalado: 0, defeito: 0 };
+    for (const m of M) if (cnt[m.status] != null) cnt[m.status]++;
+    $('#d-eb').textContent = `Modems Wi-Fi · ${fmtN(M.length)} cadastrados`;
+    $('#d-stats').innerHTML = [['todos', 'Total'], ['estoque', 'Em estoque'], ['tecnico', 'Com técnicos'], ['instalado', 'Instalados'], ['defeito', 'Defeito'], ['pend', 'Sem auditoria']].map(([k, l]) => `<button type="button" class="st" data-act="filt" data-scope="mod" data-key="f" data-val="${k}"><span class="eyebrow">${l}</span><b>${fmtN(cnt[k])}</b></button>`).join('');
+    const f = S.f.mod;
+    $('#d-chips').innerHTML = [['todos', 'Todos'], ['pend', 'Auditoria pendente'], ['aud', 'Auditados'], ['estoque', 'Em estoque'], ['tecnico', 'Com técnico'], ['instalado', 'Instalados'], ['defeito', 'Defeito']].map(([k, l]) => `<button type="button" class="chip" data-act="filt" data-scope="mod" data-key="f" data-val="${k}" aria-pressed="${f.f === k}">${l}<span class="n">${cnt[k]}</span></button>`).join('');
+    const q = norm(f.q), qh = macHex(f.q);
+    const items = M.filter(m => {
+      if (f.f === 'pend' && m.auditCiclo === c) return false;
+      if (f.f === 'aud' && m.auditCiclo !== c) return false;
+      if (MST[f.f] && m.status !== f.f) return false;
+      if (q && !(norm(`${m.modelo || ''} ${m.serial || ''} ${m.comQuem || ''} ${m.cliente || ''} ${m.obs || ''} ${m.mac || ''}`).includes(q) || (qh.length >= 2 && m.id.includes(qh)))) return false;
+      return true;
+    }).sort((a, b) => (b.atualizadoEm || b.criadoEm || 0) - (a.atualizadoEm || a.criadoEm || 0));
+    if (!M.length) { list.innerHTML = `<div class="empty">${ic('router', 28)}<b>Nenhum modem cadastrado</b><span>Cadastre um por vez ou cole uma lista de MACs de uma vez.</span><div class="w-actions" style="margin:0;justify-content:center"><button class="btn btn-primary" data-act="newmodem" data-w type="button">${ic('plus')}Novo modem</button><button class="btn" data-act="bulk" data-w type="button">${ic('scan')}Cadastrar em lote</button></div></div>`; return; }
+    if (!items.length) { list.innerHTML = `<div class="empty">${ic('search', 26)}<b>Nenhum modem neste filtro</b>${qh.length === 12 ? `<span>O MAC ${esc(macFmt(qh))} não está cadastrado.</span><button class="btn btn-primary" data-act="newmodem" data-mac="${qh}" data-w type="button">${ic('plus')}Cadastrar este MAC</button>` : '<span>Ajuste a busca ou os filtros.</span>'}</div>`; return; }
+    const shown = items.slice(0, S.modLimit);
+    list.innerHTML = `<div class="tr th mod-row"><span>MAC</span><span>Modelo · Série</span><span>Status</span><span class="who">Com quem / cliente</span><span>Auditoria</span><span></span></div>` + shown.map(m => `
+      <div class="tr mod-row" role="button" tabindex="0" data-act="modem" data-id="${esc(m.id)}">
+        <span class="mac">${macHTML(m.id)}</span>
+        <span class="cell-main"><span class="t1">${esc(m.modelo || 'Modelo não informado')}</span><span class="t2">${m.serial ? 'S/N ' + esc(m.serial) : 'Sem número de série'}${m.exemplo ? ' <span class="tag ex">Exemplo</span>' : ''}</span></span>
+        <span class="st">${modPill(m.status)}</span>
+        <span class="who t2">${m.status === 'tecnico' ? esc(m.comQuem || '—') : m.status === 'instalado' ? esc(m.cliente || '—') : '—'}</span>
+        <span class="aud">${audChip(m)}</span>
+        <span class="act">${m.auditCiclo !== c ? `<button class="btn btn-sm" data-act="audit" data-id="${esc(m.id)}" data-w type="button">${ic('check', 15)}Auditar</button>` : ''}</span>
+      </div>`).join('') + (items.length > shown.length ? `<div class="more"><button class="btn btn-sm" data-act="more" data-k="modLimit" type="button">Mostrar mais ${Math.min(200, items.length - shown.length)}</button></div>` : '');
+  }
+};
+
+/* ---------- Auditoria ---------- */
+V.auditoria = {
+  mount: () => `<div class="page">
+    <div class="ph"><div><div class="eyebrow" id="a-eb">Auditoria</div><h1>Auditoria de modems</h1></div>
+      <div class="ph-actions"><button class="btn" data-act="export" data-kind="modems" type="button">${ic('dl')}Exportar</button><button class="btn" data-act="newcycle" data-w type="button">${ic('shield')}Iniciar novo ciclo</button></div></div>
+    <div class="aud-top">
+      <section class="card aud-ring" id="a-ring"></section>
+      <section class="card">
+        <div class="card-h"><div><div class="card-t">${ic('scan', 16)}Conferência por leitura</div><div class="card-sub">Bipe a etiqueta com o leitor de código de barras ou digite o MAC e pressione Enter.</div></div></div>
+        <div class="card-b">
+          <form class="scan" id="a-scan" autocomplete="off" novalidate>
+            <div class="scan-f">${ic('scan', 22)}<input id="a-in" class="in" placeholder="AA:BB:CC:DD:EE:FF" spellcheck="false" autocapitalize="characters" autocomplete="off" aria-label="MAC do modem"><span class="beam" aria-hidden="true"></span></div>
+            <button class="btn btn-primary" type="submit" data-w>${ic('check')}Conferir</button>
+          </form>
+          <div class="scan-opts"><span>Cada leitura marca o modem como auditado neste ciclo.</span><label><input type="checkbox" id="a-sound"> ${ic('sound', 15)} Som de confirmação</label></div>
+          <div id="a-res"></div>
+          <div class="slog" id="a-log"></div>
+        </div>
+      </section>
+    </div>
+    <div class="grid-2 even">
+      <section class="card" style="overflow:hidden"><div class="card-h"><div><div class="card-t">${ic('clock', 16)}Pendentes <span class="nb" id="a-pn">0</span></div><div class="card-sub">Ainda não conferidos neste ciclo</div></div></div>
+        <div class="card-b" style="padding-bottom:0"><label class="search">${ic('search')}<input class="in" id="a-q" type="search" placeholder="Filtrar pendentes" autocomplete="off" aria-label="Filtrar pendentes"></label></div>
+        <div class="alist" id="a-pend"></div></section>
+      <section class="card" style="overflow:hidden"><div class="card-h"><div><div class="card-t">${ic('check', 16)}Auditados neste ciclo <span class="nb" id="a-dn">0</span></div><div class="card-sub">Mais recentes primeiro</div></div></div>
+        <div class="alist" id="a-done"></div></section>
+    </div>
+    <section class="card" id="a-hist" style="overflow:hidden"></section>
+  </div>`,
+  bind(root) {
+    const inp = $('#a-in', root);
+    $('#a-scan', root).addEventListener('submit', e => { e.preventDefault(); const v = inp.value; inp.value = ''; if (v.trim()) doScan(v); inp.focus(); });
+    const snd = $('#a-sound', root); snd.checked = S.sound; snd.addEventListener('change', () => { S.sound = snd.checked; lsSet('almox-sound', S.sound ? '1' : '0'); });
+    const q = $('#a-q', root); q.value = S.f.aud.q; q.addEventListener('input', () => { S.f.aud.q = q.value; V.auditoria.update(); });
+    renderScanLog();
+    if (finePointer()) setTimeout(() => inp.focus({ preventScroll: true }), 80);
+  },
+  update() {
+    const ringEl = $('#a-ring'); if (!ringEl) return;
+    if (!ready()) { ringEl.innerHTML = '<div class="skel" style="width:148px;height:148px;border-radius:50%"></div>'; $('#a-pend').innerHTML = skelRows(4); $('#a-done').innerHTML = skelRows(4); return; }
+    const c = ciclo(), tot = D.totModems, aud = D.aud;
+    $('#a-eb').textContent = S.config.cicloInicio ? `Auditoria · ciclo iniciado em ${fmtDate(S.config.cicloInicio)}` : 'Auditoria · primeiro ciclo';
+    ringEl.innerHTML = `<div class="ar-wrap">${ring(D.pct, 148, 12)}<div class="ar-c"><b class="ar-pct">${Math.round(D.pct * 100)}<small>%</small></b><span>auditado</span></div></div>
+      <div class="ar-stats"><div><span class="eyebrow">Auditados</span><b>${fmtN(aud)}</b></div><div><span class="eyebrow">Pendentes</span><b>${fmtN(tot - aud)}</b></div><div><span class="eyebrow">Divergências</span><b class="${D.div ? 'crit' : ''}">${fmtN(D.div)}</b></div><div><span class="eyebrow">Total</span><b>${fmtN(tot)}</b></div></div>
+      <div class="ar-cycle">${S.config.cicloInicio ? `Ciclo iniciado em ${esc(fmtDT(S.config.cicloInicio))}${S.config.cicloPor ? ` por ${esc(who(S.config.cicloPor))}` : ''}` : 'Ao iniciar um novo ciclo, todos os modems voltam para pendente.'}</div>`;
+    const q = norm(S.f.aud.q), qh = macHex(S.f.aud.q);
+    const pend = S.modems.filter(m => m.auditCiclo !== c && (!q || norm(`${m.modelo || ''} ${m.serial || ''} ${m.comQuem || ''} ${m.cliente || ''}`).includes(q) || (qh.length >= 2 && m.id.includes(qh)))).sort((a, b) => (a.status || '').localeCompare(b.status || '') || a.id.localeCompare(b.id));
+    const done = S.modems.filter(m => m.auditCiclo === c).sort((a, b) => (b.auditTs || 0) - (a.auditTs || 0));
+    $('#a-pn').textContent = fmtN(tot - aud); $('#a-dn').textContent = fmtN(aud);
+    $('#a-pend').innerHTML = pend.length ? pend.slice(0, 150).map(m => `<div class="ar"><div style="min-width:0"><a href="#modems" class="mac" data-act="modem" data-id="${esc(m.id)}" style="color:inherit;text-decoration:none">${macHTML(m.id)}</a><div class="t2">${esc(m.modelo || 'Modelo não informado')} · ${esc((MST[m.status] || {}).l || '—')}${m.status === 'tecnico' && m.comQuem ? ' · ' + esc(m.comQuem) : ''}</div></div><button class="btn btn-sm" data-act="audit" data-id="${esc(m.id)}" data-w type="button">${ic('check', 15)}Auditar</button></div>`).join('') + (pend.length > 150 ? `<div class="ar"><span class="t2">Mostrando 150 de ${fmtN(pend.length)}. Use o filtro para achar um modem específico.</span></div>` : '')
+      : `<div class="empty">${ic('check', 26)}<b>${tot ? (q ? 'Nenhum pendente com esse filtro' : 'Ciclo completo') : 'Nenhum modem cadastrado'}</b><span>${tot ? (q ? '' : 'Todos os modems foram conferidos neste ciclo.') : 'Cadastre modems para começar a auditoria.'}</span></div>`;
+    $('#a-done').innerHTML = done.length ? done.slice(0, 150).map(m => `<div class="ar"><div style="min-width:0"><a href="#modems" class="mac" data-act="modem" data-id="${esc(m.id)}" style="color:inherit;text-decoration:none">${macHTML(m.id)}</a><div class="t2">${esc(fmtDT(m.auditTs))} · ${esc(who(m.auditPor))}${m.auditObs ? ' · ' + esc(m.auditObs) : ''}</div></div>${m.auditResultado === 'divergente' ? '<span class="pill crit">Divergência</span>' : '<span class="pill ok">OK</span>'}</div>`).join('')
+      : `<div class="empty">${ic('scan', 26)}<b>Nenhum modem auditado neste ciclo</b><span>Bipe o primeiro MAC no campo acima.</span></div>`;
+    const hist = S.config.ciclos || [];
+    $('#a-hist').innerHTML = `<div class="card-h" style="padding-bottom:12px"><div><div class="card-t">${ic('archive', 16)}Ciclos anteriores</div><div class="card-sub">Resultado de cada auditoria encerrada</div></div></div>` + (hist.length ? `<div class="tscroll"><table class="cyc"><thead><tr><th>Início</th><th>Encerrado</th><th>Auditados</th><th>Cobertura</th><th>Divergências</th></tr></thead><tbody>${hist.map(h => `<tr><td>${h.inicio ? esc(fmtDate(h.inicio)) : '—'}</td><td>${esc(fmtDate(h.fim))}</td><td class="mono">${fmtN(h.auditados)} de ${fmtN(h.total)}</td><td class="mono">${h.total ? Math.round(h.auditados / h.total * 100) : 0}%</td><td class="mono">${fmtN(h.divergentes || 0)}</td></tr>`).join('')}</tbody></table></div>` : `<div class="empty" style="padding-top:8px">${ic('archive', 24)}<span>Nenhum ciclo encerrado ainda.</span></div>`);
+  }
+};
+
+let actx = null;
+function beep(ok) {
+  if (!S.sound) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime;
+    o.type = 'square'; o.frequency.setValueAtTime(ok === 'ok' ? 1320 : ok === 'warn' ? 880 : 220, t);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.06, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + (ok === 'ok' ? 0.12 : 0.3));
+    o.connect(g).connect(actx.destination); o.start(t); o.stop(t + 0.32);
+  } catch {}
+}
+function renderScanLog() { const el = $('#a-log'); if (!el) return; el.innerHTML = S.scanLog.slice(0, 16).map(s => `<span class="${s.k}" title="${esc(s.t)}">${s.k === 'ok' ? ic('check', 13) : ic('alert', 13)}${esc(s.mac)}</span>`).join(''); }
+function scanRes(kind, title, msg, actions = '') {
+  const el = $('#a-res'); if (!el) return;
+  const icn = kind === 'ok' ? 'check' : kind === 'warn' ? 'clock' : 'alert';
+  el.innerHTML = `<div class="sres ${kind}" role="status"><span class="ti">${ic(icn, 22)}</span><div style="min-width:0;flex:1"><div class="sres-t">${title}</div><div class="sres-m">${msg}</div>${actions ? `<div class="sres-a">${actions}</div>` : ''}<div data-r="divf"></div></div></div>`;
+}
+async function doScan(raw) {
+  const hex = parseMac(raw);
+  if (!hex) { beep('crit'); scanRes('crit', 'MAC inválido', `“${esc(String(raw).slice(0, 40))}” não parece um MAC. Use 12 caracteres de 0–9 e A–F.`); S.scanLog.unshift({ k: 'crit', mac: String(raw).slice(0, 17), t: 'Inválido' }); renderScanLog(); return; }
+  const m = modemById(hex);
+  if (!m) { beep('crit'); scanRes('crit', `Não cadastrado · <span class="mono">${macFmt(hex)}</span>`, 'Esse MAC não está no sistema. Cadastre agora para incluir na auditoria.', `<button class="btn btn-sm btn-primary" data-act="newmodem" data-mac="${hex}" data-audit="1" data-w type="button">${ic('plus', 15)}Cadastrar e auditar</button>`); S.scanLog.unshift({ k: 'crit', mac: macFmt(hex), t: 'Não cadastrado' }); renderScanLog(); return; }
+  const info = `${esc(m.modelo || 'Modelo não informado')} · ${esc((MST[m.status] || {}).l || '—')}${m.status === 'tecnico' && m.comQuem ? ' com ' + esc(m.comQuem) : ''}${m.serial ? ' · S/N ' + esc(m.serial) : ''}`;
+  if (m.auditCiclo === ciclo()) { beep('warn'); scanRes('warn', `Já auditado · <span class="mono">${macFmt(hex)}</span>`, `Conferido em ${esc(fmtDT(m.auditTs))} por ${esc(who(m.auditPor))}. ${info}`, `<button class="btn btn-sm" data-act="modem" data-id="${hex}" type="button">Abrir modem</button>`); S.scanLog.unshift({ k: 'warn', mac: macFmt(hex), t: 'Já auditado' }); renderScanLog(); return; }
+  const ok = await write(() => auditModem(hex));
+  if (!ok) return;
+  beep('ok');
+  scanRes('ok', `Auditado · <span class="mono">${macFmt(hex)}</span>`, info, `<button class="btn btn-sm" data-act="divform" data-id="${hex}" type="button">${ic('alert', 15)}Registrar divergência</button><button class="btn btn-sm btn-ghost" data-act="unaudit" data-id="${hex}" type="button">Desfazer</button>`);
+  S.scanLog.unshift({ k: 'ok', mac: macFmt(hex), t: 'Auditado' }); renderScanLog();
+}
+function auditModem(hex, resultado = 'ok', obs = '') {
+  return Store.api.update('modems/' + hex, { auditCiclo: ciclo(), auditTs: Date.now(), auditPor: S.me.id || null, auditResultado: resultado, auditObs: obs });
+}
+
+/* ---------- Sistema ---------- */
+V.sistema = {
+  mount: () => `<div class="page">
+    <div class="ph"><div><div class="eyebrow">Sistema</div><h1>Configurações e dados</h1></div></div>
+    <div class="grid-2 even">
+      <section class="card"><div class="card-h"><div class="card-t">${ic('share', 16)}Trabalho em equipe</div></div><div class="card-b prose" id="s-share"></div></section>
+      <section class="card"><div class="card-h"><div class="card-t">${ic('edit', 16)}Nome do almoxarifado</div></div><div class="card-b">
+        <form class="inline-form" id="s-nome"><div class="field"><label for="s-nome-in">Aparece no topo do sistema para todos</label><input class="in" id="s-nome-in" maxlength="60" placeholder="Ex.: Almoxarifado Central" autocomplete="off"></div><button class="btn btn-primary" type="submit" data-w>Salvar</button></form></div></section>
+      <section class="card"><div class="card-h"><div><div class="card-t">${ic('archive', 16)}Capacidade e histórico</div><div class="card-sub">O banco guarda até 5.000 registros entre materiais, modems e lançamentos</div></div></div><div class="card-b" id="s-cap" style="display:flex;flex-direction:column;gap:14px"></div></section>
+      <section class="card"><div class="card-h"><div class="card-t">${ic('dl', 16)}Exportar planilhas</div></div><div class="card-b" style="display:flex;flex-direction:column;gap:10px">
+        <p class="muted" style="margin:0;font-size:13px">Arquivos CSV que abrem direto no Excel ou no Google Planilhas.</p>
+        <div class="w-actions" style="margin:0"><button class="btn" data-act="export" data-kind="estoque" type="button">${ic('box')}Estoque</button><button class="btn" data-act="export" data-kind="movs" type="button">${ic('swap')}Movimentações</button><button class="btn" data-act="export" data-kind="modems" type="button">${ic('router')}Modems e auditoria</button></div></div></section>
+      <section class="card"><div class="card-h"><div class="card-t">${ic('flask', 16)}Dados de exemplo</div></div><div class="card-b" id="s-ex" style="display:flex;flex-direction:column;gap:10px"></div></section>
+      <section class="card"><div class="card-h"><div class="card-t">${ic('keyboard', 16)}Atalhos de teclado</div></div><div class="card-b"><div class="keys">
+        <kbd>Ctrl K</kbd><span>Buscar material, MAC ou pessoa e executar ações</span>
+        <kbd>/</kbd><span>Abrir a busca</span>
+        <kbd>N</kbd><span>Nova movimentação</span>
+        <kbd>A</kbd><span>Ir para a conferência de auditoria</span>
+        <kbd>Esc</kbd><span>Fechar painel ou busca</span></div></div></section>
+    </div>
+  </div>`,
+  bind(root) {
+    const inp = $('#s-nome-in', root); inp.value = S.config.nome || '';
+    $('#s-nome', root).addEventListener('submit', async e => { e.preventDefault(); const v = inp.value.trim().slice(0, 60); if (await write(() => saveConfig({ nome: v }), v ? 'Nome atualizado para todos' : 'Nome removido')) inp.blur(); });
+  },
+  update() {
+    const sh = $('#s-share'); if (!sh) return;
+    const inp = $('#s-nome-in'); if (inp && document.activeElement !== inp && !inp.dataset.touched) inp.value = S.config.nome || '';
+    sh.innerHTML = Store.mode === 'cloud'
+      ? `<div class="banner"><span class="dot" style="background:var(--ok);margin-top:6px"></span><div class="grow"><b>Banco compartilhado ativo.</b> Tudo o que alguém registra aparece na hora para os outros, com o nome de quem registrou.</div></div>
+         <p>Para a equipe usar o mesmo estoque, abra este sistema no Claude, use <b>Compartilhar</b> e convide cada pessoa pelo e-mail.</p>
+         <p>Quem vai registrar entradas, saídas e auditorias precisa de <b>permissão de edição</b>. Quem só consulta pode ficar como leitor.</p>
+         <p>${S.me.id ? `Você está conectado${S.me.name ? ' como <b>' + esc(S.me.name) + '</b>' : ''}${S.readOnly ? ', com acesso somente leitura' : ''}.` : ''}</p>`
+      : `<div class="banner warn">${ic('alert')}<div class="grow"><b>Modo local.</b> Os dados estão salvos só neste navegador, sem compartilhamento.</div></div>
+         <p>Para usar com a equipe, abra o sistema pelo link do Claude conectado à sua conta. Lá o banco compartilhado liga sozinho.</p>`;
+    const docs = S.materiais.length + S.movs.length + S.modems.length + 2 + num(S.config.arquivoDocs);
+    const pct = Math.min(1, docs / 5000);
+    const old = [30, 60, 90, 180].map(d => [d, S.movs.filter(m => m.ts < startOfDay(Date.now()) - d * DAY).length]);
+    const sel = $('#s-days'); const selV = sel ? sel.value : '90';
+    $('#s-cap').innerHTML = `<div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span><b class="mono">${fmtN(docs)}</b> de 5.000 registros</span><span class="mono muted">${Math.round(pct * 100)}%</span></div><div class="meter ${pct > .85 ? 'crit' : pct > .6 ? 'warn' : ''}"><i style="width:${(pct * 100).toFixed(1)}%"></i></div></div>
+      <div class="t2" style="font-size:12.5px">${fmtN(S.materiais.length)} materiais · ${fmtN(S.modems.length)} modems · ${fmtN(S.movs.length)} lançamentos ativos${num(S.config.arquivoMovs) ? ` · ${fmtN(S.config.arquivoMovs)} arquivados` : ''}</div>
+      <p class="muted" style="margin:0;font-size:13px">Arquivar junta os lançamentos antigos em poucos registros. Os saldos e a lista de quem está com cada item não mudam, e o histórico arquivado continua disponível em Movimentações.</p>
+      <div class="inline-form"><div class="field"><label for="s-days">Arquivar lançamentos com mais de</label><select class="in" id="s-days">${old.map(([d, n]) => `<option value="${d}">${d} dias (${fmtN(n)} lançamentos)</option>`).join('')}</select></div><button class="btn" data-act="archive" data-w type="button">${ic('archive')}Arquivar</button></div>`;
+    $('#s-days').value = selV;
+    const ex = S.materiais.filter(m => m.exemplo).length + S.modems.filter(m => m.exemplo).length + S.movs.filter(m => m.exemplo).length;
+    $('#s-ex').innerHTML = ex
+      ? `<p class="muted" style="margin:0;font-size:13px">Há <b>${fmtN(ex)}</b> registros de exemplo marcados com a etiqueta <span class="tag ex">Exemplo</span>. Remova antes de começar a usar de verdade.</p><div><button class="btn btn-danger" data-act="rmexamples" data-w type="button">${ic('trash')}Remover dados de exemplo</button></div>`
+      : `<p class="muted" style="margin:0;font-size:13px">Carrega 8 materiais, 12 modems e algumas movimentações fictícias para testar o sistema. Tudo fica marcado como exemplo e sai com um clique.</p><div><button class="btn" data-act="examples" data-w type="button">${ic('flask')}Carregar exemplos</button></div>`;
+  }
+};
+
+/* ================= Drawer ================= */
+const DR = { open: false, last: null };
+function openDrawer({ eyebrow = '', title = '', body = '' }) {
+  const d = $('#drawer'), s = $('#scrim');
+  $('#drawerEyebrow').textContent = eyebrow; $('#drawerTitle').textContent = title;
+  const b = $('#drawerBody'); b.innerHTML = body; b.scrollTop = 0;
+  S.drawerForm = null; S.detail = null;
+  if (!DR.open) {
+    DR.last = document.activeElement; d.hidden = false; s.hidden = false;
+    void d.offsetWidth; d.classList.add('open'); s.classList.add('open'); DR.open = true; document.body.classList.add('lock');
+  }
+  setTimeout(() => { const f = (finePointer() && $('#drawerBody [data-autofocus]')) || $('#drawerClose'); f && f.focus({ preventScroll: true }); }, 40);
+}
+function closeDrawer() {
+  if (!DR.open) return;
+  DR.open = false; S.detail = null; S.drawerForm = null;
+  const d = $('#drawer'), s = $('#scrim');
+  d.classList.remove('open'); s.classList.remove('open'); document.body.classList.remove('lock');
+  setTimeout(() => { if (!DR.open) { d.hidden = true; s.hidden = true; $('#drawerBody').innerHTML = ''; } }, reduced() ? 0 : 260);
+  if (DR.last && DR.last.focus && document.contains(DR.last)) DR.last.focus({ preventScroll: true });
+}
+
+function openMat(id) {
+  const m = matById(id); if (!m) return;
+  openDrawer({ eyebrow: 'Material', title: m.nome, body: '<div id="dd" style="display:contents"></div>' });
+  S.detail = { kind: 'mat', id }; updateDetail();
+}
+function openModem(hex) {
+  const m = modemById(hex); if (!m) return;
+  openDrawer({ eyebrow: 'Modem Wi-Fi', title: m.modelo || 'Modem', body: '<div id="dd" style="display:contents"></div><div id="dd-form"></div><div id="dd-hist" style="display:contents"></div>' });
+  S.detail = { kind: 'modem', id: hex }; updateDetail();
+}
+function updateDetail() {
+  if (!DR.open || !S.detail) return;
+  const dd = $('#dd'); if (!dd) return;
+  if (S.detail.kind === 'mat') {
+    const m = matById(S.detail.id);
+    if (!m) { dd.innerHTML = `<div class="empty">${ic('alert', 26)}<b>Este material foi excluído</b></div>`; return; }
+    $('#drawerTitle').textContent = m.nome;
+    const s = D.saldo.get(m.id) || 0, u = esc(m.unidade || 'un');
+    const mv = D.movs.filter(x => x.materialId === m.id);
+    const holders = D.posse.map(p => ({ nome: p.nome, it: p.itens.find(i => i.m.id === m.id) })).filter(x => x.it);
+    dd.innerHTML = `
+      <div class="label-card">
+        <div class="lc-top"><span class="code">${esc(m.codigo || 'SEM CÓDIGO')}</span><span class="mono">${ic('pin', 14).replace('class="ic"', 'class="ic" style="display:inline;vertical-align:-2px;margin-right:4px"')}${esc(m.local || 'SEM LOCAL')}</span></div>
+        <div class="lc-mid"><div class="lc-qty"><b>${fmtN(s)}</b><span>${u} em estoque</span>${matPill(D.state(m))}</div>${lvlBar(m)}</div>
+        <dl class="kv"><div><dt>Estoque mínimo</dt><dd class="mono">${fmtN(m.minimo)} ${u}</dd></div><div><dt>Categoria</dt><dd>${esc(m.categoria || '—')}</dd></div><div><dt>Tipo</dt><dd>${m.retornavel ? 'Retornável' : 'Consumo'}</dd></div><div><dt>Lançamentos</dt><dd class="mono">${fmtN(mv.length)}</dd></div></dl>
+      </div>
+      <div class="qa">${['saida', 'entrada', 'devolucao', 'ajuste'].map(t => `<button class="btn" data-act="mov" data-tipo="${t}" data-id="${esc(m.id)}" data-back="mat" data-w type="button">${ic(TIPOS[t].icon, 18)}${TIPOS[t].label}</button>`).join('')}</div>
+      <div class="sec-t"><span>Saldo nos últimos 30 dias</span></div>
+      <div class="spark">${sparkSVG(m, mv)}</div>
+      ${m.retornavel ? `<div class="sec-t"><span>Com a equipe</span><span>${holders.length}</span></div><div class="hist">${holders.length ? holders.map(h => `<div class="fi">${personAv(h.nome, '')}<div class="fi-t"><b>${esc(h.nome)}</b> está com <b class="mono">${fmtN(h.it.q)} ${u}</b></div><button class="btn btn-sm" data-act="mov" data-tipo="devolucao" data-id="${esc(m.id)}" data-pessoa="${esc(h.nome)}" data-qtd="${h.it.q}" data-back="mat" data-w type="button">Devolver</button></div>`).join('') : '<div class="fi"><span></span><span class="t2">Nenhuma unidade fora do almoxarifado.</span><span></span></div>'}</div>` : ''}
+      <div class="sec-t"><span>Histórico</span><span>${mv.length > 25 ? 'últimos 25' : ''}</span></div>
+      <div class="hist">${mv.length ? mv.slice(0, 25).map(x => feedItem(x, false).replace('<span class="fi-time"', `<span class="fi-time" data-d="${esc(fmtDate(x.ts))}"`).replace(/>(\d\d:\d\d)<\/span><\/div>$/, `>${fmtDate(x.ts).slice(0, 5)} · $1</span></div>`)).join('') : '<div class="fi"><span></span><span class="t2">Nenhuma movimentação ainda.</span><span></span></div>'}</div>
+      <div class="dd-foot"><button class="btn" data-act="editmat" data-id="${esc(m.id)}" data-w type="button">${ic('edit')}Editar</button><button class="btn btn-danger" data-act="delmat" data-id="${esc(m.id)}" data-w type="button">${ic('trash')}Excluir material</button></div>`;
+  } else {
+    const m = modemById(S.detail.id);
+    if (!m) { dd.innerHTML = `<div class="empty">${ic('alert', 26)}<b>Este modem foi excluído</b></div>`; $('#dd-hist').innerHTML = ''; return; }
+    $('#drawerTitle').textContent = m.modelo || 'Modem';
+    const audited = m.auditCiclo === ciclo();
+    const st = m.status;
+    const acts = [];
+    if (st === 'estoque') acts.push(['mform', 'tecnico', 'out', 'Entregar a técnico']);
+    if (st === 'tecnico') { acts.push(['mdo', 'estoque', 'ret', 'Devolver ao estoque']); acts.push(['mform', 'instalado', 'router', 'Marcar instalado']); }
+    if (st === 'instalado' || st === 'defeito') acts.push(['mdo', 'estoque', 'ret', 'Voltar ao estoque']);
+    if (st !== 'defeito') acts.push(['mform', 'defeito', 'alert', 'Marcar defeito']);
+    dd.innerHTML = `
+      <div class="label-card">
+        <div class="lc-top"><span class="mono">ENDEREÇO MAC</span><button class="btn btn-sm" style="background:transparent;color:inherit;border-color:currentColor" data-act="copymac" data-id="${esc(m.id)}" type="button">${ic('copy', 14)}Copiar</button></div>
+        <div class="lc-mid"><div class="mac-big" id="mac-sel">${macHTML(m.id)}</div><div>${modPill(st)} ${m.exemplo ? '<span class="tag ex">Exemplo</span>' : ''}</div></div>
+        <dl class="kv"><div><dt>Modelo</dt><dd>${esc(m.modelo || '—')}</dd></div><div><dt>Nº de série</dt><dd class="mono">${esc(m.serial || '—')}</dd></div>
+        <div><dt>${st === 'instalado' ? 'Cliente' : 'Com quem'}</dt><dd>${st === 'tecnico' ? esc(m.comQuem || '—') : st === 'instalado' ? esc(m.cliente || '—') : 'No almoxarifado'}</dd></div><div><dt>Cadastrado em</dt><dd class="mono">${m.criadoEm ? fmtDate(m.criadoEm) : '—'}</dd></div>
+        ${m.obs ? `<div style="grid-column:1/-1"><dt>Observação</dt><dd style="font-weight:400">${esc(m.obs)}</dd></div>` : ''}</dl>
+      </div>
+      <div class="box ${audited ? (m.auditResultado === 'divergente' ? 'crit' : 'ok') : ''}"><div class="box-row"><span class="ti ${audited ? 't-ret' : ''}">${ic(audited ? (m.auditResultado === 'divergente' ? 'alert' : 'check') : 'clock', 16)}</span><div class="grow">
+        <b>${audited ? (m.auditResultado === 'divergente' ? 'Auditado com divergência' : 'Auditado neste ciclo') : 'Auditoria pendente neste ciclo'}</b>
+        <div class="t2">${audited ? `${esc(fmtDT(m.auditTs))} · ${esc(who(m.auditPor))}${m.auditObs ? ' · ' + esc(m.auditObs) : ''}` : 'Confira o aparelho e marque como auditado.'}</div></div></div>
+        <div class="w-actions" style="margin:0">${audited ? `<button class="btn btn-sm" data-act="unaudit" data-id="${esc(m.id)}" data-w type="button">Desfazer auditoria</button>${m.auditResultado !== 'divergente' ? `<button class="btn btn-sm" data-act="divform" data-id="${esc(m.id)}" data-w type="button">${ic('alert', 15)}Registrar divergência</button>` : ''}` : `<button class="btn btn-sm btn-primary" data-act="audit" data-id="${esc(m.id)}" data-w type="button">${ic('check', 15)}Auditar agora</button><button class="btn btn-sm" data-act="divform" data-id="${esc(m.id)}" data-w type="button">${ic('alert', 15)}Auditar com divergência</button>`}</div></div>
+      <div class="sec-t"><span>Movimentar</span></div>
+      <div class="qa two">${acts.map(([a, op, i, l]) => `<button class="btn" data-act="${a}" data-op="${op}" data-id="${esc(m.id)}" data-w type="button">${ic(i, 18)}${l}</button>`).join('')}</div>`;
+    const hist = D.movs.filter(x => x.modem === m.id);
+    $('#dd-hist').innerHTML = `<div class="sec-t"><span>Histórico deste modem</span><span>${hist.length}</span></div>
+      <div class="hist">${hist.length ? hist.slice(0, 30).map(x => feedItem(x, false).replace(/>(\d\d:\d\d)<\/span><\/div>$/, `>${fmtDate(x.ts).slice(0, 5)} · $1</span></div>`)).join('') : '<div class="fi"><span></span><span class="t2">Nenhuma movimentação registrada.</span><span></span></div>'}</div>
+      <div class="dd-foot"><button class="btn" data-act="editmodem" data-id="${esc(m.id)}" data-w type="button">${ic('edit')}Editar</button><button class="btn btn-danger" data-act="delmodem" data-id="${esc(m.id)}" data-w type="button">${ic('trash')}Excluir modem</button></div>`;
+  }
+}
+function sparkSVG(m, mv) {
+  const days = 30, t0 = startOfDay(Date.now()) - (days - 1) * DAY;
+  const perDay = new Array(days).fill(0);
+  for (const x of mv) { if (m.arquivadoAte && x.ts < m.arquivadoAte) continue; const i = Math.round((startOfDay(x.ts) - t0) / DAY); if (i >= 0 && i < days) perDay[i] += num(x.delta); }
+  const bal = new Array(days); let cur = D.saldo.get(m.id) || 0;
+  for (let i = days - 1; i >= 0; i--) { bal[i] = cur; cur -= perDay[i]; }
+  const W = 480, H = 96, P = 6, min = num(m.minimo);
+  const hi = Math.max(1, ...bal, min * 1.2), lo = Math.min(0, ...bal);
+  const x = i => P + i * (W - 2 * P) / (days - 1), y = v => H - 16 - (v - lo) / (hi - lo) * (H - 28);
+  const pts = bal.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`);
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Saldo de ${esc(m.nome)} nos últimos 30 dias, de ${fmtN(bal[0])} para ${fmtN(bal[days - 1])}">
+    ${min > 0 ? `<line class="sp-m" x1="${P}" x2="${W - P}" y1="${y(min).toFixed(1)}" y2="${y(min).toFixed(1)}"/><text class="sp-t" x="${W - P}" y="${(y(min) - 4).toFixed(1)}" text-anchor="end">mínimo ${fmtN(min)}</text>` : ''}
+    <path class="sp-a" d="M${pts[0]} L${pts.join(' L')} L${x(days - 1).toFixed(1)},${H - 16} L${x(0).toFixed(1)},${H - 16}Z"/>
+    <polyline class="sp-l" points="${pts.join(' ')}"/>
+    <circle class="sp-d" cx="${x(days - 1).toFixed(1)}" cy="${y(bal[days - 1]).toFixed(1)}" r="4.5"/>
+    <text class="sp-t" x="${P}" y="${H - 2}">${fmtDate(t0).slice(0, 5)}</text><text class="sp-t" x="${W - P}" y="${H - 2}" text-anchor="end">hoje · ${fmtN(bal[days - 1])}</text></svg>`;
+}
+
+function openMovDrawer(preset = {}) {
+  const back = preset.back;
+  openDrawer({ eyebrow: 'Movimentação', title: 'Registrar movimentação', body: `${back ? `<button class="linkbtn" data-act="${back === 'mat' ? 'mat' : 'modem'}" data-id="${esc(preset.materialId || '')}" type="button" style="align-self:flex-start;display:inline-flex;gap:4px;align-items:center">${ic('back', 14)}Voltar ao material</button>` : ''}<div id="dmf"></div>` });
+  S.drawerForm = MovForm($('#dmf'), preset, () => { if (back === 'mat' && preset.materialId) openMat(preset.materialId); else closeDrawer(); });
+  setTimeout(() => { if (!finePointer()) return; const f = preset.materialId ? ($('#dmf .q-in') || $('#dmf .cb-in')) : $('#dmf .cb-in'); if (preset.materialId && !preset.pessoa && (preset.tipo || 'saida') !== 'entrada' && preset.tipo !== 'ajuste') { const p = $('#dmf [data-r="pessoa"]'); p && p.focus(); } else f && f.focus(); }, 60);
+}
+
+function nextCode(cat) {
+  const pre = (norm(cat).replace(/[^a-z]/g, '').slice(0, 3).toUpperCase() || 'MAT');
+  let max = 0; for (const m of S.materiais) { const r = new RegExp('^' + pre + '-(\\d+)$').exec(m.codigo || ''); if (r) max = Math.max(max, +r[1]); }
+  return `${pre}-${String(max + 1).padStart(3, '0')}`;
+}
+function openMatForm(id) {
+  const m = id ? matById(id) : null;
+  openDrawer({ eyebrow: m ? 'Editar material' : 'Novo material', title: m ? m.nome : 'Cadastrar material', body: `<form class="form" id="mform" novalidate>
+    <div class="field"><label for="mf-nome">Nome do material</label><input class="in" id="mf-nome" data-autofocus maxlength="90" placeholder="Ex.: Cabo drop 1 fibra" autocomplete="off"></div>
+    <div class="row2"><div class="field"><label for="mf-cat">Categoria</label><input class="in" id="mf-cat" list="dl-cats" maxlength="40" placeholder="Ex.: Cabos" autocomplete="off"></div>
+      <div class="field"><label for="mf-cod">Código</label><input class="in mono" id="mf-cod" maxlength="24" placeholder="Automático" autocomplete="off" spellcheck="false"></div></div>
+    <div class="row3"><div class="field"><label for="mf-un">Unidade</label><select class="in" id="mf-un">${UNIDADES.map(u => `<option value="${u}">${u}</option>`).join('')}</select></div>
+      <div class="field"><label for="mf-min">Estoque mínimo</label><input class="in mono" id="mf-min" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+      <div class="field"><label for="mf-loc">Localização</label><input class="in mono" id="mf-loc" maxlength="24" placeholder="A-01-2" autocomplete="off" spellcheck="false"></div></div>
+    <p class="hint" style="margin:-6px 0 0">Localização no formato corredor-prateleira-nível ajuda a achar rápido. Ex.: <span class="mono">B-03-1</span>.</p>
+    ${m ? '' : `<div class="field"><label for="mf-ini">Quantidade que existe hoje no estoque</label><input class="in mono" id="mf-ini" inputmode="decimal" placeholder="0" autocomplete="off"><span class="hint">Entra no histórico como saldo inicial.</span></div>`}
+    <label class="switch"><input type="checkbox" id="mf-ret"><span class="sw-track"></span><span><b>Item retornável</b><small>Ferramentas e equipamentos que precisam voltar. O painel mostra quem está com cada um até a devolução.</small></span></label>
+    <div class="err" id="mf-err" role="alert"></div>
+    <div class="form-foot"><button type="button" class="btn" data-act="close">Cancelar</button><button class="btn btn-primary" type="submit" data-w>${ic('check')}Salvar material</button></div></form>` });
+  const f = $('#mform');
+  if (m) { $('#mf-nome').value = m.nome || ''; $('#mf-cat').value = m.categoria || ''; $('#mf-cod').value = m.codigo || ''; $('#mf-un').value = UNIDADES.includes(m.unidade) ? m.unidade : 'un'; $('#mf-min').value = m.minimo ? String(m.minimo).replace('.', ',') : ''; $('#mf-loc').value = m.local || ''; $('#mf-ret').checked = !!m.retornavel; }
+  const updPh = () => { if (!m) $('#mf-cod').placeholder = `Automático: ${nextCode($('#mf-cat').value)}`; };
+  $('#mf-cat').addEventListener('input', updPh); updPh();
+  f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const err = $('#mf-err'); err.textContent = '';
+    const nome = $('#mf-nome').value.trim();
+    if (!nome) { err.textContent = 'Informe o nome do material.'; $('#mf-nome').focus(); return; }
+    const categoria = $('#mf-cat').value.trim();
+    const codigo = ($('#mf-cod').value.trim() || (m ? '' : nextCode(categoria))).toUpperCase();
+    if (codigo && S.materiais.some(x => x.id !== (m && m.id) && (x.codigo || '').toUpperCase() === codigo)) { err.textContent = `O código ${codigo} já está em uso por outro material.`; $('#mf-cod').focus(); return; }
+    const minimo = Math.max(0, num($('#mf-min').value));
+    const body = { nome, categoria, codigo, unidade: $('#mf-un').value, minimo, local: $('#mf-loc').value.trim().toUpperCase(), retornavel: $('#mf-ret').checked, atualizadoEm: Date.now() };
+    if (m) {
+      if (await write(() => Store.api.update('materiais/' + m.id, body), 'Material atualizado')) openMat(m.id);
+      return;
+    }
+    const ini = Math.max(0, num($('#mf-ini').value));
+    const id = uid(), now = Date.now();
+    const ok = await write(async () => {
+      await Store.api.set('materiais/' + id, { ...body, saldoBase: 0, criadoEm: now, criadoPor: S.me.id || null });
+      if (ini > 0) await Store.api.set('movs/' + movId(now), { tipo: 'entrada', materialId: id, materialNome: nome, codigo, unidade: body.unidade, qtd: ini, delta: ini, contagem: null, pessoa: '', obs: 'Saldo inicial do cadastro', ts: now, por: S.me.id || null, criadoEm: now, lote: null });
+    }, `${nome} cadastrado${ini > 0 ? ` com ${fmtN(ini)} ${body.unidade}` : ''}`);
+    if (ok) { S.materiais = S.materiais.concat([{ id, ...body, saldoBase: 0 }]); derive(); openMat(id); }
+  });
+}
+
+function openModemForm(opt = {}) {
+  const m = opt.id ? modemById(opt.id) : null;
+  openDrawer({ eyebrow: m ? 'Editar modem' : 'Novo modem', title: m ? macFmt(m.id) : 'Cadastrar modem', body: `<form class="form" id="moform" novalidate>
+    <div class="field"><label for="mo-mac">Endereço MAC</label><input class="in mono" id="mo-mac" ${m ? 'readonly' : 'data-autofocus'} placeholder="AA:BB:CC:DD:EE:FF" maxlength="17" autocomplete="off" spellcheck="false" autocapitalize="characters" style="font-size:17px;letter-spacing:.06em;height:48px"><span class="hint" id="mo-mac-h">${m ? 'O MAC identifica o modem e não pode ser alterado.' : 'Digite ou bipe. Os dois-pontos entram sozinhos.'}</span></div>
+    <div class="row2"><div class="field"><label for="mo-mod">Modelo</label><input class="in" id="mo-mod" list="dl-modelos" maxlength="60" placeholder="Ex.: ONT Wi-Fi AC1200" autocomplete="off"></div>
+      <div class="field"><label for="mo-sn">Nº de série <span class="opt">opcional</span></label><input class="in mono" id="mo-sn" maxlength="40" autocomplete="off" spellcheck="false"></div></div>
+    ${m ? '' : `<div class="row2"><div class="field"><label for="mo-st">Onde está agora</label><select class="in" id="mo-st">${Object.entries(MST).map(([k, v]) => `<option value="${k}">${v.l}</option>`).join('')}</select></div>
+      <div class="field" id="mo-cq-f" hidden><label for="mo-cq">Com qual técnico</label><input class="in" id="mo-cq" list="dl-pessoas" maxlength="60" autocomplete="off"></div>
+      <div class="field" id="mo-cl-f" hidden><label for="mo-cl">Cliente ou endereço</label><input class="in" id="mo-cl" maxlength="80" autocomplete="off"></div></div>`}
+    <div class="field"><label for="mo-obs">Observação <span class="opt">opcional</span></label><input class="in" id="mo-obs" maxlength="140" autocomplete="off"></div>
+    ${m ? '' : `<label class="switch"><input type="checkbox" id="mo-aud"><span class="sw-track"></span><span><b>Já marcar como auditado</b><small>Use quando estiver conferindo o aparelho fisicamente agora.</small></span></label>`}
+    <div class="err" id="mo-err" role="alert"></div>
+    <div class="form-foot"><button type="button" class="btn" data-act="close">Cancelar</button><button class="btn btn-primary" type="submit" data-w>${ic('check')}Salvar modem</button></div></form>` });
+  const macIn = $('#mo-mac'), h = $('#mo-mac-h');
+  if (m) { macIn.value = macFmt(m.id); $('#mo-mod').value = m.modelo || ''; $('#mo-sn').value = m.serial || ''; $('#mo-obs').value = m.obs || ''; }
+  else {
+    if (opt.mac) macIn.value = macFmt(opt.mac);
+    if (opt.audit) $('#mo-aud').checked = true;
+    const stSel = $('#mo-st');
+    const syncSt = () => { $('#mo-cq-f').hidden = stSel.value !== 'tecnico'; $('#mo-cl-f').hidden = stSel.value !== 'instalado'; };
+    stSel.addEventListener('change', syncSt); syncSt();
+    const check = () => {
+      const hex = macHex(macIn.value).slice(0, 12);
+      if (hex.length < 12) { h.className = 'hint'; h.textContent = hex.length ? `${hex.length} de 12 caracteres` : 'Digite ou bipe. Os dois-pontos entram sozinhos.'; return; }
+      const ex = modemById(hex);
+      if (ex) { h.className = 'hint crit'; h.innerHTML = `Já cadastrado: ${esc(ex.modelo || 'modem')} · ${esc((MST[ex.status] || {}).l || '')}. <button type="button" class="linkbtn" data-act="modem" data-id="${hex}">Abrir</button>`; }
+      else { h.className = 'hint ok'; h.textContent = 'MAC válido e ainda não cadastrado.'; }
+    };
+    macIn.addEventListener('input', () => {
+      const raw = macIn.value; const f = extractMacs(raw);
+      const hex = (f[0] || macHex(raw)).slice(0, 12);
+      const fm = macFmt(hex); if (fm !== raw) macIn.value = fm; check();
+    });
+    macIn.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#mo-mod').focus(); } });
+    check();
+  }
+  $('#moform').addEventListener('submit', async e => {
+    e.preventDefault();
+    const err = $('#mo-err'); err.textContent = '';
+    const modelo = $('#mo-mod').value.trim(), serial = $('#mo-sn').value.trim(), obs = $('#mo-obs').value.trim();
+    if (m) { if (await write(() => Store.api.update('modems/' + m.id, { modelo, serial, obs, atualizadoEm: Date.now() }), 'Modem atualizado')) openModem(m.id); return; }
+    const hex = macHex(macIn.value);
+    if (hex.length !== 12) { err.textContent = 'O MAC precisa ter 12 caracteres hexadecimais (0–9 e A–F).'; macIn.focus(); return; }
+    if (modemById(hex)) { err.textContent = `O MAC ${macFmt(hex)} já está cadastrado.`; return; }
+    const status = $('#mo-st').value, comQuem = status === 'tecnico' ? $('#mo-cq').value.trim() : '', cliente = status === 'instalado' ? $('#mo-cl').value.trim() : '';
+    if (status === 'tecnico' && !comQuem) { err.textContent = 'Informe com qual técnico o modem está.'; $('#mo-cq').focus(); return; }
+    const now = Date.now(), aud = $('#mo-aud').checked;
+    const body = { mac: macFmt(hex), modelo, serial, status, comQuem, cliente, obs, criadoEm: now, atualizadoEm: now, criadoPor: S.me.id || null, auditCiclo: aud ? ciclo() : null, auditTs: aud ? now : null, auditPor: aud ? (S.me.id || null) : null, auditResultado: aud ? 'ok' : null, auditObs: '' };
+    const ok = await write(async () => {
+      await Store.api.set('modems/' + hex, body);
+      await Store.api.set('movs/' + movId(now), { tipo: 'cadastro', alvo: 'modem', modem: hex, mac: macFmt(hex), modelo, pessoa: comQuem, obs, ts: now, por: S.me.id || null, criadoEm: now, para: status });
+    }, `Modem ${macFmt(hex)} cadastrado${aud ? ' e auditado' : ''}`);
+    if (!ok) return;
+    if (opt.audit && S.view === 'auditoria') { closeDrawer(); scanRes('ok', `Cadastrado e auditado · <span class="mono">${macFmt(hex)}</span>`, esc(modelo || 'Modelo não informado')); S.scanLog.unshift({ k: 'ok', mac: macFmt(hex), t: 'Cadastrado' }); renderScanLog(); setTimeout(() => { const i = $('#a-in'); i && i.focus(); }, 280); return; }
+    openModemForm({});
+    toast('Pronto para o próximo modem', 'info', { ms: 2200 });
+  });
+}
+
+function openBulk() {
+  openDrawer({ eyebrow: 'Modems Wi-Fi', title: 'Cadastrar em lote', body: `<form class="form" id="bkform" novalidate>
+    <div class="field"><label for="bk-t">Cole a lista ou bipe os MACs um embaixo do outro</label><textarea class="in mono" id="bk-t" data-autofocus rows="8" spellcheck="false" placeholder="AA:BB:CC:DD:EE:FF&#10;AA-BB-CC-DD-EE-01&#10;AABBCCDDEE02"></textarea><span class="hint">Aceita qualquer formato: com dois-pontos, hífens ou sem separador. Pode colar direto de uma planilha.</span></div>
+    <div class="bk-prev" id="bk-prev"></div>
+    <div class="row2"><div class="field"><label for="bk-mod">Modelo de todos</label><input class="in" id="bk-mod" list="dl-modelos" maxlength="60" autocomplete="off"></div>
+      <div class="field"><label for="bk-st">Onde estão</label><select class="in" id="bk-st"><option value="estoque">Em estoque</option><option value="defeito">Defeito</option></select></div></div>
+    <label class="switch"><input type="checkbox" id="bk-aud"><span class="sw-track"></span><span><b>Já marcar todos como auditados</b><small>Use quando a lista vier da conferência física de agora.</small></span></label>
+    <div class="err" id="bk-err" role="alert"></div>
+    <div class="form-foot"><button type="button" class="btn" data-act="close">Cancelar</button><button class="btn btn-primary" type="submit" id="bk-go" data-w disabled>${ic('check')}Cadastrar</button></div></form>` });
+  const ta = $('#bk-t');
+  let novos = [];
+  const upd = () => {
+    const all = [...new Set(extractMacs(ta.value))];
+    novos = all.filter(h => !modemById(h));
+    const dups = all.length - novos.length;
+    $('#bk-prev').innerHTML = all.length ? `<div class="bk-sum"><span><b>${all.length}</b> encontrados</span><span class="hint ok"><b>${novos.length}</b> novos</span>${dups ? `<span class="hint warn"><b>${dups}</b> já cadastrados (serão ignorados)</span>` : ''}</div><div class="bk-chips">${all.slice(0, 120).map(h => `<span class="${modemById(h) ? 'dup' : ''}">${macFmt(h)}</span>`).join('')}${all.length > 120 ? `<span>+${all.length - 120}</span>` : ''}</div>` : '';
+    $('#bk-go').disabled = !novos.length;
+    $('#bk-go').innerHTML = `${ic('check')}Cadastrar ${novos.length ? novos.length + ' ' + (novos.length === 1 ? 'modem' : 'modems') : ''}`;
+  };
+  ta.addEventListener('input', upd); upd();
+  $('#bkform').addEventListener('submit', async e => {
+    e.preventDefault(); if (!novos.length) return;
+    const err = $('#bk-err'); err.textContent = '';
+    const btn = $('#bk-go'); btn.disabled = true;
+    const modelo = $('#bk-mod').value.trim(), status = $('#bk-st').value, aud = $('#bk-aud').checked, now = Date.now();
+    const list = novos.slice();
+    let done = 0;
+    const ok = await write(async () => {
+      for (let i = 0; i < list.length; i += 8) {
+        await Promise.all(list.slice(i, i + 8).map(hex => Store.api.set('modems/' + hex, { mac: macFmt(hex), modelo, serial: '', status, comQuem: '', cliente: '', obs: '', criadoEm: now, atualizadoEm: now, criadoPor: S.me.id || null, auditCiclo: aud ? ciclo() : null, auditTs: aud ? now : null, auditPor: aud ? (S.me.id || null) : null, auditResultado: aud ? 'ok' : null, auditObs: '' })));
+        done = Math.min(list.length, i + 8); btn.innerHTML = `Gravando ${done} de ${list.length}…`;
+      }
+      await Store.api.set('movs/' + movId(now), { tipo: 'cadastro', alvo: 'modem', modem: '', mac: '', qtdModems: list.length, modelo, pessoa: '', obs: '', ts: now, por: S.me.id || null, criadoEm: now, para: status });
+    }, `${list.length} ${list.length === 1 ? 'modem cadastrado' : 'modems cadastrados'}${aud ? ' e auditados' : ''}`);
+    if (ok) closeDrawer(); else { btn.disabled = false; if (done) err.textContent = `${done} foram gravados antes do erro. Tente de novo: os já cadastrados serão ignorados.`; upd(); }
+  });
+}
+
+async function modemMove(hex, next, extra = '') {
+  const m = modemById(hex); if (!m) return;
+  const prev = m.status, now = Date.now();
+  const patch = { status: next, atualizadoEm: now };
+  let tipo = 'status', pessoa = '';
+  if (next === 'tecnico') { patch.comQuem = extra; patch.cliente = ''; tipo = 'saida'; pessoa = extra; }
+  else if (next === 'estoque') { patch.comQuem = ''; patch.cliente = ''; tipo = prev === 'tecnico' ? 'devolucao' : 'status'; pessoa = prev === 'tecnico' ? (m.comQuem || '') : ''; }
+  else if (next === 'instalado') { patch.cliente = extra; patch.comQuem = ''; pessoa = m.comQuem || ''; }
+  else if (next === 'defeito') { if (extra) patch.obs = extra; }
+  const ok = await write(async () => {
+    await Store.api.update('modems/' + hex, patch);
+    await Store.api.set('movs/' + movId(now), { tipo, alvo: 'modem', modem: hex, mac: macFmt(hex), modelo: m.modelo || '', pessoa, obs: next === 'instalado' ? (extra ? 'Cliente: ' + extra : '') : next === 'defeito' ? extra : '', de: prev, para: next, ts: now, por: S.me.id || null, criadoEm: now });
+  }, next === 'tecnico' ? `Modem entregue a ${extra}` : next === 'estoque' ? 'Modem de volta ao estoque' : next === 'instalado' ? 'Modem marcado como instalado' : 'Modem marcado com defeito');
+  if (ok) { const f = $('#dd-form'); if (f) f.innerHTML = ''; }
+}
+
+/* ================= Config, examples, archive, export ================= */
+async function saveConfig(patch) {
+  if (S.configExists) await Store.api.update('config/geral', patch);
+  else { await Store.api.set('config/geral', { ...S.config, ...patch }); S.configExists = true; }
+}
+async function newCycle() {
+  const tot = D.totModems, aud = D.aud;
+  const ok = await ask('Iniciar novo ciclo de auditoria?', `Todos os ${fmtN(tot)} modems voltam para “pendente”. O ciclo atual (${fmtN(aud)} de ${fmtN(tot)} auditados) fica registrado em Ciclos anteriores.`, 'Iniciar novo ciclo');
+  if (!ok) return;
+  const hist = Array.isArray(S.config.ciclos) ? S.config.ciclos.slice() : [];
+  if (S.config.ciclo || aud > 0) hist.unshift({ id: ciclo(), inicio: S.config.cicloInicio || null, fim: Date.now(), auditados: aud, total: tot, divergentes: D.div });
+  await write(() => saveConfig({ ciclo: uid(), cicloInicio: Date.now(), cicloPor: S.me.id || null, ciclos: hist.slice(0, 24) }), 'Novo ciclo iniciado. Todos os modems estão pendentes.');
+}
+
+async function loadExamples() {
+  const now = Date.now(), H = 36e5;
+  const mats = [
+    ['CAB-001', 'Cabo drop 1 fibra (FTTH)', 'Cabos', 'm', 500, 'A-01-1', 1800, false],
+    ['CON-001', 'Conector SC/APC de campo', 'Conectores', 'un', 100, 'A-02-3', 120, false],
+    ['EQU-001', 'ONU GPON Wi-Fi', 'Equipamentos', 'un', 15, 'B-01-1', 42, false],
+    ['FIX-001', 'Esticador para cabo drop', 'Fixação', 'un', 200, 'A-03-2', 640, false],
+    ['CAB-002', 'Cabo de rede Cat6', 'Cabos', 'm', 300, 'A-01-2', 0, false],
+    ['FER-001', 'Alicate de clivagem', 'Ferramentas', 'un', 2, 'C-01-1', 6, true],
+    ['FER-002', 'Power meter óptico', 'Ferramentas', 'un', 1, 'C-01-2', 4, true],
+    ['EPI-001', 'Luva de vaqueta', 'EPI', 'par', 20, 'D-02-1', 34, false]
+  ].map(([codigo, nome, categoria, unidade, minimo, local, ini, retornavel]) => ({ id: 'ex' + uid(), codigo, nome, categoria, unidade, minimo, local, ini, retornavel }));
+  const P = ['Carlos Mendes', 'Ana Souza', 'Rafael Lima'];
+  const mv = [];
+  const add = (mi, tipo, qtd, pessoa, hAgo, obs = '') => { const m = mats[mi], ts = now - hAgo * H; mv.push({ id: movId(ts), body: { tipo, materialId: m.id, materialNome: m.nome, codigo: m.codigo, unidade: m.unidade, qtd, delta: TIPOS[tipo].sign * qtd, contagem: null, pessoa, obs, ts, por: null, criadoEm: now, lote: null, exemplo: true } }); };
+  mats.forEach((m, i) => { if (m.ini) add(i, 'entrada', m.ini, 'Fornecedor (exemplo)', 300, 'Saldo inicial'); });
+  add(0, 'saida', 350, P[0], 200, 'OS 4512'); add(1, 'saida', 30, P[0], 200, 'OS 4512'); add(2, 'saida', 6, P[1], 170);
+  add(3, 'saida', 120, P[2], 150); add(0, 'saida', 280, P[1], 120, 'Rede do bairro Norte'); add(1, 'saida', 40, P[2], 100);
+  add(5, 'saida', 1, P[0], 96); add(6, 'saida', 1, P[1], 72); add(5, 'saida', 1, P[2], 50); add(5, 'devolucao', 1, P[2], 26);
+  add(1, 'saida', 25, P[1], 20, 'OS 4533'); add(2, 'saida', 8, P[0], 8); add(0, 'devolucao', 40, P[1], 6, 'Sobra de serviço'); add(7, 'saida', 18, P[2], 3); add(3, 'saida', 90, P[0], 1.2);
+  const models = ['ONT Wi-Fi AC1200', 'Roteador Wi-Fi 6 AX1500', 'ONT Wi-Fi Dual Band'];
+  const c = ciclo();
+  const modems = Array.from({ length: 12 }, (_, i) => {
+    const hex = ('02' + Math.random().toString(16).slice(2, 12).padEnd(10, '0')).toUpperCase().slice(0, 12);
+    const status = i < 6 ? 'estoque' : i < 9 ? 'tecnico' : i < 11 ? 'instalado' : 'defeito';
+    const aud = i % 3 !== 2 && i < 9;
+    return { hex, body: { mac: macFmt(hex), modelo: models[i % 3], serial: 'SN' + (482100 + i * 37), status, comQuem: status === 'tecnico' ? P[i % 3] : '', cliente: status === 'instalado' ? `Cliente ${1040 + i}` : '', obs: status === 'defeito' ? 'Não liga (exemplo)' : '', criadoEm: now - 250 * H, atualizadoEm: now - (12 - i) * H, criadoPor: null, auditCiclo: aud ? c : null, auditTs: aud ? now - i * 2 * H : null, auditPor: null, auditResultado: aud ? (i === 4 ? 'divergente' : 'ok') : null, auditObs: aud && i === 4 ? 'Etiqueta danificada' : '', exemplo: true } };
+  });
+  const ok = await write(async () => {
+    await Promise.all(mats.map(m => Store.api.set('materiais/' + m.id, { nome: m.nome, codigo: m.codigo, categoria: m.categoria, unidade: m.unidade, minimo: m.minimo, local: m.local, retornavel: m.retornavel, saldoBase: 0, criadoEm: now, atualizadoEm: now, criadoPor: null, exemplo: true })));
+    for (let i = 0; i < mv.length; i += 8) await Promise.all(mv.slice(i, i + 8).map(x => Store.api.set('movs/' + x.id, x.body)));
+    await Promise.all(modems.map(x => Store.api.set('modems/' + x.hex, x.body)));
+  }, 'Dados de exemplo carregados. Remova em Sistema quando terminar de testar.');
+  return ok;
+}
+async function removeExamples() {
+  const docs = [...S.materiais.filter(m => m.exemplo).map(m => 'materiais/' + m.id), ...S.movs.filter(m => m.exemplo).map(m => 'movs/' + m.id), ...S.modems.filter(m => m.exemplo).map(m => 'modems/' + m.id)];
+  if (!docs.length) return;
+  const ok = await ask('Remover dados de exemplo?', `${fmtN(docs.length)} registros marcados como exemplo serão apagados. O que você cadastrou de verdade não é afetado.`, 'Remover exemplos', true);
+  if (!ok) return;
+  await write(async () => { for (let i = 0; i < docs.length; i += 8) await Promise.all(docs.slice(i, i + 8).map(p => Store.api.del(p))); }, 'Dados de exemplo removidos');
+}
+
+async function archiveOld(days) {
+  const cutoff = startOfDay(Date.now()) - days * DAY;
+  const old = S.movs.filter(m => (m.ts || 0) < cutoff).sort((a, b) => a.ts - b.ts);
+  if (!old.length) { toast('Nenhum lançamento anterior a esse período.', 'info'); return; }
+  const ok = await ask('Arquivar histórico antigo?', `${fmtN(old.length)} lançamentos anteriores a ${fmtDate(cutoff)} serão agrupados no arquivo. Os saldos continuam iguais e o histórico arquivado pode ser consultado em Movimentações.`, 'Arquivar');
+  if (!ok) return;
+  const got = await Store.api.lease('config/arquivo', S.me.id || 'local');
+  if (!got) { toast('Outra pessoa está arquivando agora. Tente de novo em alguns minutos.', 'warn'); return; }
+  toast('Arquivando… não feche esta página.', 'info', { ms: 5000 });
+  const api = Store.api, now = Date.now();
+  const done = await write(async () => {
+    let chunks = 0;
+    for (let i = 0; i < old.length; i += 400) {
+      const part = old.slice(i, i + 400);
+      await api.set('arquivo/' + uid(), { criadoEm: now, de: part[0].ts, ate: part[part.length - 1].ts, n: part.length, itens: part });
+      chunks++;
+    }
+    const agg = new Map();
+    for (const mv of old) {
+      if (!mv.materialId) continue; const m = matById(mv.materialId); if (!m) continue;
+      if (m.arquivadoAte && mv.ts < m.arquivadoAte) continue;
+      const a = agg.get(m.id) || { d: 0, p: {} };
+      a.d += num(mv.delta);
+      if (m.retornavel && mv.pessoa && (mv.tipo === 'saida' || mv.tipo === 'devolucao')) { const k = norm(mv.pessoa).replace(/[^a-z0-9]+/g, '_').slice(0, 60) || 'x'; const cur = a.p[k] || { n: String(mv.pessoa).trim(), q: 0 }; cur.q += mv.tipo === 'saida' ? num(mv.qtd) : -num(mv.qtd); a.p[k] = cur; }
+      agg.set(m.id, a);
+    }
+    for (const m of S.materiais) {
+      if (num(m.arquivadoAte) >= cutoff) continue;
+      const a = agg.get(m.id) || { d: 0, p: {} };
+      const pb = {}; const base = m.posseBase || {};
+      for (const [k, v] of Object.entries(a.p)) pb[k] = { n: v.n, q: round3(num(base[k] && base[k].q) + v.q) };
+      await api.update('materiais/' + m.id, { saldoBase: round3(num(m.saldoBase) + a.d), arquivadoAte: cutoff, posseBase: pb });
+    }
+    await saveConfig({ arquivadoAte: Math.max(num(S.config.arquivadoAte), cutoff), arquivoDocs: num(S.config.arquivoDocs) + chunks, arquivoMovs: num(S.config.arquivoMovs) + old.length });
+    for (let i = 0; i < old.length; i += 10) await Promise.all(old.slice(i, i + 10).map(m => api.del('movs/' + m.id)));
+  }, `${fmtN(old.length)} lançamentos arquivados`);
+  if (done) S.arquivo = null;
+}
+async function loadArchive() {
+  try {
+    const docs = await Store.api.getColl('arquivo');
+    const items = [];
+    for (const d of docs) for (const it of (d.itens || [])) items.push({ ...it, arquivado: true });
+    S.arquivo = items.sort((a, b) => b.ts - a.ts);
+    S.f.mov.p = 'all'; const p = $('#m-p'); if (p) p.value = 'all';
+    toast(`${fmtN(items.length)} lançamentos arquivados incluídos no histórico`, 'info');
+    V.movs.update();
+  } catch (e) { toast('Não foi possível carregar o arquivo agora.', 'crit'); }
+}
+
+function csvCell(v, sep) {
+  if (typeof v === 'number') return String(v).replace('.', ',');
+  let s = String(v ?? '');
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+  return sep === '\t' ? s.replace(/[\t\r\n]+/g, ' ') : (/[;"\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s);
+}
+function buildRows(kind) {
+  if (kind === 'estoque') return [['Código', 'Material', 'Categoria', 'Unidade', 'Saldo', 'Mínimo', 'Situação', 'Localização', 'Retornável'],
+    ...[...S.materiais].sort((a, b) => (a.codigo || '').localeCompare(b.codigo || '', 'pt-BR', { numeric: true })).map(m => [m.codigo || '', m.nome, m.categoria || '', m.unidade || 'un', D.saldo.get(m.id) || 0, num(m.minimo), { ok: 'Normal', low: 'Baixo', zero: 'Zerado' }[D.state(m)], m.local || '', m.retornavel ? 'Sim' : 'Não'])];
+  if (kind === 'movs') return [['Data', 'Hora', 'Tipo', 'Código', 'Material ou modem', 'Quantidade', 'Unidade', 'Pessoa', 'Observação', 'Registrado por'],
+    ...(S.arquivo ? D.movs.concat(S.arquivo) : D.movs).map(m => [fmtDate(m.ts), fmtTime(m.ts), m.alvo === 'modem' ? `Modem · ${(TIPOS[m.tipo] || {}).label || m.tipo}` : (TIPOS[m.tipo] || {}).label || m.tipo, m.codigo || '', m.alvo === 'modem' ? (m.mac || (m.qtdModems ? `${m.qtdModems} modems` : '')) : (m.materialNome || ''), m.alvo === 'modem' ? '' : num(m.delta), m.alvo === 'modem' ? '' : (m.unidade || 'un'), m.pessoa || '', m.obs || '', who(m.por, m)])];
+  const c = ciclo();
+  return [['MAC', 'Modelo', 'Nº de série', 'Status', 'Com quem', 'Cliente', 'Auditado neste ciclo', 'Data da auditoria', 'Auditado por', 'Resultado', 'Observação'],
+    ...S.modems.map(m => [macFmt(m.id), m.modelo || '', m.serial || '', (MST[m.status] || {}).l || m.status || '', m.comQuem || '', m.cliente || '', m.auditCiclo === c ? 'Sim' : 'Não', m.auditCiclo === c && m.auditTs ? fmtDT(m.auditTs) : '', m.auditCiclo === c ? who(m.auditPor) : '', m.auditCiclo === c ? (m.auditResultado === 'divergente' ? 'Divergência' : 'OK') : '', m.auditObs || m.obs || ''])];
+}
+async function exportCSV(kind) {
+  if (!ready()) return;
+  const rows = buildRows(kind);
+  const name = `${{ estoque: 'estoque', movs: 'movimentacoes', modems: 'modems-auditoria' }[kind]}-${new Date().toISOString().slice(0, 10)}.csv`;
+  if (S.downloads) {
+    try { await S.downloads.save({ filename: name, data: '\uFEFF' + rows.map(r => r.map(v => csvCell(v, ';')).join(';')).join('\r\n') }); toast('Planilha exportada', 'ok'); return; }
+    catch (e) { const code = e && e.code; if (code === 'declined') return; if (code === 'rate_limited') { toast('Já existe um download aguardando confirmação.', 'warn'); return; } }
+  }
+  const tsv = rows.map(r => r.map(v => csvCell(v, '\t')).join('\t')).join('\n');
+  openDrawer({ eyebrow: 'Exportar', title: name.replace('.csv', ''), body: `<p class="muted" style="margin:0">Copie e cole no Excel ou no Google Planilhas. As colunas já vêm separadas.</p><textarea class="in mono" id="csv-t" rows="16" readonly style="font-size:12px;white-space:pre"></textarea><div><button class="btn btn-primary" data-act="copycsv" type="button">${ic('copy')}Copiar tudo</button></div>` });
+  $('#csv-t').value = tsv;
+}
+async function copyText(text, el) {
+  try { await navigator.clipboard.writeText(text); toast('Copiado', 'ok', { ms: 1600 }); }
+  catch { if (el) { if (el.select) el.select(); else { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } } toast('Selecionei o texto. Use Ctrl+C para copiar.', 'info'); }
+}
+
+/* ================= Toast / modal / arm ================= */
+function toast(msg, kind = 'info', opts = {}) {
+  const box = $('#toasts'); const t = document.createElement('div');
+  t.className = 'toast ' + kind;
+  t.innerHTML = ic(kind === 'ok' ? 'check' : kind === 'crit' || kind === 'warn' ? 'alert' : 'bolt', 18) + '<div class="toast-t"></div>';
+  if (opts.html) t.querySelector('.toast-t').innerHTML = msg; else t.querySelector('.toast-t').textContent = msg;
+  box.append(t);
+  while (box.children.length > 4) box.firstElementChild.remove();
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 300); }, opts.ms || 4200);
+}
+let modalRes = null;
+function ask(title, text, okLabel = 'Confirmar', danger = false) {
+  return new Promise(res => {
+    const m = $('#modal');
+    m.innerHTML = `<div class="modal-box" role="alertdialog" aria-modal="true" aria-labelledby="mt" aria-describedby="mp"><h3 id="mt"></h3><p id="mp"></p><div class="modal-foot"><button class="btn" data-m="0" type="button">Cancelar</button><button class="btn ${danger ? 'btn-danger armed' : 'btn-primary'}" data-m="1" type="button"></button></div></div>`;
+    $('#mt', m).textContent = title; $('#mp', m).textContent = text; $('[data-m="1"]', m).textContent = okLabel;
+    m.hidden = false; modalRes = v => { m.hidden = true; m.onclick = null; modalRes = null; res(v); };
+    m.onclick = e => { const b = e.target.closest('[data-m]'); if (b) modalRes(b.dataset.m === '1'); else if (e.target === m) modalRes(false); };
+    setTimeout(() => $('[data-m="1"]', m).focus(), 20);
+  });
+}
+function arm(btn, fn, label = 'Confirmar exclusão') {
+  if (btn.classList.contains('armed')) { btn.classList.remove('armed'); clearTimeout(btn._t); fn(); return; }
+  const orig = btn.innerHTML; btn.classList.add('armed', 'btn-danger');
+  if (!btn.classList.contains('btn-icon')) btn.textContent = label; else btn.title = label;
+  btn._t = setTimeout(() => { btn.classList.remove('armed'); if (!btn.classList.contains('btn-icon')) btn.innerHTML = orig; }, 3500);
+}
+
+/* ================= Command palette ================= */
+const CK = { items: [], hi: 0 };
+function openCmd() {
+  const c = $('#cmdk'); c.hidden = false; const i = $('#cmdkIn'); i.value = ''; renderCmd(''); setTimeout(() => i.focus(), 10);
+}
+function closeCmd() { $('#cmdk').hidden = true; }
+function renderCmd(q) {
+  const n = norm(q), qh = macHex(q);
+  const acts = [
+    { t: 'Registrar saída', s: 'Alguém pegou material', i: 'out', c: 't-out', run: () => openMovDrawer({ tipo: 'saida' }) },
+    { t: 'Registrar entrada', s: 'Material chegou ao almoxarifado', i: 'in', c: 't-in', run: () => openMovDrawer({ tipo: 'entrada' }) },
+    { t: 'Registrar devolução', s: 'Material voltou ao estoque', i: 'ret', c: 't-ret', run: () => openMovDrawer({ tipo: 'devolucao' }) },
+    { t: 'Ajuste de inventário', s: 'Corrigir saldo pela contagem física', i: 'adj', c: '', run: () => openMovDrawer({ tipo: 'ajuste' }) },
+    { t: 'Novo material', s: 'Cadastrar item no estoque', i: 'box', c: '', run: () => openMatForm() },
+    { t: 'Novo modem', s: 'Cadastrar MAC', i: 'router', c: 't-mod', run: () => openModemForm({}) },
+    { t: 'Cadastrar modems em lote', s: 'Colar lista de MACs', i: 'scan', c: 't-mod', run: () => openBulk() },
+    { t: 'Conferir modems (auditoria)', s: 'Modo leitura com scanner', i: 'shield', c: 't-ret', run: () => go('auditoria', { focus: '#a-in' }) },
+    ...NAV.map(v => ({ t: 'Ir para ' + v.l, s: '', i: v.i, c: '', run: () => go(v.v) }))
+  ];
+  const groups = [];
+  const A = n ? acts.filter(a => norm(a.t + ' ' + a.s).includes(n)) : acts.slice(0, 8);
+  if (A.length) groups.push(['Ações', A.slice(0, 6)]);
+  if (n) {
+    const M = S.materiais.filter(m => norm(`${m.nome} ${m.codigo || ''} ${m.local || ''}`).includes(n)).slice(0, 6).map(m => ({ t: m.nome, s: `${m.codigo || 'sem código'} · ${fmtN(D.saldo.get(m.id) || 0)} ${m.unidade || 'un'}${m.local ? ' · ' + m.local : ''}`, i: 'box', c: '', run: () => openMat(m.id) }));
+    if (M.length) groups.push(['Materiais', M]);
+    const Md = S.modems.filter(m => (qh.length >= 3 && m.id.includes(qh)) || norm(`${m.serial || ''} ${m.modelo || ''}`).includes(n)).slice(0, 6).map(m => ({ t: macFmt(m.id), s: `${m.modelo || 'Modelo não informado'} · ${(MST[m.status] || {}).l || ''}${m.auditCiclo === ciclo() ? ' · auditado' : ' · pendente'}`, i: 'router', c: 't-mod', mono: true, run: () => openModem(m.id) }));
+    if (Md.length) groups.push(['Modems', Md]);
+    else if (qh.length === 12 && !modemById(qh)) groups.push(['Modems', [{ t: 'Cadastrar ' + macFmt(qh), s: 'MAC ainda não cadastrado', i: 'plus', c: 't-mod', run: () => openModemForm({ mac: qh }) }]]);
+    const Pp = D.people.filter(p => norm(p).includes(n)).slice(0, 5).map(p => ({ t: p, s: 'Ver movimentações desta pessoa', i: 'user', c: '', run: () => { S.f.mov.q = p; S.f.mov.p = 'all'; S.f.mov.t = 'todos'; go('movs'); } }));
+    if (Pp.length) groups.push(['Pessoas', Pp]);
+  }
+  CK.items = groups.flatMap(g => g[1]); CK.hi = 0;
+  let k = 0;
+  $('#cmdkList').innerHTML = groups.length ? groups.map(([g, its]) => `<div class="cmdk-g eyebrow">${g}</div>` + its.map(it => { const idx = k++; return `<div class="cmdk-it" role="option" id="ck-${idx}" data-ck="${idx}" aria-selected="${idx === 0}"><span class="ti ${it.c}">${ic(it.i, 16)}</span><div class="grow"><div class="t1 ${it.mono ? 'mono' : ''}">${esc(it.t)}</div>${it.s ? `<div class="t2">${esc(it.s)}</div>` : ''}</div></div>`; }).join('')).join('')
+    : `<div class="empty">${ic('search', 24)}<span>Nada encontrado para “${esc(q)}”.</span></div>`;
+  $('#cmdkIn').setAttribute('aria-activedescendant', CK.items.length ? 'ck-0' : '');
+}
+function runCmd(i) { const it = CK.items[i]; if (!it) return; closeCmd(); it.run(); }
+
+/* ================= Actions (delegated) ================= */
+const ACT = {
+  go: (el, e) => { e.preventDefault(); closeDrawer(); go(el.dataset.to); },
+  cmd: () => openCmd(),
+  close: () => closeDrawer(),
+  mov: el => openMovDrawer({ tipo: el.dataset.tipo, materialId: el.dataset.id, pessoa: el.dataset.pessoa, qtd: el.dataset.qtd, back: el.dataset.back }),
+  mat: (el, e) => { e.preventDefault(); openMat(el.dataset.id); },
+  newmat: () => openMatForm(),
+  editmat: el => openMatForm(el.dataset.id),
+  delmat: async el => { const m = matById(el.dataset.id); if (!m) return; if (await ask(`Excluir ${m.nome}?`, 'O material sai do estoque. As movimentações já registradas continuam no histórico.', 'Excluir material', true)) { if (await write(() => Store.api.del('materiais/' + m.id), 'Material excluído')) closeDrawer(); } },
+  modem: (el, e) => { e.preventDefault(); openModem(el.dataset.id); },
+  newmodem: el => openModemForm({ mac: el.dataset.mac, audit: el.dataset.audit === '1' }),
+  editmodem: el => openModemForm({ id: el.dataset.id }),
+  delmodem: async el => { const m = modemById(el.dataset.id); if (!m) return; if (await ask(`Excluir o modem ${macFmt(m.id)}?`, 'O cadastro e o status de auditoria deste modem serão apagados. O histórico de movimentações continua.', 'Excluir modem', true)) { if (await write(() => Store.api.del('modems/' + m.id), 'Modem excluído')) closeDrawer(); } },
+  bulk: () => openBulk(),
+  audit: async el => { const hex = el.dataset.id; if (!modemById(hex)) return; el.disabled = true; if (await write(() => auditModem(hex))) { beep('ok'); toast(`Modem ${macFmt(hex)} auditado`, 'ok', { ms: 2200 }); } el.disabled = false; },
+  unaudit: async el => { const hex = el.dataset.id; if (await write(() => Store.api.update('modems/' + hex, { auditCiclo: null, auditTs: null, auditPor: null, auditResultado: null, auditObs: '' }), 'Auditoria desfeita')) { const r = $('#a-res'); if (r && S.view === 'auditoria') r.innerHTML = ''; } },
+  divform: el => {
+    const hex = el.dataset.id;
+    const host = (el.closest('.sres') && el.closest('.sres').querySelector('[data-r="divf"]')) || $('#dd-form');
+    if (!host) return;
+    host.innerHTML = `<form class="inline-form" style="margin-top:10px" data-div="${hex}"><div class="field"><label for="dv-${hex}">Qual a divergência?</label><input class="in" id="dv-${hex}" maxlength="140" placeholder="Ex.: MAC da etiqueta diferente do aparelho" autocomplete="off"></div><button class="btn btn-danger armed" type="submit">Salvar divergência</button></form>`;
+    const f = host.querySelector('form'); f.querySelector('input').focus();
+    f.addEventListener('submit', async e => { e.preventDefault(); const obs = f.querySelector('input').value.trim(); if (!obs) { f.querySelector('input').focus(); return; } if (await write(() => auditModem(hex, 'divergente', obs), 'Divergência registrada')) host.innerHTML = ''; });
+  },
+  mform: el => {
+    const hex = el.dataset.id, op = el.dataset.op, host = $('#dd-form'); if (!host) return;
+    const cfg = { tecnico: ['Nome do técnico', 'dl-pessoas', 'Confirmar entrega'], instalado: ['Cliente, contrato ou endereço', '', 'Confirmar instalação'], defeito: ['Qual o defeito?', '', 'Marcar defeito'] }[op];
+    host.innerHTML = `<form class="box" data-mf="${op}"><div class="inline-form"><div class="field"><label for="mf-x">${cfg[0]}</label><input class="in" id="mf-x" ${cfg[1] ? `list="${cfg[1]}"` : ''} maxlength="80" autocomplete="off"></div><button class="btn ${op === 'defeito' ? 'btn-danger armed' : 'btn-primary'}" type="submit">${cfg[2]}</button><button class="btn btn-ghost" type="button" data-act="mcancel">Cancelar</button></div><div class="err"></div></form>`;
+    const f = host.querySelector('form'), inp = f.querySelector('input'); inp.focus();
+    f.addEventListener('submit', e => { e.preventDefault(); const v = inp.value.trim(); if (op === 'tecnico' && !v) { f.querySelector('.err').textContent = 'Informe o nome do técnico.'; inp.focus(); return; } modemMove(hex, op, v); });
+  },
+  mcancel: () => { const h = $('#dd-form'); if (h) h.innerHTML = ''; },
+  mdo: el => modemMove(el.dataset.id, el.dataset.op),
+  copymac: el => copyText(macFmt(el.dataset.id), $('#mac-sel')),
+  copycsv: () => copyText($('#csv-t').value, $('#csv-t')),
+  delmov: el => arm(el, async () => { await write(() => Store.api.del('movs/' + el.dataset.id), 'Lançamento excluído'); }),
+  filt: el => { const sc = el.dataset.scope; S.f[sc][el.dataset.key] = el.dataset.val; if (sc === 'mod' && S.view !== 'modems') { go('modems'); return; } V[S.view].update(); },
+  lowfilter: () => { S.f.est.f = 'baixo'; S.f.est.q = ''; S.f.est.cat = ''; go('estoque'); },
+  pessoa: (el, e) => { e.preventDefault(); S.f.mov.q = el.dataset.nome; S.f.mov.p = 'all'; S.f.mov.t = 'todos'; go('movs'); },
+  more: el => { S[el.dataset.k] += el.dataset.k === 'movLimit' ? 150 : el.dataset.k === 'modLimit' ? 200 : 300; V[S.view].update(); },
+  export: el => exportCSV(el.dataset.kind),
+  examples: async () => { if (await loadExamples() && S.view === 'sistema') go('painel'); },
+  rmexamples: () => removeExamples(),
+  newcycle: () => newCycle(),
+  archive: () => { const s = $('#s-days'); archiveOld(num(s ? s.value : 90) || 90); },
+  loadarch: () => loadArchive()
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const f = ACT[el.dataset.act]; if (!f) return;
+  if (el.tagName === 'A') e.preventDefault();
+  f(el, e);
+});
+$('#scrim').addEventListener('click', closeDrawer);
+$('#cmdk').addEventListener('click', e => { if (e.target.id === 'cmdk') closeCmd(); const it = e.target.closest('[data-ck]'); if (it) runCmd(+it.dataset.ck); });
+$('#cmdkIn').addEventListener('input', e => renderCmd(e.target.value));
+$('#cmdkIn').addEventListener('keydown', e => {
+  const its = $$('.cmdk-it');
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (!its.length) return; CK.hi = (CK.hi + (e.key === 'ArrowDown' ? 1 : -1) + its.length) % its.length; its.forEach((x, i) => x.setAttribute('aria-selected', String(i === CK.hi))); its[CK.hi].scrollIntoView({ block: 'nearest' }); $('#cmdkIn').setAttribute('aria-activedescendant', its[CK.hi].id); }
+  else if (e.key === 'Enter') { e.preventDefault(); runCmd(CK.hi); }
+});
+document.addEventListener('keydown', e => {
+  const typing = e.target.closest && e.target.closest('input,textarea,select,[contenteditable="true"]');
+  if (e.key === 'Escape') {
+    if (modalRes) { modalRes(false); return; }
+    if (!$('#cmdk').hidden) { closeCmd(); return; }
+    if (DR.open) { closeDrawer(); return; }
+  }
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); $('#cmdk').hidden ? openCmd() : closeCmd(); return; }
+  if (typing || e.ctrlKey || e.metaKey || e.altKey || modalRes || !$('#cmdk').hidden) return;
+  if (e.key === '/') { e.preventDefault(); openCmd(); }
+  else if ((e.key === 'n' || e.key === 'N') && !DR.open) { e.preventDefault(); openMovDrawer({}); }
+  else if ((e.key === 'a' || e.key === 'A') && !DR.open) { e.preventDefault(); go('auditoria', { focus: '#a-in' }); }
+  else if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role="button"][data-act]')) { e.preventDefault(); e.target.click(); }
+});
+$('#drawer').addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const f = $$('#drawer button:not([disabled]),#drawer input:not([type="hidden"]):not([hidden]),#drawer select,#drawer textarea,#drawer a[href],#drawer [tabindex="0"]').filter(x => x.offsetParent !== null);
+  if (!f.length) return;
+  if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+  else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+});
+document.addEventListener('input', e => { if (e.target.id === 's-nome-in') e.target.dataset.touched = '1'; });
+
+/* ================= Clock ================= */
+let lastMin = -1;
+function tick() {
+  const now = new Date();
+  const c = $('#p-clock'); if (c) c.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const d = $('#p-date'); if (d) d.textContent = `${WDL[now.getDay()]}, ${now.getDate()} de ${MESL[now.getMonth()]} de ${now.getFullYear()}`;
+  if (now.getMinutes() !== lastMin) { lastMin = now.getMinutes(); if (lastMin % 1 === 0 && ready() && (S.view === 'painel')) { const f = $('#p-feed'); if (f && D.movs.length) f.innerHTML = D.movs.slice(0, 9).map(mv => feedItem(mv)).join(''); } }
+}
+
+/* ================= Boot ================= */
+function subscribe() {
+  const api = Store.api;
+  const onErr = e => { S.sync = 'error'; updateChrome(); console.warn('db', e); };
+  const seen = new Set(); let primed = false;
+  setTimeout(() => { primed = true; }, 4000);
+  api.watchColl('materiais', l => { S.materiais = l; S.loaded.materiais = true; changed(); }, onErr);
+  api.watchColl('movs', (l, meta, snap) => {
+    if (primed && snap && typeof snap.docChanges === 'function') {
+      for (const ch of snap.docChanges()) {
+        if (ch.type !== 'added') continue;
+        const d = ch.doc.data(); if (!d || seen.has(ch.doc.id)) continue; seen.add(ch.doc.id);
+        if (d.por && d.por !== S.me.id && Date.now() - (d.criadoEm || d.ts || 0) < 180000) {
+          markNew(ch.doc.id);
+          toast(`<b>${esc(who(d.por))}</b> · ${movSentence(d)}`, 'info', { html: true, ms: 5200 });
+        }
+      }
+    }
+    S.movs = l; S.loaded.movs = true; if (S.sync === 'error') S.sync = 'ok'; changed();
+  }, onErr);
+  api.watchColl('modems', l => { S.modems = l; S.loaded.modems = true; changed(); }, onErr);
+  api.watchDoc('config/geral', d => { S.config = d || {}; S.configExists = !!d; S.loaded.config = true; changed(); }, onErr);
+}
+
+async function boot() {
+  renderShell();
+  const h = (location.hash || '').slice(1), saved = lsGet('almox-view');
+  go(V[h] ? h : (V[saved] ? saved : 'painel'), { keepScroll: true });
+  updateChrome();
+  setInterval(tick, 1000);
+  const C = window.claude;
+  const use = n => (C && typeof C.use === 'function') ? Promise.resolve(C.use(n)).catch(() => null) : Promise.resolve(null);
+  use('user').then(async u => {
+    if (!u) return; S.user = u;
+    try { S.me = await u.me(); } catch {}
+    try { if ((await u.can('data.write')) === false && Store.mode !== 'local') S.readOnly = true; } catch {}
+    changed(); renderOnline();
+  });
+  use('room').then(r => {
+    if (!r) return; S.room = r;
+    try { r.presence({ view: S.view }).catch(() => {}); r.onPeers(ch => { S.peers = ch.peers; renderOnline(); refreshProfiles(); }, () => { S.peers = []; renderOnline(); }); } catch {}
+  });
+  use('downloads').then(d => { S.downloads = d; });
+  const db = await use('db');
+  if (db) { Store.mode = 'cloud'; Store.api = cloudAdapter(db); }
+  else { Store.mode = 'local'; Store.api = localAdapter(); S.readOnly = false; }
+  subscribe();
+  changed();
+}
+boot();
+})();
+</script>
+<!--APP-END-->
+</body>
+</html>
