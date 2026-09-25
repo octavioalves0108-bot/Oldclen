@@ -363,7 +363,7 @@ main,footer{position:relative;z-index:2}
 .back{transform:rotateY(180deg);display:grid;place-items:center;background:linear-gradient(165deg,#0e1a25,#050a0f);border:1px solid rgba(205,238,240,.1)}
 .back::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(99,214,208,.05) 0 1px,transparent 1px 16px),repeating-linear-gradient(90deg,rgba(99,214,208,.05) 0 1px,transparent 1px 16px)}
 .back svg{position:relative;width:38%;fill:none;stroke:rgba(99,214,208,.45);stroke-width:1.2;stroke-linejoin:round}
-.floor{position:absolute;left:50%;bottom:6px;width:min(900px,90%);height:90px;transform:translateX(-50%);pointer-events:none;
+.floor{position:absolute;left:50%;bottom:6px;width:min(900px,90%);height:90px;translate:-50% 0;pointer-events:none;
   background:radial-gradient(ellipse at center,rgba(99,214,208,.14),transparent 70%);animation:breathe 6s ease-in-out infinite}
 .carousel:not(.is-3d) .stage{height:auto;perspective:none}
 .carousel:not(.is-3d) .ring{position:relative;left:0;top:0;margin:0;width:auto;height:auto;display:flex;gap:16px;overflow-x:auto;padding:0 var(--pad) 20px}

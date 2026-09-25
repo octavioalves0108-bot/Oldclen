@@ -66,6 +66,7 @@ portfólio.** Em dois dias você sai do zero e passa a ter 15 páginas para most
 | — | [`crm/pipeline.csv`](crm/pipeline.csv) | Onde você controla quem falou o quê |
 | — | [`demos/nette-centro-de-beleza/`](demos/nette-centro-de-beleza/) | Demo cinematográfica: abertura de marca + vitrine em 3D |
 | — | [`demos/odontologica-formosa/`](demos/odontologica-formosa/) | Demo cinematográfica: dente em 3D escaneado + tratamentos |
+| — | [`demos/gente-linda/`](demos/gente-linda/) | Demo cinematográfica: coração do logo em 3D + especialidades |
 
 ### Se você for trabalhar só por WhatsApp
 
