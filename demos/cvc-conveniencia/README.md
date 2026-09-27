@@ -21,7 +21,30 @@ arquivo em [app.netlify.com/drop](https://app.netlify.com/drop).
 
 Rodapé e carrossel levam o aviso "Beba com moderação · venda proibida para
 menores de 18 anos". Com "reduzir movimento" ligado no sistema, as animações
-longas são desligadas.
+longas são desligadas. No computador, a roda do mouse tem rolagem suave com
+inércia; no celular, a rolagem é a nativa do aparelho.
+
+## Para continuar fluida
+
+Num teste com o processador desacelerado 4×, simulando um celular comum, a
+página roda a ~60 quadros por segundo no topo e rolando, e a 44–51 no
+carrossel. Antes da otimização rodava a 12–20. Se for editar, mantenha estas
+regras:
+
+- **Animar só `transform` e `opacity`.** Animar `top`, `width` ou `left`
+  recalcula o layout a cada quadro
+- **Nada de `filter: blur()` ou `backdrop-filter` em camada grande ou que se
+  mexe.** Para suavizar, use gradiente
+- **Movimento contínuo por CSS, não por script.** As bolhas, o gelo e o giro
+  da lata são animações que o navegador executa sozinho. O script só ajusta o
+  ritmo
+- **No laço do script, ler tudo primeiro e escrever depois, e só quando o
+  valor muda.** Ler a posição de algo logo depois de mudar um estilo força o
+  navegador a recalcular a página no meio do quadro
+- **Não trocar variável CSS num elemento que tem muitos filhos.** Isso
+  recalcula todos eles; escreva o `transform` direto no elemento
+- **As seções abaixo do topo usam `content-visibility: auto`.** O navegador
+  pula o desenho delas enquanto estão fora da tela
 
 ## De onde vieram os dados — leia antes de mostrar
 
