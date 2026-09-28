@@ -66,6 +66,7 @@ portfólio.** Em dois dias você sai do zero e passa a ter 15 páginas para most
 | — | [`demos/pousada-do-sol/`](demos/pousada-do-sol/) | Demo premium com abertura cinematográfica (pousada em Alto Paraíso) |
 | — | [`demos/cvc-conveniencia/`](demos/cvc-conveniencia/) | Demo premium com abertura, pergunta de idade e lata 3D (conveniência) |
 | — | [`prompts/restaurantes/`](prompts/restaurantes/) | 3 restaurantes sem site em Taguatinga Norte e um prompt completo de site para cada |
+| — | [`prompts/cvc-conveniencia.md`](prompts/cvc-conveniencia.md) | Prompt completo do site da CVC Conveniência, no mesmo formato |
 | — | [`crm/pipeline.csv`](crm/pipeline.csv) | Onde você controla quem falou o quê |
 
 ### Se você for trabalhar só por WhatsApp

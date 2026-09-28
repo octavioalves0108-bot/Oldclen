@@ -68,6 +68,14 @@ só traz a agência CVC Viagens e outras conveniências. Portanto:
 promoção. Seguindo a regra do `gerador/COMO-USAR.md`, nada disso entra sem
 dado real.
 
+## Prompt para refazer com os dados reais
+
+[`../../prompts/cvc-conveniencia.md`](../../prompts/cvc-conveniencia.md) descreve
+esta página inteira num prompt, no mesmo formato dos prompts de restaurante.
+Serve para regenerar o site quando o dono confirmar WhatsApp, endereço,
+horário e produtos, ou para gerar em outra ferramenta. A coruja vetorizada
+que ele pede como anexo está em `fonte/img/coruja.svg`.
+
 ## Como editar
 
 ### Trocar o pedido para WhatsApp
