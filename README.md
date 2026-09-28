@@ -65,6 +65,7 @@ portfólio.** Em dois dias você sai do zero e passa a ter 15 páginas para most
 | — | [`gerador/index.html`](gerador/index.html) | A ferramenta que monta a página em 10 min |
 | — | [`crm/pipeline.csv`](crm/pipeline.csv) | Onde você controla quem falou o quê |
 | — | [`demos/restaurante-celeste/`](demos/restaurante-celeste/) | Demo sob medida, nível premium: Restaurante Celeste (Taguatinga Norte) |
+| — | [`demos/jeri-carne-de-sol/`](demos/jeri-carne-de-sol/) | Demo sob medida, nível premium: Jeri Carne de Sol (Taguatinga Norte) |
 
 ### Se você for trabalhar só por WhatsApp
 
