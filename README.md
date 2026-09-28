@@ -65,6 +65,7 @@ portfólio.** Em dois dias você sai do zero e passa a ter 15 páginas para most
 | — | [`gerador/index.html`](gerador/index.html) | A ferramenta que monta a página em 10 min |
 | — | [`demos/pousada-do-sol/`](demos/pousada-do-sol/) | Demo premium com abertura cinematográfica (pousada em Alto Paraíso) |
 | — | [`demos/cvc-conveniencia/`](demos/cvc-conveniencia/) | Demo premium com abertura, pergunta de idade e lata 3D (conveniência) |
+| — | [`prompts/restaurantes/`](prompts/restaurantes/) | 3 restaurantes sem site em Taguatinga Norte e um prompt completo de site para cada |
 | — | [`crm/pipeline.csv`](crm/pipeline.csv) | Onde você controla quem falou o quê |
 
 ### Se você for trabalhar só por WhatsApp
