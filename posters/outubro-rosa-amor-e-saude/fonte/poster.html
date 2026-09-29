@@ -52,27 +52,27 @@
   .linha { position: absolute; left: 236px; top: 180px; width: 2px; height: 440px;
     background: linear-gradient(#F3B7CF, rgba(243, 183, 207, 0)); }
 
-  /* Foto */
-  .moldura {
-    position: absolute; left: 308px; top: 152px; width: 690px; height: 900px;
-    border: 2px solid var(--rosa-medio);
-    border-radius: 345px 345px 40px 40px / 345px 345px 40px 40px;
+  /* Pessoa recortada, integrada ao cenário */
+  .halo {
+    position: absolute; left: 462px; top: 160px; width: 640px; height: 640px; border-radius: 50%;
+    background: radial-gradient(circle at 45% 40%, #FBD3E3 0%, #F5B2CD 55%, #EE98BD 100%);
   }
-  .foto {
-    position: absolute; left: 330px; top: 130px; width: 690px; height: 900px;
-    border-radius: 345px 345px 40px 40px / 345px 345px 40px 40px;
-    overflow: hidden; box-shadow: 0 30px 70px rgba(168, 17, 79, .22);
-    border: 8px solid #fff;
+  .anel {
+    position: absolute; left: 434px; top: 134px; width: 696px; height: 696px; border-radius: 50%;
+    border: 2px solid rgba(214, 36, 110, .28);
   }
-  .foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 14%; display: block; }
+  .pessoa {
+    position: absolute; left: 412px; top: 112px; width: 668px;
+    -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 84%), linear-gradient(to right, transparent 0%, #000 16%);
+    -webkit-mask-composite: source-in;
+            mask-image: linear-gradient(to bottom, #000 62%, transparent 84%), linear-gradient(to right, transparent 0%, #000 16%);
+            mask-composite: intersect;
+  }
+  .pessoa img { width: 100%; display: block; filter: drop-shadow(0 18px 30px rgba(168, 17, 79, .22)); }
 
   /* Cartão com a arte da campanha */
-  .cartao {
-    position: absolute; left: 50px; top: 676px; width: 510px;
-    padding: 26px 28px; background: #fff; border-radius: 30px;
-    box-shadow: 0 28px 60px rgba(168, 17, 79, .20);
-  }
-  .cartao img { width: 100%; display: block; }
+  .cartao { position: absolute; left: 34px; top: 700px; width: 486px; }
+  .cartao img { width: 100%; display: block; mix-blend-mode: multiply; }
 
   /* Rodapé */
   .rodape { position: absolute; left: 60px; right: 60px; top: 1126px; }
@@ -109,8 +109,9 @@
   <div class="vertical">Outubro Rosa</div>
   <div class="linha"></div>
 
-  <div class="moldura"></div>
-  <div class="foto"><img src="foto.jpg" alt=""></div>
+  <div class="anel"></div>
+  <div class="halo"></div>
+  <div class="pessoa"><img src="pessoa.png" alt=""></div>
 
   <div class="cartao"><img src="logo.png" alt="Quem ama rosa, se cuida"></div>
 
