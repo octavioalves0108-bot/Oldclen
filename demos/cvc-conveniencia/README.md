@@ -13,7 +13,7 @@ arquivo em [app.netlify.com/drop](https://app.netlify.com/drop).
 | Pergunta de idade | "Você tem 18 anos ou mais?" dentro da própria abertura. Quem responde "sim" entra com um círculo laranja que se abre a partir da coruja. A resposta fica guardada no navegador, então a pergunta não se repete |
 | Topo | "A noite pede. A CVC *tem.*" com as letras subindo uma a uma. Ao lado, uma lata 3D girando com a coruja e a marca no rótulo, cubos de gelo 3D e bolhas subindo. A lata gira mais rápido quando a página rola e inclina com o mouse |
 | Faixas | Categorias correndo em sentidos opostos, entortando com a velocidade da rolagem |
-| Seleção da casa | Carrossel 3D com 6 categorias ilustradas: cervejas, destilados, vinhos, energéticos, gelo e carvão, snacks. Cada item tem bolhas, gotas, brasas ou fumaça animadas e um botão de pedido |
+| Seleção da casa | Carrossel 3D com as categorias confirmadas (por padrão, cervejas, gelo, carvão e snacks; há 9 prontas). Cada item tem bolhas, gotas, brasas ou fumaça animadas e um botão de pedido |
 | A CVC | Texto que acende palavra por palavra. A coruja ao lado pisca e segue o cursor com os olhos |
 | Como pedir | Três passos em cartões com inclinação 3D |
 | Instagram | Celular em 3D com o perfil estilizado, que inclina com o mouse |
@@ -78,21 +78,38 @@ que ele pede como anexo está em `fonte/img/coruja.svg`.
 
 ## Como editar
 
-### Trocar o pedido para WhatsApp
+### Preencher o que o dono confirmar
 
-No começo do `<script>` do `fonte/template.html`:
+Tudo fica num bloco só, no começo do `<script>` do `fonte/template.html`.
+Campo vazio = a informação não aparece em lugar nenhum:
 
 ```js
 var LOJA={
   instagram:'cvcconveniencia',
-  whatsapp:'',          // ex.: '5561999990000' (DDI + DDD + número)
-  pedirIdade:true       // false desliga a pergunta de idade
+  whatsapp:'',        // ex.: '5561999990000' (DDI + DDD + número)
+  pedirIdade:true,    // false desliga a pergunta de idade
+  categorias:['cervejas','gelo','carvao','snacks'],
+  endereco:'',        // preenchido = seção "Onde estamos" com mapa
+  horario:'',         // ex.: 'Todos os dias, das 16h às 2h'
+  horarioSchema:'',   // o mesmo no formato do Google: 'Mo-Su 16:00-02:00'
+  entrega:'',         // ex.: 'Entregamos em Taguatinga Norte e Sul'
+  pagamento:'',       // ex.: 'Pix, cartão e dinheiro'
+  logoUrl:''          // endereço público da logo, depois de publicar
 };
 ```
 
-Com o número preenchido, todos os botões passam a abrir o WhatsApp com
-mensagem pronta citando o item, e os textos "Direct" viram "WhatsApp"
-sozinhos.
+- **`whatsapp`:** preenchido, todos os botões abrem o WhatsApp com mensagem
+  pronta citando o item, e os textos "Direct" viram "WhatsApp" sozinhos
+- **`categorias`:** quais cards entram no carrossel, na faixa laranja e nos
+  destaques do celular. Opções: `cervejas`, `destilados`, `vinhos`,
+  `energeticos`, `agua`, `gelo`, `carvao`, `snacks`, `doces`. O padrão é a
+  reserva combinada no prompt. Tabacaria não tem card: a Lei 9.294/1996
+  proíbe propaganda de tabaco fora do ponto de venda
+- **`endereco`, `horario`, `entrega`, `pagamento`:** qualquer um preenchido
+  faz aparecer a seção "Onde estamos" e o link no menu. Com endereço, entram
+  o mapa e o botão do Google Maps
+- **JSON-LD:** telefone, endereço, horário e logo só entram quando
+  preenchidos
 
 ### Gerar o index.html de novo
 

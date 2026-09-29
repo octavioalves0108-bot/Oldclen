@@ -53,8 +53,9 @@ indicada.
 - **O que vende de fato.** Marque com ele o que existe, e só isso entra no
   carrossel: cervejas · destilados (whisky, gin, vodka) · vinhos e
   espumantes · energéticos e refrigerantes · água · gelo · carvão · snacks e
-  petiscos · doces · tabacaria. Reserva, se ele não responder: cervejas,
-  gelo, carvão e snacks
+  petiscos · doces. Reserva, se ele não responder: cervejas, gelo, carvão e
+  snacks. **Tabacaria fica fora do site mesmo que ele venda:** a Lei
+  9.294/1996 proíbe propaganda de produtos de tabaco fora do ponto de venda
 - **Entrega.** Se faz delivery, a área e se cobra taxa. Sem confirmação, não
   mencione entrega — fale em "pedido" e "combine com a loja"
 - **Formas de pagamento** (Pix, cartão, dinheiro). Sem confirmação, omita
@@ -174,7 +175,10 @@ indicada.
    girando, nome, @, "Seguir" e "Mensagem", destaques e uma grade de 9
    blocos gráficos que aparecem em sequência. Só nome, @ e logo são reais —
    **sem número de seguidores, sem bio inventada, sem posts falsos**
-10. **Como chegar** — só se o endereço for confirmado (seção 3)
+10. **Onde estamos** — só aparece se houver endereço, horário, entrega ou
+    pagamento confirmados (seção 3), e mostra só os campos preenchidos. Com
+    endereço, entra um mapa ilustrado com a coruja como pino e o botão "Abrir
+    no Google Maps"
 11. **Chamada final:** a coruja piscando, "Bateu a vontade? / Chama a
     *coruja.*", raios laranja girando devagar e um brilho que cresce com a
     rolagem, botão de pedido e o @
@@ -243,12 +247,21 @@ quadros por segundo num celular médio; com elas, a ~60.
   var LOJA = {
     instagram: 'cvcconveniencia',
     whatsapp: '',       // só números, com DDI e DDD: '5561999990000'
-    pedirIdade: true    // false desliga a pergunta de idade
+    pedirIdade: true,   // false desliga a pergunta de idade
+    categorias: ['cervejas', 'gelo', 'carvao', 'snacks'], // só as confirmadas
+    endereco: '',       // preenchido = seção "Onde estamos" com mapa
+    horario: '',        // texto, ex.: 'Todos os dias, das 16h às 2h'
+    horarioSchema: '',  // o mesmo no formato do Google: 'Mo-Su 16:00-02:00'
+    entrega: '',        // vazio = o site não fala de entrega
+    pagamento: '',      // ex.: 'Pix, cartão e dinheiro'
+    logoUrl: ''         // endereço público da logo, para o JSON-LD
   };
   ```
   Com `whatsapp` vazio, os botões abrem `ig.me/m/cvcconveniencia` e dizem
   "Direct". Preenchido, abrem `wa.me/<número>?text=<mensagem>` com mensagem
-  citando o item, e os textos viram "WhatsApp" sozinhos
+  citando o item, e os textos viram "WhatsApp" sozinhos. `categorias` controla
+  o carrossel, a faixa laranja e os destaques do celular. Campo vazio = a
+  informação não aparece em lugar nenhum, nem no JSON-LD
 - **Celular primeiro:** confira em 390 px; nenhuma rolagem lateral (atenção
   aos elementos 3D, que ficam mais largos que a caixa antes de aparecer);
   botões com pelo menos 44 px
