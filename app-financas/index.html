@@ -653,6 +653,7 @@ body.onboarding .fab{display:none}
 <div id="toasts" role="status" aria-live="polite"></div>
 <div id="tooltip" role="tooltip"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 /* =====================================================================
    UTILS
@@ -1125,9 +1126,7 @@ function migrate(s) {
   return s;
 }
 let saveTimer = null;
-function save() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 250); }
-function saveNow() { clearTimeout(saveTimer); if (state) DB.put('kv', 'state', state).catch(() => toast('Não foi possível salvar', 'error')); }
-async function loadState() { await DB.open(); const s = await DB.get('kv', 'state').catch(() => undefined); if (s && s.profile) state = migrate(s); }
+// save(), saveNow() e o carregamento por usuário ficam no módulo de contas (nuvem)
 
 /* =====================================================================
    DOMÍNIO — cálculos
@@ -1249,13 +1248,15 @@ function renderShell(cur) {
   let sec = '', side = `<div class="brand"><span class="brand-mark">${LOGO(20)}</span><div>NEXO<small>FINANCE OS</small></div></div><div style="padding:0 4px 8px"><button class="btn btn-primary btn-block" data-action="tx-add">${icon('plus', 18)} Novo lançamento</button></div><nav class="side-nav">`;
   for (const n of NAV) { if (n.sec !== sec) { sec = n.sec; side += `<div class="side-label">${sec}</div>`; } side += `<a class="sn-item ${cur === n.id ? 'active' : ''}" href="#/${n.id}" ${cur === n.id ? 'aria-current="page"' : ''}>${icon(n.ic)}${n.label}</a>`; }
   const t = monthTotals(monthKey(new Date()));
-  side += `</nav><div class="side-foot"><span class="avatar">${esc((state.profile.name || '?').trim()[0]?.toUpperCase() || '?')}</span><div style="min-width:0"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(state.profile.name)}</div><div class="faint" style="font-size:12.5px">Guardado: ${brl0(totalSaved())}</div></div></div>`;
+  side += `</nav><div class="side-foot"><span class="avatar">${esc((state.profile.name || '?').trim()[0]?.toUpperCase() || '?')}</span><div style="min-width:0"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(state.profile.name)}</div><div class="faint" style="font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(session?.user?.email || '')}</div></div><button class="icon-btn" style="margin-left:auto" data-action="logout" aria-label="Sair da conta">${icon('logout', 18)}</button></div>`;
   $('#sidebar').innerHTML = side;
   $('#bottomnav').innerHTML = BOTTOM.map(id => { const n = NAV.find(x => x.id === id); return `<a class="bn-item ${cur === id ? 'active' : ''}" href="#/${id}">${icon(n.ic, 22)}<span>${n.short || n.label}</span></a>`; }).join('')
     + `<button type="button" class="bn-item ${!BOTTOM.includes(cur) ? 'active' : ''}" data-action="more">${icon('more', 22)}<span>Mais</span></button>`;
   $('#topbar').innerHTML = `<div class="brand"><span class="brand-mark">${LOGO(20)}</span><div>NEXO<small>FINANCE OS</small></div></div><div class="spacer"></div>
     <span class="topbar-chip" title="Saldo do mês"><span class="dot" style="${t.free < 0 ? 'background:var(--bad);box-shadow:0 0 8px var(--bad)' : ''}"></span><span class="money">${brl0(t.free)}</span></span>
+    <button type="button" class="icon-btn" id="sync-chip" data-action="sync-now"></button>
     <button type="button" class="icon-btn" data-action="theme-toggle" aria-label="Alternar tema claro/escuro">${icon(document.documentElement.dataset.theme === 'light' ? 'moon' : 'sun')}</button>`;
+  setSync(sync.status);
   if (!$('#fab')) document.body.insertAdjacentHTML('beforeend', `<button type="button" class="fab" id="fab" data-action="tx-add" aria-label="Novo lançamento">${icon('plus', 28)}</button>`);
 }
 actions.more = () => openModal({ title: 'Mais', body: `<div class="more-grid">${NAV.filter(n => !BOTTOM.includes(n.id)).map(n => `<a class="more-tile" href="#/${n.id}" data-action="close-modal-nav">${icon(n.ic, 24)}<b>${n.label}</b></a>`).join('')}</div>` });
@@ -1269,10 +1270,11 @@ function viewOnboarding() {
   return `<div class="onb"><div class="onb-hero">
       <div class="brand" style="font-size:20px"><span class="brand-mark" style="width:44px;height:44px">${LOGO(24)}</span><div>NEXO<small>FINANCE OS</small></div></div>
       <h1>Controle seu dinheiro e <span class="grad-text">poupe todo mês</span>.</h1>
-      <p>Gastos, orçamento, contas fixas e metas em um só painel. Tudo fica salvo só no seu aparelho.</p>
+      <p>Gastos, orçamento, contas fixas e metas em um só painel, salvos na sua conta e sincronizados entre seus aparelhos.</p>
       <div class="onb-feats">${feats.map(([i, t]) => `<div class="onb-feat"><span class="li-icon">${icon(i, 18)}</span>${t}</div>`).join('')}</div></div>
     <form class="card glow" data-form="onboarding" novalidate><div class="eyebrow">Configuração inicial</div><h2 style="margin:10px 0 18px;font-size:24px">Vamos montar seu painel</h2>
       <div class="form-grid">
+        <p class="muted full" style="font-size:13.5px;margin-top:-8px">Conta: <b style="color:var(--text)">${esc(session?.user?.email || '')}</b> · <button type="button" class="btn-text" style="min-height:0;padding:0" data-action="logout">sair</button></p>
         <label class="field full"><span>Seu nome</span><input class="input" name="name" maxlength="40" placeholder="Como quer ser chamado?"></label>
         <label class="field"><span>Renda mensal (R$)</span><input class="input" name="income" inputmode="decimal" placeholder="4.500,00"></label>
         <label class="field"><span>Dia do pagamento</span><input class="input" name="payday" inputmode="numeric" value="5"></label>
@@ -1671,7 +1673,11 @@ actions['rep-month'] = el => navMonth('repMonth', el);
 function viewConfig() {
   const p = state.profile, S = state.settings, R = S.remind, perm = !('Notification' in window) ? 'unsupported' : Notification.permission;
   const permTxt = { granted: ['good', 'Ativadas'], denied: ['bad', 'Bloqueadas no navegador'], default: ['warn', 'Não ativadas'], unsupported: ['', 'Sem suporte'] }[perm];
-  return pageHead('Configurações', 'Perfil, lembretes, categorias, aparência e seus dados.') + `<div class="grid">
+  const st = { ok: ['good', 'Sincronizado'], saving: ['warn', 'Salvando…'], offline: ['warn', 'Offline'], error: ['bad', 'Erro ao sincronizar'], idle: ['', 'Conectado'] }[sync.status] || ['', ''];
+  return pageHead('Configurações', 'Conta, perfil, lembretes, categorias, aparência e seus dados.') + `<div class="grid">
+    <section class="card glow d-12"><div class="row wrap between"><div class="row" style="gap:14px;min-width:0"><span class="avatar" style="width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font:700 18px var(--font-display);background:linear-gradient(145deg,var(--accent),var(--violet));color:#fff">${esc((p.name || '?')[0].toUpperCase())}</span>
+      <div style="min-width:0"><div class="eyebrow">Sua conta</div><div style="font-weight:600;font-size:17px;margin-top:6px;overflow-wrap:anywhere">${esc(session?.user?.email || '')}</div><span class="chip ${st[0]}" style="margin-top:6px">${icon('cloud', 13)}${st[1]}</span></div></div>
+      <div class="row wrap" style="gap:8px"><button class="btn btn-ghost" data-action="sync-now">${icon('cloud', 16)} Sincronizar agora</button><button class="btn btn-ghost" data-action="change-pw">${icon('lock', 16)} Alterar senha</button><button class="btn btn-danger" data-action="logout">${icon('logout', 16)} Sair</button></div></div></section>
     <section class="card d-6"><div class="card-head"><h3>Perfil e meta de poupança</h3>${icon('target', 20)}</div>
       <form data-form="profile" novalidate><div class="form-grid">
         <label class="field full"><span>Nome</span><input class="input" name="name" maxlength="40" value="${esc(p.name)}"></label>
@@ -1696,13 +1702,13 @@ function viewConfig() {
     </section>
     <section class="card d-6"><div class="card-head"><h3>Aparência e dados</h3>${icon('save', 20)}</div>
       ${seg('theme', [['dark', 'Escuro'], ['light', 'Claro'], ['auto', 'Automático']], S.theme)}
-      <p class="muted" style="font-size:13.5px;margin:16px 0 12px">Seus dados ficam só neste aparelho. Faça backup de vez em quando.</p>
+      <p class="muted" style="font-size:13.5px;margin:16px 0 12px">Seus dados ficam na sua conta (nuvem) e têm uma cópia neste aparelho para funcionar offline. O backup em arquivo é opcional.</p>
       <div class="form-grid">
         <button class="btn btn-ghost" data-action="export-json">${icon('download', 16)} Exportar backup</button>
         <label class="btn btn-ghost upload-btn">${icon('upload', 16)} Importar backup<input type="file" accept="application/json,.json" data-change="import-backup"></label>
         <button class="btn btn-ghost full" data-action="export-csv">${icon('download', 16)} Exportar lançamentos (CSV / Excel)</button>
         ${hasDemo() ? `<button class="btn btn-ghost full" data-action="clear-demo">${icon('trash', 16)} Apagar dados de exemplo</button>` : ''}
-        <button class="btn btn-danger full" data-action="wipe">${icon('alert', 16)} Apagar todos os dados</button>
+        <button class="btn btn-danger full" data-action="wipe">${icon('alert', 16)} Apagar todos os dados da conta</button>
       </div>
     </section>
     <section class="card d-12"><div class="card-head"><h3>Instalar no celular como app</h3>${icon('phone', 20)}</div>
@@ -1711,7 +1717,7 @@ function viewConfig() {
         <div class="d-4 t-4"><b>2. Abra o link no celular</b><p class="muted" style="font-size:13.5px;margin-top:4px"><b>Android:</b> menu ⋮ → “Adicionar à tela inicial”. <b>iPhone:</b> Compartilhar → “Adicionar à Tela de Início”.</p></div>
         <div class="d-4 t-4"><b>3. Ative as notificações</b><p class="muted" style="font-size:13.5px;margin-top:4px">Abra pelo ícone e toque em “Ativar notificações” (iPhone: iOS 16.4+).</p></div>
       </div></section>
-  </div><p class="faint" style="font-size:12.5px;text-align:center;margin-top:24px">NEXO Finance · v1.0 · Dados locais (${DB.fallback ? 'localStorage' : 'IndexedDB'})</p>`;
+  </div><p class="faint" style="font-size:12.5px;text-align:center;margin-top:24px">NEXO Finance · v1.1 · Conta na nuvem (Supabase) + cópia local (${DB.fallback ? 'localStorage' : 'IndexedDB'})</p>`;
 }
 forms.profile = (f, fd) => {
   const name = String(fd.get('name') || '').trim(), income = parseMoney(fd.get('income')), payday = parseNum(fd.get('payday'));
@@ -1750,10 +1756,6 @@ Object.assign(actions, {
     toast('CSV exportado', 'success', { sub: `${rows.length - 1} lançamentos` });
   },
   'clear-demo': async () => { if (!await confirmDialog({ title: 'Apagar dados de exemplo?', message: 'Remove os lançamentos e a meta de exemplo. Suas categorias, contas fixas e o que você registrou continuam.', confirm: 'Apagar exemplos', danger: true })) return; clearDemo(); render(); toast('Dados de exemplo apagados', 'success', { sub: 'Agora é com você. Bora poupar! 🐷' }); },
-  wipe: async () => {
-    if (!await confirmDialog({ title: 'Apagar todos os dados?', message: 'Isso apaga lançamentos, metas, contas e configurações deste aparelho. <b>Não dá para desfazer.</b>', confirm: 'Apagar tudo', danger: true })) return;
-    clearTimeout(saveTimer); state = null; await DB.clear('kv'); history.replaceState(null, '', location.pathname + location.search); applyTheme(); render(true); toast('Todos os dados foram apagados', 'info');
-  },
 });
 changes['import-backup'] = async el => {
   const file = el.files[0]; el.value = ''; if (!file) return;
@@ -1768,6 +1770,261 @@ changes['import-backup'] = async el => {
 <script>
 'use strict';
 /* =====================================================================
+   CONTAS NA NUVEM (Supabase) — login, cadastro, senha e sincronização
+   ---------------------------------------------------------------------
+   Para não precisar da tela de configuração, preencha aqui as chaves do
+   seu projeto (Supabase → Project Settings → API). A chave "anon" é pública
+   por design: quem protege os dados são as regras RLS do SQL abaixo.
+   ===================================================================== */
+const CLOUD = { url: '', key: '' };
+const SETUP_SQL = `create table if not exists public.user_state (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  data jsonb not null,
+  updated_at timestamptz not null default now()
+);
+alter table public.user_state enable row level security;
+create policy "ler meus dados" on public.user_state
+  for select using (auth.uid() = user_id);
+create policy "criar meus dados" on public.user_state
+  for insert with check (auth.uid() = user_id);
+create policy "atualizar meus dados" on public.user_state
+  for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "apagar meus dados" on public.user_state
+  for delete using (auth.uid() = user_id);`;
+
+Object.assign(ICONS, {
+  cloud: '<path d="M7 18.5h10.5a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.6 9.1 4.7 4.7 0 0 0 7 18.5z"/>',
+  cloudOff: '<path d="M3 3l18 18"/><path d="M8.5 6.2A6 6 0 0 1 18.1 10.55 4 4 0 0 1 20.2 17.4M16 18.5H7a4.7 4.7 0 0 1-.4-9.4"/>',
+  logout: '<path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M10 16l-4-4 4-4M6 12h10"/>',
+  eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/>',
+  lock: '<rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/>',
+});
+
+let sb = null, session = undefined, authMode = 'login', stateLoading = false, authBusy = false;
+const sync = { status: 'idle', dirty: false, timer: null };
+function cloudConfig() {
+  try { const c = JSON.parse(localStorage.getItem('nexofin:cloud') || 'null'); if (c?.url && c?.key) return c; } catch { }
+  return CLOUD.url && CLOUD.key ? CLOUD : null;
+}
+function initClient() {
+  const c = cloudConfig(); if (!c || !window.supabase?.createClient) return false;
+  try { sb = window.supabase.createClient(c.url, c.key, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }); }
+  catch { sb = null; return false; }
+  sb.auth.onAuthStateChange((event, s) => setTimeout(() => onAuth(event, s), 0)); // fora do callback: evita travar o cliente
+  return true;
+}
+function onAuth(event, s) {
+  if (event === 'PASSWORD_RECOVERY') { session = s; authMode = 'reset'; render(true); return; }
+  const prev = session?.user?.id; session = s;
+  if (s && s.user.id !== prev) { if (authMode !== 'reset') authMode = 'login'; loadUserState(); }
+  else if (!s) { state = null; stateLoading = false; render(true); }
+  else if (event === 'INITIAL_SESSION' || event === 'USER_UPDATED') render();
+}
+const localKey = () => 'state:' + session.user.id;
+function setSync(st) {
+  sync.status = st; const el = $('#sync-chip'); if (!el) return;
+  const m = { ok: ['cloud', 'Sincronizado', ''], saving: ['cloud', 'Salvando…', 'var(--warn)'], offline: ['cloudOff', 'Offline · salvo no aparelho', 'var(--warn)'], error: ['cloudOff', 'Erro ao sincronizar', 'var(--bad)'], idle: ['cloud', 'Conectado', ''] }[st] || ['cloud', '', ''];
+  el.innerHTML = icon(m[0], 18); el.title = m[1]; el.setAttribute('aria-label', m[1]); el.style.color = m[2];
+}
+/* ---- persistência: cópia local imediata + envio à nuvem com atraso ---- */
+function save() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 250); }
+function saveNow() {
+  clearTimeout(saveTimer); if (!state || !session) return;
+  state._savedAt = Date.now(); DB.put('kv', localKey(), state).catch(() => { });
+  sync.dirty = true; setSync('saving'); clearTimeout(sync.timer); sync.timer = setTimeout(pushCloud, 1200);
+}
+async function pushCloud() {
+  clearTimeout(sync.timer); if (!state || !session || !sync.dirty) return;
+  const uidNow = session.user.id, stamp = state._savedAt, payload = JSON.parse(JSON.stringify(state));
+  try {
+    const { error } = await sb.from('user_state').upsert({ user_id: uidNow, data: payload, updated_at: new Date(stamp).toISOString() });
+    if (error) throw error;
+    if (session?.user.id === uidNow && state?._savedAt === stamp) sync.dirty = false;
+    setSync(sync.dirty ? 'saving' : 'ok');
+  } catch (e) { setSync(navigator.onLine === false ? 'offline' : 'error'); cloudErrorToast(e); }
+}
+let lastCloudToast = 0;
+function cloudErrorToast(e) {
+  if (Date.now() - lastCloudToast < 60000) return; lastCloudToast = Date.now();
+  const msg = String(e?.message || e || '');
+  if (/user_state|relation|42P01|schema cache/i.test(msg + (e?.code || ''))) toast('Banco não configurado', 'error', { sub: 'Rode o SQL de configuração no Supabase (veja o guia).', duration: 8000 });
+  else if (navigator.onLine !== false) toast('Não foi possível sincronizar', 'error', { sub: 'Seus dados estão salvos no aparelho e serão enviados depois.' });
+}
+async function loadUserState() {
+  stateLoading = true; state = null; render();
+  const id = session.user.id, local = await DB.get('kv', 'state:' + id).catch(() => undefined);
+  let cloud = null, cloudErr = null;
+  try { const { data, error } = await sb.from('user_state').select('data, updated_at').eq('user_id', id).maybeSingle(); if (error) throw error; cloud = data?.data || null; }
+  catch (e) { cloudErr = e; }
+  if (session?.user.id !== id) return; // trocou de conta no meio
+  let s = null;
+  if (cloud && (!local || (cloud._savedAt || 0) >= (local._savedAt || 0))) s = cloud;
+  else if (local) { s = local; sync.dirty = true; }
+  if (!s && !cloudErr) {
+    // dados da versão sem login, salvos neste aparelho
+    const legacy = await DB.get('kv', 'state').catch(() => undefined);
+    if (legacy?.profile && await confirmDialog({ title: 'Usar dados deste aparelho?', message: `Encontramos dados salvos aqui antes do login (${legacy.tx?.length || 0} lançamentos). Quer levá-los para a conta <b>${esc(session.user.email)}</b>?`, confirm: 'Usar nesta conta' })) {
+      s = legacy; sync.dirty = true; DB.del('kv', 'state').catch(() => { });
+    }
+  }
+  state = s && s.profile ? migrate(s) : null; stateLoading = false;
+  if (cloudErr) { setSync('offline'); cloudErrorToast(cloudErr); } else setSync('ok');
+  if (state) { DB.put('kv', 'state:' + id, state).catch(() => { }); if (sync.dirty && !cloudErr) pushCloud(); }
+  applyTheme(); render(true);
+}
+async function pullIfNewer() {
+  if (!sb || !session || !state || sync.dirty) return;
+  try {
+    const { data, error } = await sb.from('user_state').select('data').eq('user_id', session.user.id).maybeSingle();
+    if (error || !data?.data) return;
+    if ((data.data._savedAt || 0) > (state._savedAt || 0) && !$('#modal-root').firstChild) { state = migrate(data.data); DB.put('kv', localKey(), state).catch(() => { }); applyTheme(); render(); toast('Dados atualizados de outro aparelho', 'info', { icon: 'cloud' }); }
+    setSync('ok');
+  } catch { }
+}
+
+/* ---- telas de acesso ---- */
+const authHero = () => `<div class="onb-hero"><div class="brand" style="font-size:20px"><span class="brand-mark" style="width:44px;height:44px">${LOGO(24)}</span><div>NEXO<small>FINANCE OS</small></div></div>
+  <h1>Seu dinheiro, <span class="grad-text">em qualquer aparelho</span>.</h1>
+  <p>Entre com seu e-mail e senha para acessar seus gastos, orçamento e metas, sincronizados na nuvem e protegidos.</p>
+  <div class="onb-feats">${[['lock', 'Cada conta só enxerga os próprios dados'], ['cloud', 'Sincroniza entre celular e computador'], ['cloudOff', 'Funciona offline e envia quando voltar a internet']].map(([i, t]) => `<div class="onb-feat"><span class="li-icon">${icon(i, 18)}</span>${t}</div>`).join('')}</div></div>`;
+const pwField = (name, label, auto, extra = '') => `<label class="field full"><span>${label}</span><div style="position:relative"><input class="input" type="password" name="${name}" autocomplete="${auto}" style="padding-left:44px;padding-right:52px" ${extra}><span style="position:absolute;left:14px;top:14px;color:var(--text-3)">${icon('lock')}</span><button type="button" class="icon-btn" data-action="pw-toggle" aria-label="Mostrar senha" style="position:absolute;right:2px;top:2px">${icon('eye', 18)}</button></div></label>`;
+const emailField = (v = '') => `<label class="field full"><span>E-mail</span><div style="position:relative"><input class="input" type="email" name="email" autocomplete="email" inputmode="email" value="${esc(v)}" style="padding-left:44px" autofocus><span style="position:absolute;left:14px;top:14px;color:var(--text-3)">${icon('mail')}</span></div></label>`;
+function viewAuth(mode) {
+  const last = localStorage.getItem('nexofin:lastEmail') || '';
+  const body = {
+    login: `<h2 style="margin:10px 0 18px;font-size:24px">Entrar na sua conta</h2><form data-form="login" class="form-grid" novalidate>${emailField(last)}${pwField('password', 'Senha', 'current-password')}
+      <div class="full" style="text-align:right;margin-top:-4px"><button type="button" class="btn-text" data-action="auth-mode" data-v="forgot">Esqueci minha senha</button></div>
+      <button class="btn btn-primary btn-lg full" >Entrar ${icon('right', 18)}</button></form>
+      <p class="muted" style="text-align:center;margin-top:16px">Ainda não tem conta? <button class="btn-text" style="min-height:0;padding:0" data-action="auth-mode" data-v="signup">Criar conta</button></p>`,
+    signup: `<h2 style="margin:10px 0 18px;font-size:24px">Criar sua conta</h2><form data-form="signup" class="form-grid" novalidate>${emailField()}${pwField('password', 'Senha (mínimo 8 caracteres)', 'new-password')}${pwField('password2', 'Repita a senha', 'new-password')}
+      <button class="btn btn-primary btn-lg full" >Criar conta ${icon('right', 18)}</button></form>
+      <p class="muted" style="text-align:center;margin-top:16px">Já tem conta? <button class="btn-text" style="min-height:0;padding:0" data-action="auth-mode" data-v="login">Entrar</button></p>`,
+    forgot: `<h2 style="margin:10px 0 8px;font-size:24px">Recuperar senha</h2><p class="muted" style="margin-bottom:16px">Enviamos um link para você criar uma nova senha.</p><form data-form="forgot" class="form-grid" novalidate>${emailField(last)}
+      <button class="btn btn-primary btn-lg full">Enviar link</button></form>
+      <p style="text-align:center;margin-top:16px"><button class="btn-text" data-action="auth-mode" data-v="login">${icon('left', 16)} Voltar para o login</button></p>`,
+    reset: `<h2 style="margin:10px 0 8px;font-size:24px">Criar nova senha</h2><p class="muted" style="margin-bottom:16px">${esc(session?.user?.email || '')}</p><form data-form="reset" class="form-grid" novalidate>${pwField('password', 'Nova senha (mínimo 8 caracteres)', 'new-password', 'autofocus')}${pwField('password2', 'Repita a nova senha', 'new-password')}
+      <button class="btn btn-primary btn-lg full">Salvar nova senha</button></form>`,
+  }[mode] || '';
+  return `<div class="onb">${authHero()}<div class="card glow"><div class="eyebrow">Acesso</div>${body}</div></div>`;
+}
+function viewSetup() {
+  const c = cloudConfig() || {};
+  return `<div class="onb"><div class="onb-hero"><div class="brand" style="font-size:20px"><span class="brand-mark" style="width:44px;height:44px">${LOGO(24)}</span><div>NEXO<small>FINANCE OS</small></div></div>
+    <h1>Conectar à <span class="grad-text">nuvem</span></h1><p>Configuração feita uma vez só (uns 5 minutos). Depois disso, cada pessoa cria a própria conta com e-mail e senha.</p>
+    <ol class="muted" style="margin:18px 0 0;padding-left:20px;line-height:1.7">
+      <li>Crie uma conta grátis em <b style="color:var(--text)">supabase.com</b> e clique em <b style="color:var(--text)">New project</b>.</li>
+      <li>No projeto, abra <b style="color:var(--text)">SQL Editor</b>, cole o SQL ao lado e clique em <b style="color:var(--text)">Run</b>.</li>
+      <li>Em <b style="color:var(--text)">Project Settings → API</b>, copie a <b style="color:var(--text)">Project URL</b> e a chave <b style="color:var(--text)">anon public</b> e cole aqui.</li>
+      <li>Em <b style="color:var(--text)">Authentication → URL Configuration</b>, coloque o link do app em <b style="color:var(--text)">Site URL</b> (para o link de confirmação e de nova senha abrirem o app).</li></ol></div>
+    <div class="card glow"><div class="eyebrow">Configuração do servidor</div>
+      <form data-form="setup" class="form-grid" style="margin-top:16px" novalidate>
+        <label class="field full"><span>Project URL</span><input class="input" name="url" value="${esc(c.url || '')}" placeholder="https://xxxx.supabase.co" autocomplete="off"></label>
+        <label class="field full"><span>Chave anon public</span><input class="input" name="key" value="${esc(c.key || '')}" placeholder="eyJhbGciOi…" autocomplete="off"></label>
+        <button class="btn btn-primary btn-lg full">Conectar ${icon('right', 18)}</button></form>
+      <div class="row between" style="margin-top:18px"><b>SQL de configuração</b><button class="btn btn-ghost" data-action="copy-sql">${icon('copy', 16)} Copiar</button></div>
+      <pre style="margin:8px 0 0;padding:12px;border-radius:12px;background:var(--field);border:1px solid var(--line);font-size:11.5px;line-height:1.5;overflow:auto;max-height:220px;color:var(--text-2)">${esc(SETUP_SQL)}</pre>
+    </div></div>`;
+}
+const viewNoLib = () => `<div class="onb">${authHero()}<div class="card">${emptyState({ ic: 'cloudOff', title: 'Sem conexão com o servidor de login', text: 'Não foi possível carregar o módulo de contas. Verifique sua internet e tente de novo.', action: '<button class="btn btn-primary" data-action="reload">Tentar de novo</button>' })}</div></div>`;
+const viewLoading = () => `<div class="onb" style="min-height:70vh;display:grid;place-items:center"><div class="empty"><div class="empty-icon pulse">${icon('cloud', 28)}</div><h3>Carregando sua conta…</h3><p>${esc(session?.user?.email || '')}</p></div></div>`;
+/** Decide o que mostrar antes do app: configuração, login, carregando ou boas-vindas */
+function gateView() {
+  if (!sb) return window.supabase?.createClient ? viewSetup() : viewNoLib();
+  if (authMode === 'reset' && session) return viewAuth('reset');
+  if (session === undefined) return viewLoading();
+  if (!session) return viewAuth(authMode);
+  if (stateLoading) return viewLoading();
+  if (!state) return viewOnboarding();
+  return null;
+}
+
+/* ---- ações de conta ---- */
+const AUTH_ERR = [[/invalid login credentials/i, 'E-mail ou senha incorretos.'], [/email not confirmed/i, 'Confirme seu e-mail pelo link que enviamos antes de entrar.'], [/already registered|already exists/i, 'Já existe uma conta com este e-mail. Faça login.'], [/password should be at least/i, 'A senha precisa ter pelo menos 8 caracteres.'], [/rate limit|too many/i, 'Muitas tentativas. Aguarde alguns minutos.'], [/fetch|network/i, 'Sem conexão com a internet.'], [/invalid.*email|email.*invalid/i, 'E-mail inválido.'], [/same.*password|different from the old/i, 'A nova senha precisa ser diferente da atual.']];
+const authMsg = e => (AUTH_ERR.find(([r]) => r.test(e?.message || '')) || [0, e?.message || 'Algo deu errado. Tente de novo.'])[1];
+const validEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+/** trava o botão do formulário enquanto espera o servidor, sem apagar o que foi digitado */
+async function busy(fn) {
+  if (authBusy) return; authBusy = true;
+  const btn = $('#view form[data-form] button.btn-primary'), html = btn?.innerHTML; if (btn) { btn.disabled = true; btn.innerHTML = 'Aguarde…'; }
+  try { await fn(); } catch (e) { toast(authMsg(e), 'error'); }
+  finally { authBusy = false; if (btn && document.contains(btn)) { btn.disabled = false; btn.innerHTML = html; } }
+}
+const rerenderAuth = () => { if (!state) render(true); };
+forms.setup = (f, fd) => {
+  const url = String(fd.get('url') || '').trim().replace(/\/+$/, ''), key = String(fd.get('key') || '').trim();
+  if (!/^https:\/\/[\w.-]+$/.test(url)) return fieldError(f, 'url', 'Cole a Project URL (começa com https://)');
+  if (key.length < 20) return fieldError(f, 'key', 'Cole a chave anon public');
+  localStorage.setItem('nexofin:cloud', JSON.stringify({ url, key }));
+  if (!initClient()) return toast('Não foi possível conectar', 'error');
+  session = undefined; render(true); toast('Servidor conectado', 'success', { icon: 'cloud', sub: 'Agora crie sua conta ou entre.' });
+};
+forms.login = (f, fd) => {
+  const email = String(fd.get('email') || '').trim().toLowerCase(), password = String(fd.get('password') || '');
+  if (!validEmail(email)) return fieldError(f, 'email', 'Informe um e-mail válido');
+  if (!password) return fieldError(f, 'password', 'Informe sua senha');
+  busy(async () => { const { error } = await sb.auth.signInWithPassword({ email, password }); if (error) return toast(authMsg(error), 'error'); localStorage.setItem('nexofin:lastEmail', email); });
+};
+forms.signup = (f, fd) => {
+  const email = String(fd.get('email') || '').trim().toLowerCase(), password = String(fd.get('password') || '');
+  if (!validEmail(email)) return fieldError(f, 'email', 'Informe um e-mail válido');
+  if (password.length < 8) return fieldError(f, 'password', 'A senha precisa ter pelo menos 8 caracteres');
+  if (!/[a-zA-Z]/.test(password) || !/\d/.test(password)) return fieldError(f, 'password', 'Use letras e números na senha');
+  if (password !== fd.get('password2')) return fieldError(f, 'password2', 'As senhas não conferem');
+  busy(async () => {
+    const { data, error } = await sb.auth.signUp({ email, password, options: { emailRedirectTo: location.href.split('#')[0] } });
+    if (error) return toast(authMsg(error), 'error');
+    localStorage.setItem('nexofin:lastEmail', email);
+    if (!data.session) { authMode = 'login'; rerenderAuth(); toast('Conta criada! Confirme seu e-mail', 'success', { icon: 'mail', sub: `Enviamos um link para ${email}. Depois é só entrar.`, duration: 12000 }); }
+  });
+};
+forms.forgot = (f, fd) => {
+  const email = String(fd.get('email') || '').trim().toLowerCase();
+  if (!validEmail(email)) return fieldError(f, 'email', 'Informe um e-mail válido');
+  busy(async () => { const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.href.split('#')[0] }); if (error) return toast(authMsg(error), 'error'); authMode = 'login'; rerenderAuth(); toast('Link enviado', 'success', { icon: 'mail', sub: `Se existir uma conta com ${email}, você vai receber o link em instantes.`, duration: 10000 }); });
+};
+forms.reset = (f, fd) => {
+  const password = String(fd.get('password') || '');
+  if (password.length < 8) return fieldError(f, 'password', 'A senha precisa ter pelo menos 8 caracteres');
+  if (password !== fd.get('password2')) return fieldError(f, 'password2', 'As senhas não conferem');
+  busy(async () => { const { error } = await sb.auth.updateUser({ password }); if (error) return toast(authMsg(error), 'error'); authMode = 'login'; history.replaceState(null, '', location.pathname + location.search + '#/inicio'); toast('Senha alterada', 'success'); loadUserState(); });
+};
+forms['change-pw'] = (f, fd) => {
+  const password = String(fd.get('password') || '');
+  if (password.length < 8) return fieldError(f, 'password', 'A senha precisa ter pelo menos 8 caracteres');
+  if (password !== fd.get('password2')) return fieldError(f, 'password2', 'As senhas não conferem');
+  (async () => { const { error } = await sb.auth.updateUser({ password }); if (error) return toast(authMsg(error), 'error'); closeModal(true); toast('Senha alterada', 'success', { icon: 'lock' }); })();
+};
+Object.assign(actions, {
+  'auth-mode': el => { authMode = el.dataset.v; render(true); },
+  'pw-toggle': el => { const i = el.parentElement.querySelector('input'); const show = i.type === 'password'; i.type = show ? 'text' : 'password'; el.setAttribute('aria-label', show ? 'Ocultar senha' : 'Mostrar senha'); el.style.color = show ? 'var(--accent)' : ''; },
+  'copy-sql': async () => { try { await navigator.clipboard.writeText(SETUP_SQL); toast('SQL copiado', 'success', { sub: 'Cole no SQL Editor do Supabase e clique em Run.' }); } catch { toast('Selecione e copie o texto manualmente', 'info'); } },
+  reload: () => location.reload(),
+  'sync-now': async () => { if (sync.dirty) await pushCloud(); else await pullIfNewer(); if (sync.status === 'ok') toast('Tudo sincronizado', 'success', { icon: 'cloud' }); },
+  'change-pw': () => openModal({ title: 'Alterar senha', body: `<form data-form="change-pw" class="form-grid" novalidate>${pwField('password', 'Nova senha (mínimo 8 caracteres)', 'new-password', 'autofocus')}${pwField('password2', 'Repita a nova senha', 'new-password')}<div class="modal-foot full"><button type="button" class="btn btn-ghost" data-action="close-modal">Cancelar</button><button class="btn btn-primary">Salvar</button></div></form>` }),
+  logout: async () => {
+    if (!await confirmDialog({ title: 'Sair da conta?', message: `Seus dados continuam salvos na nuvem. Por segurança, a cópia deste aparelho é apagada ao sair.${sync.dirty ? '<br><b>Há alterações ainda não enviadas; vou tentar enviar agora.</b>' : ''}`, confirm: 'Sair' })) return;
+    clearTimeout(saveTimer); if (sync.dirty && state) { state._savedAt = Date.now(); await pushCloud(); }
+    if (sync.dirty && !await confirmDialog({ title: 'Alterações não enviadas', message: 'Sem conexão: as últimas alterações ainda não chegaram à nuvem e serão perdidas se você sair agora.', confirm: 'Sair mesmo assim', danger: true })) return;
+    const id = session.user.id; await DB.del('kv', 'state:' + id).catch(() => { });
+    sync.dirty = false; state = null; await sb.auth.signOut().catch(() => { }); session = null; authMode = 'login';
+    history.replaceState(null, '', location.pathname + location.search); render(true); toast('Você saiu da conta', 'info');
+  },
+  wipe: async () => {
+    if (!await confirmDialog({ title: 'Apagar todos os dados desta conta?', message: 'Isso apaga lançamentos, metas, contas e configurações desta conta, na nuvem e neste aparelho. <b>Não dá para desfazer.</b> A conta (e-mail e senha) continua existindo.', confirm: 'Apagar tudo', danger: true })) return;
+    clearTimeout(saveTimer); clearTimeout(sync.timer);
+    try { const { error } = await sb.from('user_state').delete().eq('user_id', session.user.id); if (error) throw error; } catch (e) { return toast('Não foi possível apagar na nuvem', 'error', { sub: 'Verifique a internet e tente de novo.' }); }
+    await DB.del('kv', localKey()).catch(() => { }); sync.dirty = false; state = null;
+    history.replaceState(null, '', location.pathname + location.search); applyTheme(); render(true); toast('Todos os dados foram apagados', 'info');
+  },
+});
+addEventListener('online', () => { if (sync.dirty) pushCloud(); });
+addEventListener('offline', () => setSync('offline'));
+</script>
+<script>
+'use strict';
+/* =====================================================================
    ROTEADOR + EVENTOS + INICIALIZAÇÃO
    ===================================================================== */
 const VIEWS = { inicio: viewDashboard, lancamentos: viewLancamentos, orcamento: viewOrcamento, contas: viewContas, metas: viewMetas, relatorios: viewRelatorios, config: viewConfig };
@@ -1776,9 +2033,10 @@ let enterTimer = null, lastDayKey = dateKey(), lastReminderCheck = 0;
 function render(enter = false) {
   hideTip();
   const view = $('#view');
-  if (!state) {
+  const gate = gateView();
+  if (gate !== null) {
     document.body.classList.add('onboarding'); ['#sidebar', '#bottomnav', '#topbar'].forEach(s => $(s).innerHTML = '');
-    view.className = 'main view enter'; view.innerHTML = viewOnboarding(); document.title = 'NEXO Finance · Boas-vindas'; return;
+    view.className = 'main view' + (enter ? ' enter' : ''); view.innerHTML = gate; ui.prevRoute = null; document.title = 'NEXO Finance · Acesso'; return;
   }
   document.body.classList.remove('onboarding');
   let r = route(); if (!VIEWS[r.name]) r = { name: 'inicio' };
@@ -1798,7 +2056,9 @@ function tick() {
   if (!state) return;
   if (dateKey() !== lastDayKey) { lastDayKey = dateKey(); if (!$('#modal-root').firstChild) render(); }
   if (Date.now() - lastReminderCheck > 20000) { lastReminderCheck = Date.now(); checkReminders(); }
+  if (Date.now() - lastPull > 60000) { lastPull = Date.now(); if (sync.dirty) pushCloud(); else pullIfNewer(); }
 }
+let lastPull = Date.now();
 function makeAppIcon() {
   try {
     const c = document.createElement('canvas'); c.width = c.height = 192; const g = c.getContext('2d');
@@ -1833,11 +2093,13 @@ document.addEventListener('pointermove', onPointer, { passive: true });
 document.addEventListener('scroll', hideTip, { passive: true, capture: true });
 let resizeT = null; addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(drawCharts, 150); });
 addEventListener('hashchange', () => render());
-document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); else if (state) { tick(); checkReminders(); } });
+document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); else if (state) { tick(); checkReminders(); pullIfNewer(); } });
 addEventListener('pagehide', saveNow);
 matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', () => { if (state?.settings.theme === 'auto') { applyTheme(); render(); } });
 (async function init() {
-  await loadState(); applyTheme(); makeAppIcon(); render(true);
+  await DB.open(); applyTheme(); makeAppIcon();
+  if (!initClient()) session = null; // sem servidor configurado → tela de configuração
+  render(true);
   setInterval(tick, 5000); setTimeout(() => { if (state) checkReminders(); }, 5000);
   if (DB.fallback) toast('Armazenamento simplificado', 'info', { sub: 'Este navegador bloqueou o IndexedDB; os dados usam localStorage.' });
   try { navigator.storage?.persist?.(); } catch { }
