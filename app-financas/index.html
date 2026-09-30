@@ -1907,7 +1907,10 @@ function viewAuth(mode) {
     reset: `<h2 style="margin:10px 0 8px;font-size:24px">Criar nova senha</h2><p class="muted" style="margin-bottom:16px">${esc(session?.user?.email || '')}</p><form data-form="reset" class="form-grid" novalidate>${pwField('password', 'Nova senha (mínimo 8 caracteres)', 'new-password', 'autofocus')}${pwField('password2', 'Repita a nova senha', 'new-password')}
       <button class="btn btn-primary btn-lg full">Salvar nova senha</button></form>`,
   }[mode] || '';
-  return `<div class="onb">${authHero()}<div class="card glow"><div class="eyebrow">Acesso</div>${body}</div></div>`;
+  const own = (() => { try { return !!JSON.parse(localStorage.getItem('nexofin:cloud') || 'null'); } catch { return false; } })();
+  const host = (cloudConfig()?.url || '').replace(/^https:\/\//, '');
+  return `<div class="onb">${authHero()}<div class="card glow"><div class="eyebrow">Acesso</div>${body}
+    ${own ? `<p class="faint" style="font-size:12px;text-align:center;margin-top:14px;border-top:1px solid var(--line);padding-top:12px">Servidor: ${esc(host)} · <button class="btn-text" style="min-height:0;padding:0;font-size:12px" data-action="server-reset">trocar servidor</button></p>` : ''}</div></div>`;
 }
 function viewSetup() {
   const c = cloudConfig() || {};
@@ -1941,7 +1944,7 @@ function gateView() {
 }
 
 /* ---- ações de conta ---- */
-const AUTH_ERR = [[/invalid login credentials/i, 'E-mail ou senha incorretos.'], [/email not confirmed/i, 'Confirme seu e-mail pelo link que enviamos antes de entrar.'], [/already registered|already exists/i, 'Já existe uma conta com este e-mail. Faça login.'], [/password should be at least/i, 'A senha precisa ter pelo menos 8 caracteres.'], [/rate limit|too many/i, 'Muitas tentativas. Aguarde alguns minutos.'], [/fetch|network/i, 'Sem conexão com a internet.'], [/invalid.*email|email.*invalid/i, 'E-mail inválido.'], [/same.*password|different from the old/i, 'A nova senha precisa ser diferente da atual.']];
+const AUTH_ERR = [[/unexpected token|not valid json|<!doctype/i, 'O endereço do servidor está errado. Toque em “trocar servidor” abaixo e cole a Project URL do Supabase (termina em .supabase.co).'], [/invalid api key|no api key/i, 'A chave do servidor está errada. Toque em “trocar servidor” e cole a chave anon public.'], [/invalid login credentials/i, 'E-mail ou senha incorretos.'], [/email not confirmed/i, 'Confirme seu e-mail pelo link que enviamos antes de entrar.'], [/already registered|already exists/i, 'Já existe uma conta com este e-mail. Faça login.'], [/password should be at least/i, 'A senha precisa ter pelo menos 8 caracteres.'], [/rate limit|too many/i, 'Muitas tentativas. Aguarde alguns minutos.'], [/fetch|network/i, 'Sem conexão com a internet.'], [/invalid.*email|email.*invalid/i, 'E-mail inválido.'], [/same.*password|different from the old/i, 'A nova senha precisa ser diferente da atual.']];
 const authMsg = e => (AUTH_ERR.find(([r]) => r.test(e?.message || '')) || [0, e?.message || 'Algo deu errado. Tente de novo.'])[1];
 const validEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
 /** trava o botão do formulário enquanto espera o servidor, sem apagar o que foi digitado */
@@ -1952,14 +1955,32 @@ async function busy(fn) {
   finally { authBusy = false; if (btn && document.contains(btn)) { btn.disabled = false; btn.innerHTML = html; } }
 }
 const rerenderAuth = () => { if (!state) render(true); };
-forms.setup = (f, fd) => {
-  const url = String(fd.get('url') || '').trim().replace(/\/+$/, ''), key = String(fd.get('key') || '').trim();
-  if (!/^https:\/\/[\w.-]+$/.test(url)) return fieldError(f, 'url', 'Cole a Project URL (começa com https://)');
+/** Testa se a URL é mesmo de um projeto Supabase e se a chave é aceita, antes de salvar */
+async function testServer(url, key) {
+  let res;
+  try { res = await fetch(url + '/auth/v1/settings', { headers: { apikey: key } }); }
+  catch { return 'Não consegui acessar esse endereço. Confira a Project URL e sua internet.'; }
+  const text = await res.text(); let json = null; try { json = JSON.parse(text); } catch { }
+  if (!json) return 'Esse endereço não é de um projeto Supabase. Use a Project URL (termina em .supabase.co), não o link do app nem do painel.';
+  if (res.status === 401 || res.status === 403) return 'A chave não foi aceita. Copie a chave "anon public" em Project Settings → API.';
+  if (!res.ok) return `O servidor respondeu com erro (${res.status}).`;
+  return null;
+}
+forms.setup = async (f, fd) => {
+  let url = String(fd.get('url') || '').trim().replace(/\/+$/, '').replace(/\/(rest|auth)\/v1.*$/, ''); const key = String(fd.get('key') || '').trim();
+  const dash = url.match(/supabase\.com\/dashboard\/project\/([a-z0-9]+)/i); if (dash) url = `https://${dash[1]}.supabase.co`; // colou o link do painel
+  if (!/^https:\/\/[\w.-]+$/.test(url)) return fieldError(f, 'url', 'Cole a Project URL, ex: https://abcd1234.supabase.co');
+  if (/netlify\.app|vercel\.app|github\.io/i.test(url) || url === location.origin) return fieldError(f, 'url', 'Esse é o link do app. Cole a Project URL do Supabase (termina em .supabase.co)');
   if (key.length < 20) return fieldError(f, 'key', 'Cole a chave anon public');
+  if (/service_role/.test(atobSafe(key.split('.')[1] || ''))) return fieldError(f, 'key', 'Essa é a chave SECRETA (service_role). Use a chave "anon public".');
+  const btn = f.querySelector('button.btn-primary'), html = btn.innerHTML; btn.disabled = true; btn.innerHTML = 'Testando conexão…';
+  const err = await testServer(url, key); btn.disabled = false; btn.innerHTML = html;
+  if (err) { toast('Não foi possível conectar', 'error', { sub: err, duration: 9000 }); return; }
   localStorage.setItem('nexofin:cloud', JSON.stringify({ url, key }));
   if (!initClient()) return toast('Não foi possível conectar', 'error');
   session = undefined; render(true); toast('Servidor conectado', 'success', { icon: 'cloud', sub: 'Agora crie sua conta ou entre.' });
 };
+function atobSafe(s) { try { return atob(s.replace(/-/g, '+').replace(/_/g, '/')); } catch { return ''; } }
 forms.login = (f, fd) => {
   const email = String(fd.get('email') || '').trim().toLowerCase(), password = String(fd.get('password') || '');
   if (!validEmail(email)) return fieldError(f, 'email', 'Informe um e-mail válido');
@@ -2001,6 +2022,10 @@ Object.assign(actions, {
   'pw-toggle': el => { const i = el.parentElement.querySelector('input'); const show = i.type === 'password'; i.type = show ? 'text' : 'password'; el.setAttribute('aria-label', show ? 'Ocultar senha' : 'Mostrar senha'); el.style.color = show ? 'var(--accent)' : ''; },
   'copy-sql': async () => { try { await navigator.clipboard.writeText(SETUP_SQL); toast('SQL copiado', 'success', { sub: 'Cole no SQL Editor do Supabase e clique em Run.' }); } catch { toast('Selecione e copie o texto manualmente', 'info'); } },
   reload: () => location.reload(),
+  'server-reset': async () => {
+    if (!await confirmDialog({ title: 'Trocar servidor?', message: 'Você volta para a tela de configuração para colar outra Project URL e chave.', confirm: 'Trocar' })) return;
+    localStorage.removeItem('nexofin:cloud'); location.reload();
+  },
   'sync-now': async () => { if (sync.dirty) await pushCloud(); else await pullIfNewer(); if (sync.status === 'ok') toast('Tudo sincronizado', 'success', { icon: 'cloud' }); },
   'change-pw': () => openModal({ title: 'Alterar senha', body: `<form data-form="change-pw" class="form-grid" novalidate>${pwField('password', 'Nova senha (mínimo 8 caracteres)', 'new-password', 'autofocus')}${pwField('password2', 'Repita a nova senha', 'new-password')}<div class="modal-foot full"><button type="button" class="btn btn-ghost" data-action="close-modal">Cancelar</button><button class="btn btn-primary">Salvar</button></div></form>` }),
   logout: async () => {
