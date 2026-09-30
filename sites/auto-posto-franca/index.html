@@ -29,7 +29,7 @@
 <script>
 /* ==================================================================
    CONFIGURAÇÃO DO SITE: edite só este bloco.
-   Tudo que ficar vazio ("") aparece no site como [PREENCHER].
+   Campo vazio ("") simplesmente não aparece no site.
    ================================================================== */
 window.POSTO = {
   nome: "Auto Posto França",
@@ -38,7 +38,7 @@ window.POSTO = {
   endereco: "",
 
   // WhatsApp só com números: 55 + DDD + número, ex.: "5562999999999"
-  whatsapp: "",
+  whatsapp: "556296131762",
   whatsappMensagem: "Olá! Vim pelo site do Auto Posto França.",
 
   instagram: "https://www.instagram.com/autopostofranca/",
@@ -55,8 +55,6 @@ window.POSTO = {
   },
 
   combustiveis: {
-    // Mude para true depois de conferir a lista com o posto
-    confirmado: false,
     itens: [
       { nome: "Gasolina comum",    descricao: "Para o dia a dia e para a estrada.",                icone: "fuel" },
       { nome: "Gasolina aditivada", descricao: "Com aditivos que ajudam a manter o motor limpo.",  icone: "sparkles" },
@@ -78,8 +76,6 @@ window.POSTO = {
   },
 
   servicos: {
-    // Mude para true depois de conferir a lista com o posto
-    confirmado: false,
     itens: [
       { nome: "Loja de conveniência", descricao: "Lanches, bebidas e itens para a viagem.",      icone: "store" },
       { nome: "Calibragem",           descricao: "Pneus no ponto antes das estradas de terra.",  icone: "gauge" },
@@ -133,9 +129,6 @@ p{margin:0}
 .skip:focus{top:12px}
 
 /* placeholders visíveis */
-.fill{font-family:var(--f-mono);font-size:.84em;color:var(--yellow);background:rgba(248,224,64,.1);border:1px dashed rgba(248,224,64,.6);border-radius:6px;padding:1px 6px;white-space:nowrap}
-.pending{display:flex;gap:10px;align-items:flex-start;padding:12px 16px;margin-bottom:20px;border:1px dashed rgba(248,224,64,.55);border-radius:var(--r-sm);background:rgba(248,224,64,.06);color:var(--yellow);font:500 13px/1.5 var(--f-mono)}
-.pending .ic{margin-top:1px}
 
 /* botões */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.6em;min-height:48px;padding:0 1.3em;border-radius:999px;border:1px solid transparent;font:600 15px/1 var(--f-body);text-decoration:none;cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s,background .25s,border-color .25s,color .25s;white-space:nowrap}
@@ -146,7 +139,6 @@ p{margin:0}
 .btn-ghost:hover{border-color:rgba(47,214,200,.6);box-shadow:0 0 28px -8px rgba(47,214,200,.6)}
 .btn-teal{background:rgba(47,214,200,.07);color:var(--teal);border-color:rgba(47,214,200,.35);min-height:42px;font-size:14px}
 .btn-teal:hover{background:rgba(47,214,200,.14);box-shadow:0 0 24px -8px rgba(47,214,200,.7)}
-.btn.is-pending{position:relative}
 
 /* cabeçalho */
 .site-header{position:fixed;inset:0 0 auto;z-index:50;height:var(--header-h);border-bottom:1px solid transparent;transition:background .3s,border-color .3s}
@@ -346,6 +338,15 @@ main{position:relative;z-index:1}
 .ph-photo.wide{aspect-ratio:16/9}
 .ph-photo img{width:100%;height:100%;object-fit:cover}
 
+.ig-cta{display:flex;align-items:center;gap:20px;padding:26px 28px;color:inherit;text-decoration:none}
+.ig-cta-icon{display:grid;place-items:center;flex:none;width:64px;height:64px;border-radius:18px;color:#fff;background:radial-gradient(circle at 30% 107%,#fdf497 0,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285aeb 90%);box-shadow:0 0 30px -8px rgba(214,36,159,.7)}
+.ig-cta-icon .ic{width:30px;height:30px}
+.ig-cta-text{display:grid;gap:4px;flex:1;min-width:0}
+.ig-cta-text strong{font:600 clamp(1.05rem,3vw,1.4rem)/1.2 var(--f-display);overflow-wrap:anywhere}
+.ig-cta-text span{color:var(--muted)}
+.ig-cta-go{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-weight:600;white-space:nowrap}
+@media (max-width:559px){.ig-cta{flex-wrap:wrap}.ig-cta-go{width:100%}}
+.hud-value a{color:inherit;text-decoration-color:var(--teal);text-underline-offset:3px}
 /* localização */
 .loc-grid{display:grid;gap:16px}
 @media (min-width:920px){.loc-grid{grid-template-columns:1.25fr 1fr}}
@@ -394,7 +395,6 @@ main{position:relative;z-index:1}
 .fab::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid rgba(31,175,75,.7);animation:ring 2.8s ease-out infinite}
 @keyframes ring{from{transform:scale(1);opacity:.8}to{transform:scale(1.6);opacity:0}}
 .fab .ic{width:30px;height:30px}
-.fab-flag{position:absolute;right:70px;top:50%;transform:translateY(-50%);padding:4px 8px;border-radius:8px;background:var(--bg);border:1px dashed rgba(248,224,64,.7);color:var(--yellow);font:500 11px/1.3 var(--f-mono);white-space:nowrap}
 
 /* revelação ao rolar */
 .js [data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
@@ -408,7 +408,7 @@ main{position:relative;z-index:1}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-fuel" viewBox="0 0 24 24"><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-6.998a2 2 0 0 0-.59-1.42L18 5"/> <path d="M14 21V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16"/> <path d="M2 21h13"/> <path d="M3 9h11"/></symbol><symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/> <path d="M20 2v4"/> <path d="M22 4h-4"/> <circle cx="4" cy="20" r="2"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20a10 10 0 0010-10 25.9 25.9 0 00-1.04-7.281 1 1 0 00-1.755-.325C15.833 5.5 13 5.5 9.8 6.1A7 7 0 0011 20"/> <path d="M2 21a5 5 0 012.911-4.544C7.613 15.212 8.351 15.24 11 13"/></symbol><symbol id="i-truck" viewBox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/> <path d="M15 18H9"/> <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/> <circle cx="17" cy="18" r="2"/> <circle cx="7" cy="18" r="2"/></symbol><symbol id="i-store" viewBox="0 0 24 24"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"/> <path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"/> <path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"/></symbol><symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/> <path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol><symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></symbol><symbol id="i-toilet" viewBox="0 0 24 24"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"/> <path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"/></symbol><symbol id="i-snowflake" viewBox="0 0 24 24"><path d="m10 20-1.25-2.5L6 18"/> <path d="M10 4 8.75 6.5 6 6"/> <path d="m14 20 1.25-2.5L18 18"/> <path d="m14 4 1.25 2.5L18 6"/> <path d="m17 21-3-6h-4"/> <path d="m17 3-3 6 1.5 3"/> <path d="M2 12h6.5L10 9"/> <path d="m20 10-1.5 2 1.5 2"/> <path d="M22 12h-6.5L14 15"/> <path d="m4 10 1.5 2L4 14"/> <path d="m7 21 3-6-1.5-3"/> <path d="m7 3 3 6h4"/></symbol><symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/> <circle cx="12" cy="10" r="3"/></symbol><symbol id="i-navigation" viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/> <path d="M12 6v6l4 2"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 5h16"/> <path d="M4 12h16"/> <path d="M4 19h16"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/> <path d="m6 6 12 12"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/> <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/> <circle cx="18" cy="5" r="3"/></symbol><symbol id="i-mountain" viewBox="0 0 24 24"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></symbol><symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M12 20h.01"/> <path d="M8.5 16.429a5 5 0 0 1 7 0"/> <path d="M5 12.859a10 10 0 0 1 5.17-2.69"/> <path d="M19 12.859a10 10 0 0 0-2.007-1.523"/> <path d="M2 8.82a15 15 0 0 1 4.177-2.643"/> <path d="M22 8.82a15 15 0 0 0-11.288-3.764"/> <path d="m2 2 20 20"/></symbol><symbol id="i-map" viewBox="0 0 24 24"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/> <path d="M15 5.764v15"/> <path d="M9 3.236v15"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/> <circle cx="12" cy="13" r="3"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/> <path d="M12 16v-4"/> <path d="M12 8h.01"/></symbol><symbol id="i-locate-fixed" viewBox="0 0 24 24"><line x1="2" x2="5" y1="12" y2="12"/> <line x1="19" x2="22" y1="12" y2="12"/> <line x1="12" x2="12" y1="2" y2="5"/> <line x1="12" x2="12" y1="19" y2="22"/> <circle cx="12" cy="12" r="7"/> <circle cx="12" cy="12" r="3"/></symbol><symbol id="b-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></symbol><symbol id="b-instagram" viewBox="0 0 24 24"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></symbol></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-fuel" viewBox="0 0 24 24"><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-6.998a2 2 0 0 0-.59-1.42L18 5"/> <path d="M14 21V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16"/> <path d="M2 21h13"/> <path d="M3 9h11"/></symbol><symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/> <path d="M20 2v4"/> <path d="M22 4h-4"/> <circle cx="4" cy="20" r="2"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20a10 10 0 0010-10 25.9 25.9 0 00-1.04-7.281 1 1 0 00-1.755-.325C15.833 5.5 13 5.5 9.8 6.1A7 7 0 0011 20"/> <path d="M2 21a5 5 0 012.911-4.544C7.613 15.212 8.351 15.24 11 13"/></symbol><symbol id="i-truck" viewBox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/> <path d="M15 18H9"/> <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/> <circle cx="17" cy="18" r="2"/> <circle cx="7" cy="18" r="2"/></symbol><symbol id="i-store" viewBox="0 0 24 24"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"/> <path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"/> <path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"/></symbol><symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/> <path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol><symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></symbol><symbol id="i-toilet" viewBox="0 0 24 24"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"/> <path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"/></symbol><symbol id="i-snowflake" viewBox="0 0 24 24"><path d="m10 20-1.25-2.5L6 18"/> <path d="M10 4 8.75 6.5 6 6"/> <path d="m14 20 1.25-2.5L18 18"/> <path d="m14 4 1.25 2.5L18 6"/> <path d="m17 21-3-6h-4"/> <path d="m17 3-3 6 1.5 3"/> <path d="M2 12h6.5L10 9"/> <path d="m20 10-1.5 2 1.5 2"/> <path d="M22 12h-6.5L14 15"/> <path d="m4 10 1.5 2L4 14"/> <path d="m7 21 3-6-1.5-3"/> <path d="m7 3 3 6h4"/></symbol><symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/> <circle cx="12" cy="10" r="3"/></symbol><symbol id="i-navigation" viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/> <path d="M12 6v6l4 2"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 5h16"/> <path d="M4 12h16"/> <path d="M4 19h16"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/> <path d="m6 6 12 12"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/> <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/> <circle cx="18" cy="5" r="3"/></symbol><symbol id="i-mountain" viewBox="0 0 24 24"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></symbol><symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M12 20h.01"/> <path d="M8.5 16.429a5 5 0 0 1 7 0"/> <path d="M5 12.859a10 10 0 0 1 5.17-2.69"/> <path d="M19 12.859a10 10 0 0 0-2.007-1.523"/> <path d="M2 8.82a15 15 0 0 1 4.177-2.643"/> <path d="M22 8.82a15 15 0 0 0-11.288-3.764"/> <path d="m2 2 20 20"/></symbol><symbol id="i-map" viewBox="0 0 24 24"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/> <path d="M15 5.764v15"/> <path d="M9 3.236v15"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/> <circle cx="12" cy="13" r="3"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/> <path d="M12 16v-4"/> <path d="M12 8h.01"/></symbol><symbol id="i-locate-fixed" viewBox="0 0 24 24"><line x1="2" x2="5" y1="12" y2="12"/> <line x1="19" x2="22" y1="12" y2="12"/> <line x1="12" x2="12" y1="2" y2="5"/> <line x1="12" x2="12" y1="19" y2="22"/> <circle cx="12" cy="12" r="7"/> <circle cx="12" cy="12" r="3"/></symbol><symbol id="i-plug-zap" viewBox="0 0 24 24"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z"/> <path d="m2 22 3-3"/> <path d="M7.5 13.5 10 11"/> <path d="M10.5 16.5 13 14"/> <path d="m18 3-4 4h6l-4 4"/></symbol><symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M12 2v8"/> <path d="m4.93 10.93 1.41 1.41"/> <path d="M2 18h2"/> <path d="M20 18h2"/> <path d="m19.07 10.93-1.41 1.41"/> <path d="M22 22H2"/> <path d="m8 6 4-4 4 4"/> <path d="M16 18a4 4 0 0 0-8 0"/></symbol><symbol id="i-timer" viewBox="0 0 24 24"><line x1="10" x2="14" y1="2" y2="2"/> <line x1="12" x2="15" y1="14" y2="11"/> <circle cx="12" cy="14" r="8"/></symbol><symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 7h10v10"/> <path d="M7 17 17 7"/></symbol><symbol id="b-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></symbol><symbol id="b-instagram" viewBox="0 0 24 24"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></symbol></svg>
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
 
 <header class="site-header" id="topo">
@@ -521,9 +521,9 @@ main{position:relative;z-index:1}
       <a class="btn btn-ghost" data-wa href="#localizacao"><svg class="ic ic-fill" aria-hidden="true"><use href="#b-whatsapp"/></svg>Chamar no WhatsApp</a>
     </div>
     <div class="hud" role="group" aria-label="Painel do posto">
-      <div class="hud-cell is-pending" data-status-cell>
-        <span class="hud-label"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>Status</span>
-        <span class="hud-value"><span class="status-dot" aria-hidden="true"></span><span data-status>Horário <span class="fill">[PREENCHER]</span></span></span>
+      <div class="hud-cell" data-status-cell>
+        <span class="hud-label"><svg class="ic" aria-hidden="true"><use href="#i-fuel"/></svg>Bandeira</span>
+        <span class="hud-value">Petrobras</span>
       </div>
       <div class="hud-cell">
         <span class="hud-label"><svg class="ic" aria-hidden="true"><use href="#i-locate-fixed"/></svg>Coordenadas</span>
@@ -544,7 +544,6 @@ main{position:relative;z-index:1}
       <h2 id="t-comb">O combustível certo para cada viagem.</h2>
       <p class="sec-lead">Carro, caminhonete ou 4x4: saia de Cavalcante com o tanque cheio antes de seguir para as cachoeiras.</p>
     </header>
-    <div data-fuel-pending></div>
     <div class="grid-fuel" data-fuel-grid></div>
     <p class="note" data-price-note></p>
   </div>
@@ -557,7 +556,6 @@ main{position:relative;z-index:1}
       <h2 id="t-serv">Pare, abasteça e se prepare.</h2>
       <p class="sec-lead">O que resolver no posto antes de pegar as estradas da região.</p>
     </header>
-    <div data-svc-pending></div>
     <div class="grid-svc" data-svc-grid></div>
   </div>
 </section>
@@ -733,7 +731,6 @@ main{position:relative;z-index:1}
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const icon = (id, fill) => `<svg class="ic${fill ? ' ic-fill' : ''}" aria-hidden="true"><use href="#${fill ? 'b' : 'i'}-${id}"/></svg>`;
-  const FILL = hint => `<span class="fill">[PREENCHER]${hint ? ' ' + esc(hint) : ''}</span>`;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduced) document.documentElement.classList.add('no-motion');
 
@@ -747,8 +744,11 @@ main{position:relative;z-index:1}
   $$('[data-route]').forEach(a => { a.href = rota; });
   $$('[data-ig]').forEach(a => { a.href = P.instagram; });
   $$('[data-wa]').forEach(a => {
-    if (wa) { a.href = wa; a.target = '_blank'; a.rel = 'noopener'; }
-    else if (a.hasAttribute('data-fab')) a.insertAdjacentHTML('beforeend', '<span class="fab-flag">[PREENCHER] WhatsApp</span>');
+    if (wa) { a.href = wa; a.target = '_blank'; a.rel = 'noopener'; return; }
+    // sem WhatsApp: o botão flutuante some e os outros botões levam ao Instagram
+    if (a.hasAttribute('data-fab')) { a.remove(); return; }
+    a.href = P.instagram; a.target = '_blank'; a.rel = 'noopener';
+    a.innerHTML = a.innerHTML.replace('#b-whatsapp', '#b-instagram').replace('WhatsApp', 'Instagram');
   });
 
   const fmtTel = n => {
@@ -756,11 +756,16 @@ main{position:relative;z-index:1}
     return m ? `(${m[1]}) ${m[2]}-${m[3]}` : n;
   };
   const slots = {
-    endereco: P.endereco ? esc(P.endereco) : FILL('endereço'),
-    horario: P.horario.texto ? esc(P.horario.texto) : FILL('horário'),
-    whatsapp: wa ? `<a href="${wa}" target="_blank" rel="noopener">${esc(fmtTel(numero))}</a>` : FILL('WhatsApp')
+    endereco: esc(P.endereco || 'Centro, Cavalcante – GO'),
+    horario: P.horario.texto ? esc(P.horario.texto) : '',
+    whatsapp: wa ? `<a href="${wa}" target="_blank" rel="noopener">${esc(fmtTel(numero))}</a>` : ''
   };
-  $$('[data-slot]').forEach(el => { el.innerHTML = slots[el.dataset.slot]; });
+  // informação que não foi preenchida: a linha inteira sai do site
+  $$('[data-slot]').forEach(el => {
+    const html = slots[el.dataset.slot];
+    if (html) el.innerHTML = html;
+    else (el.closest('.info-row, li') || el).remove();
+  });
   $$('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
 
   /* ---------- aberto / fechado (horário de Brasília) ---------- */
@@ -778,7 +783,6 @@ main{position:relative;z-index:1}
   }
   function status() {
     const d = P.horario.dias;
-    if (!d) return { estado: 'pending', texto: `Horário ${FILL()}` };
     if (d === '24h') return { estado: 'open', texto: 'Aberto 24 horas' };
     const { dia, min } = agora();
     const hoje = d[dia];
@@ -802,22 +806,26 @@ main{position:relative;z-index:1}
     cell.classList.add('is-' + s.estado);
     $('[data-status]').innerHTML = s.texto;
   }
-  pintaStatus();
-  setInterval(pintaStatus, 60000);
+  // com horário: status aberto/fechado; sem horário: o painel mostra o WhatsApp
+  if (P.horario.dias) {
+    $('[data-status-cell]').innerHTML = `<span class="hud-label">${icon('clock')}Status</span><span class="hud-value"><span class="status-dot" aria-hidden="true"></span><span data-status></span></span>`;
+    pintaStatus();
+    setInterval(pintaStatus, 60000);
+  } else if (wa) {
+    $('[data-status-cell]').innerHTML = `<span class="hud-label">${icon('whatsapp', true)}WhatsApp</span><span class="hud-value"><a href="${wa}" target="_blank" rel="noopener">${esc(fmtTel(numero))}</a></span>`;
+  }
 
   /* ---------- combustíveis e serviços ---------- */
   const pad = i => String(i + 1).padStart(2, '0');
-  if (!P.combustiveis.confirmado) $('[data-fuel-pending]').innerHTML = `<p class="pending">${icon('info')}<span>[PREENCHER] Confirme a lista de combustíveis com o posto e mude "confirmado" para true.</span></p>`;
   $('[data-fuel-grid]').innerHTML = P.combustiveis.itens.map((f, i) => {
     const v = P.precos.mostrar ? P.precos.valores[f.nome] : null;
-    const preco = P.precos.mostrar ? `<div class="price">${v ? `<span>R$</span><strong>${esc(v)}</strong><span>/litro</span>` : FILL('preço')}</div>` : '';
+    const preco = v ? `<div class="price"><span>R$</span><strong>${esc(v)}</strong><span>/litro</span></div>` : '';
     return `<article class="card fuel" data-reveal><div class="card-top"><span class="badge">${icon(f.icone)}</span><span class="idx">${pad(i)}</span></div><h3>${esc(f.nome)}</h3><p>${esc(f.descricao)}</p>${preco}</article>`;
   }).join('');
   const nota = $('[data-price-note]');
-  if (P.precos.mostrar) nota.innerHTML = `${icon('clock')}Preços atualizados em ${P.precos.atualizadoEm ? esc(P.precos.atualizadoEm) : FILL('data')}`;
-  else nota.innerHTML = `${icon('info')}Consulte os preços do dia ${wa ? `<a href="${wa}" target="_blank" rel="noopener">pelo WhatsApp</a>` : 'pelo WhatsApp'}.`;
+  if (P.precos.mostrar && P.precos.atualizadoEm) nota.innerHTML = `${icon('clock')}Preços atualizados em ${esc(P.precos.atualizadoEm)}`;
+  else nota.innerHTML = `${icon('info')}Consulte os preços do dia ${wa ? `<a href="${wa}" target="_blank" rel="noopener">pelo WhatsApp</a>` : 'no posto'}.`;
 
-  if (!P.servicos.confirmado) $('[data-svc-pending]').innerHTML = `<p class="pending">${icon('info')}<span>[PREENCHER] Confirme a lista de serviços com o posto e mude "confirmado" para true.</span></p>`;
   $('[data-svc-grid]').innerHTML = P.servicos.itens.map(s =>
     `<article class="card svc" data-reveal><span class="badge teal">${icon(s.icone)}</span><h3>${esc(s.nome)}</h3><p>${esc(s.descricao)}</p></article>`
   ).join('');
@@ -842,16 +850,18 @@ main{position:relative;z-index:1}
   ).join('');
 
   /* ---------- fotos ---------- */
-  const LEGENDAS = ['Fachada do posto', 'Pista de abastecimento', 'Loja de conveniência', 'Equipe do posto', 'Clientes a caminho da Chapada', 'Novidade ou promoção'];
-  $('[data-ig-grid]').innerHTML = LEGENDAS.map((leg, i) => {
-    const src = P.fotos.instagram[i];
-    return src
-      ? `<a class="ph-photo" href="${esc(P.instagram)}" target="_blank" rel="noopener" data-reveal><img src="${esc(src)}" alt="${esc(leg)}" loading="lazy" decoding="async"></a>`
-      : `<div class="ph" data-reveal>${icon('camera')}<span>[PREENCHER]<br>Foto: ${leg}</span></div>`;
-  }).join('');
-  $('[data-facade]').innerHTML = P.fotos.fachada
-    ? `<div class="ph-photo wide"><img src="${esc(P.fotos.fachada)}" alt="Fachada do Auto Posto França" loading="lazy" decoding="async"></div>`
-    : `<div class="ph wide">${icon('camera')}<span>[PREENCHER]<br>Foto da fachada, para o viajante reconhecer o posto ao chegar</span></div>`;
+  const fotos = P.fotos.instagram.filter(Boolean);
+  const usuario = '@' + (P.instagram.match(/instagram\.com\/([^/?#]+)/) || [, 'instagram'])[1];
+  if (fotos.length) {
+    $('[data-ig-grid]').innerHTML = fotos.map((src, i) =>
+      `<a class="ph-photo" href="${esc(P.instagram)}" target="_blank" rel="noopener" data-reveal><img src="${esc(src)}" alt="Foto ${i + 1} do Instagram do posto" loading="lazy" decoding="async"></a>`
+    ).join('');
+  } else {
+    $('.ig-head .btn').remove();
+    $('[data-ig-grid]').outerHTML = `<a class="card ig-cta" href="${esc(P.instagram)}" target="_blank" rel="noopener" data-reveal><span class="ig-cta-icon">${icon('instagram', true)}</span><span class="ig-cta-text"><strong>${esc(usuario)}</strong><span>Fotos, avisos e novidades do posto</span></span><span class="ig-cta-go">Seguir no Instagram${icon('arrow-up-right')}</span></a>`;
+  }
+  if (P.fotos.fachada) $('[data-facade]').innerHTML = `<div class="ph-photo wide"><img src="${esc(P.fotos.fachada)}" alt="Fachada do Auto Posto França" loading="lazy" decoding="async"></div>`;
+  else $('.facade').remove();
 
   /* ---------- mapa sob demanda ---------- */
   $('[data-map-load]').addEventListener('click', () => {
