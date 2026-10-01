@@ -10,7 +10,7 @@ Ela usa um arquivo só (`index.html`), que abre direto no navegador.
 
 | Efeito | Onde |
 |---|---|
-| Roda 3D em tempo real (pneu com letreiro SAMATEC, raios diamantados, disco furado, pinça vermelha) | Topo |
+| Roda 3D em tempo real (pneu com letreiro SAMATEC, raios diamantados, disco furado, pinça amarela) | Topo |
 | A roda gira, acelera conforme a pessoa rola a página e inclina seguindo o mouse | Topo |
 | Velocímetro "Role e acelere" ligado à velocidade da roda | Topo |
 | **Vista explodida**: a roda se desmonta peça por peça (pneu, roda, disco, pinça, suspensão), com etiquetas presas a cada peça | "Por dentro da roda" |
@@ -53,7 +53,7 @@ window.SAMATEC = {
 };
 ```
 
-- **Cor da marca:** troque `--ac` em `:root` (hoje `#e8202a`). A cor da pinça,
+- **Cor da marca:** troque `--ac` em `:root` (hoje amarelo `#ffc400`). A cor da pinça,
   da mola e dos detalhes 3D muda junto
 - **Logo:** o topo usa um logotipo em texto ("SAMATEC" com três faixas).
   Se ele tiver um logo, troque o `<svg>` dentro de `.brand`
